@@ -1,0 +1,5 @@
+Synchronize instructions
+
+Pull in Visual Paradigm by Project > Import > XML... and choose the project.xml file in the git repo
+
+Push by using Project > Export > XML..., tick "Export project" choose as target the same project.xml file
