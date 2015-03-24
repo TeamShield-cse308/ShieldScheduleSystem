@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.EditSchoolController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Edit School" underline="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="541.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="25.0" prefWidth="45.0" text="Back" />
+      <Button layoutX="17.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleEditInfo" prefHeight="25.0" prefWidth="77.0" text="Edit Info" />
+      <Button layoutX="17.0" layoutY="54.0" mnemonicParsing="false" onAction="#handleEditCourse" text="Edit Course" />
+   </children>
+</AnchorPane>

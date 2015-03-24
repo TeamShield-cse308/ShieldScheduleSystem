@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginPageController">
+   <children>
+      <PasswordField fx:id="password" layoutX="175.0" layoutY="201.0" />
+      <TextField fx:id="email" layoutX="175.0" layoutY="157.0" />
+      <Button layoutX="101.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleForgotPassword" prefHeight="25.0" prefWidth="149.0" text="Forgot Password" />
+      <Button layoutX="287.0" layoutY="243.0" mnemonicParsing="false" onAction="#handleNewUser" prefHeight="25.0" prefWidth="149.0" text="New User" />
+      <Button layoutX="338.0" layoutY="201.0" mnemonicParsing="false" onAction="#handleLogin" text="Login" />
+      <Label layoutX="101.0" layoutY="41.0" text="Scheduling System" AnchorPane.leftAnchor="101.0" AnchorPane.rightAnchor="100.0">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="101.0" layoutY="159.0" text="Email:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="101.0" layoutY="203.0" text="Password: ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
