@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.StudentRegistrationController">
+   <cursor>
+      <Cursor fx:constant="SE_RESIZE" />
+   </cursor>
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Student Registration" underline="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="85.0" text="Email:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="133.0" layoutY="83.0" />
+      <Label layoutX="14.0" layoutY="174.0" text="Confirm Password:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="133.0" layoutY="172.0" />
+      <TextField layoutX="133.0" layoutY="147.0" />
+      <Label layoutX="14.0" layoutY="149.0" text="Password: ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="133.0" layoutY="108.0" />
+      <Label layoutX="14.0" layoutY="110.0" text="Confirm Email:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="210.0" text="School:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="133.0" layoutY="50.0" />
+      <Label layoutX="14.0" layoutY="52.0" text="Full Name: ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="133.0" layoutY="208.0" prefWidth="150.0" />
+      <CheckBox layoutX="15.0" layoutY="252.0" mnemonicParsing="false" text="Accept Terms and Conditions" />
+      <Button layoutX="19.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleRegister" text="Register" />
+   </children>
+</AnchorPane>
