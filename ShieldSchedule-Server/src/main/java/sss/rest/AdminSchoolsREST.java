@@ -28,7 +28,7 @@ import sss.entities.School;
 @RequestScoped
 public class AdminSchoolsREST
 {
-
+    //test
     @Context
     private UriInfo context;
 
