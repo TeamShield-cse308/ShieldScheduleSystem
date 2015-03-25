@@ -24,6 +24,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * A class to read the JSON detailing the school objects in the database
  * Adapted from: http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/javafx_json_tutorial/javafx_javaee7_json_tutorial.html#section2s1
  * @author Jeffrey Kabot
  */

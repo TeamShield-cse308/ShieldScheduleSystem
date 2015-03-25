@@ -12,8 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- *
- * @author Snapadragon
+ * Class representing school courses in the database
+ * @author Phillip Elliot
  */
 @Entity
 public class Course implements Serializable

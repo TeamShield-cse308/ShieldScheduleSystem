@@ -14,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- *
- * @author Snapadragon
+ * Class representing ScheduleBlocks (Periods) in the database
+ * @author Phillip Elliot
  */
 @Entity
 public class ScheduleBlock implements Serializable

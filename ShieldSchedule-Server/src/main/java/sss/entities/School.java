@@ -14,10 +14,11 @@ import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
- *
+ * Class representing Schools in the database
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
+//database queries for retrieving all or certain schools
 @NamedQueries({
     @NamedQuery(name = "School.findAll", 
             query = "SELECT s FROM School s"),
@@ -45,10 +46,8 @@ public class School implements Serializable
     private List<Student> studentList;
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    School()
-    {
-        
-    }
+    //required by JPA
+    protected School(){}
 
     public School(String initName, int initSemesters, int initScheduleDays, int initPeriods)
     {
@@ -108,8 +107,7 @@ public class School implements Serializable
     }
     
     
-    
-    
+
     public void addCourse(Course c)
     {
         courseList.add(c);

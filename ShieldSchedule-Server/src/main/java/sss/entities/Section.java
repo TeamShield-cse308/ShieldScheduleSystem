@@ -13,8 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- *
- * @author Snapadragon
+ * Class to persist Sections of classes in the database
+ * @author Phillip Elliot
  */
 @Entity
 public class Section implements Serializable

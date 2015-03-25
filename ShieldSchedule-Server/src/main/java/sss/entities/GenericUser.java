@@ -12,29 +12,37 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * The class representing Administrator users in our database
+ * Class representing generic users in the database
  * @author Phillip Elliot
  */
 @Entity
-public class Administrator extends GenericUser implements Serializable
+public class GenericUser implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //requirement for JPA
-    protected Administrator(){}
+    private String name;
+    private String password;
     
+    //required by JPA
+    protected GenericUser() {}
+    
+    public GenericUser(String initName, String initPassword)
+    {
+        //@TODO validity checking on name and password
+        name = initName;
+        password = initPassword;
+    }
 
-    @Override
     public Long getId()
     {
         return id;
     }
 
-    @Override
     public void setId(Long id)
     {
         this.id = id;
@@ -52,10 +60,10 @@ public class Administrator extends GenericUser implements Serializable
     public boolean equals(Object object)
     {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Administrator)) {
+        if (!(object instanceof GenericUser)) {
             return false;
         }
-        Administrator other = (Administrator) object;
+        GenericUser other = (GenericUser) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -65,7 +73,7 @@ public class Administrator extends GenericUser implements Serializable
     @Override
     public String toString()
     {
-        return "cse308.Admin[ id=" + id + " ]";
+        return "cse308.Guest[ id=" + id + " ]";
     }
 
 }

@@ -8,7 +8,7 @@ package view;
 import java.io.Serializable;
 
 /**
- *
+ * A class providing the client-side representation of a school
  * @author Jeffrey Kabot
  */
 public class School implements Serializable

@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- *
+ * Links the RESTful WebServices to their URIs
  * @author Jeffrey Kabot
  */
 @javax.ws.rs.ApplicationPath("webresources")

@@ -15,11 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
- *
- * @author Snapadragon
+ * Class for persisting Student user representations in the database
+ * @author Phillip Elliot
  */
 @Entity
-public class Student extends Guest implements Serializable
+public class Student extends GenericUser implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +31,7 @@ public class Student extends Guest implements Serializable
     private School mySchool;
 
     @ManyToMany
-    List<Student> friendsList = new ArrayList<Student>();
+    List<Student> friendsList = new ArrayList<>();
 
     @OneToOne
     private AssignedSchedule myAssignedSchedule;

@@ -28,6 +28,7 @@ import javax.ws.rs.core.GenericType;
 public class ManageSchoolsController implements Initializable, ControlledScreen
 {
 
+    //Box listing schools in the database
     @FXML
     public ComboBox<String> schoolsBox;
     
@@ -44,6 +45,8 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
 
     public void populateSchoolsBox()
     {
+        //adapted from oracle javafx / javaee tutorial
+        //connect to shield schedule server
         WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
         client.register(SchoolsBodyReader.class);
@@ -52,7 +55,7 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         {
         };
         
-        //list of all schools in database
+        //get a list of all schools in database, transmitted from server in JSON
         List<School> schools = clientTarget.request("application/json").get(gtlc);
         
         //extract school names from schools

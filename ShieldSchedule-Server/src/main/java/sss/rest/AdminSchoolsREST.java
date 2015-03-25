@@ -6,6 +6,7 @@
 package sss.rest;
 
 import java.util.List;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
@@ -20,10 +21,10 @@ import sss.entities.School;
 
 /**
  * REST Web Service
- *
+ * Exposes the functionality of the AdminSchoolsBean to the client program
  * @author Jeffrey Kabot
  */
-@Path("admin-schools")
+@Path("admin-schools") //the url at which this web service's resources are accessed
 @RequestScoped
 public class AdminSchoolsREST
 {
@@ -31,8 +32,13 @@ public class AdminSchoolsREST
     @Context
     private UriInfo context;
 
+    //link the bean whose functionallity we expose
     @Inject
     private AdminSchoolsBean adminSchoolsBean;
+    
+    //Logger
+    private static final Logger logger = Logger.getLogger("sss.rest.AdminSchoolsREST");
+    
     
     /**
      * Creates a new instance of AdminSchoolsREST
@@ -43,6 +49,7 @@ public class AdminSchoolsREST
 
     /**
      * Retrieves representation of an instance of sss.rest.AdminSchoolsREST
+     * This default GET retrieves all the schools in the system's database
      * @return an instance of java.lang.String
      */
     @GET

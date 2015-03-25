@@ -10,7 +10,7 @@
     <class>sss.entities.School</class>
     <class>sss.entities.Student</class>
     <class>sss.entities.Course</class>
-    <class>sss.entities.Guest</class>
+    <class>sss.entities.GenericUser</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/sample"/>
       <property name="javax.persistence.jdbc.user" value="app"/>

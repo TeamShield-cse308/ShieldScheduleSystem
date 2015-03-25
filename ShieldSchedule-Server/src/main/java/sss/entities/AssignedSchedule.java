@@ -14,8 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.*;
 
 /**
- *
- * @author Snapadragon
+ * Class representing AssignedSchedules in the database
+ * @author Phillip Elliot
  */
 @Entity
 public class AssignedSchedule implements Serializable
@@ -29,6 +29,8 @@ public class AssignedSchedule implements Serializable
     @OneToMany
     private List<Section> sectionList;
 
+    protected AssignedSchedule() {}
+    
     public Long getId()
     {
         return id;
