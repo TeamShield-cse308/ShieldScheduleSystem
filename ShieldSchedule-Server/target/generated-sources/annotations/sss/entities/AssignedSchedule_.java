@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import sss.entities.Section;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2015-03-23T22:47:13")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2015-04-10T18:48:01")
 @StaticMetamodel(AssignedSchedule.class)
 public class AssignedSchedule_ { 
 

@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
 
 /**
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class AdminViewController implements Initializable, ControlledScreen {
     ScreensController myController;

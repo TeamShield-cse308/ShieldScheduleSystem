@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 /**
  * FXML Controller class
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class AddCourseController implements Initializable, ControlledScreen {
     @FXML

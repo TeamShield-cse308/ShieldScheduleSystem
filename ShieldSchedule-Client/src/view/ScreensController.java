@@ -23,7 +23,7 @@ import javafx.util.Duration;
 
 /**
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class ScreensController extends StackPane {
 
@@ -43,13 +43,14 @@ public class ScreensController extends StackPane {
 
     public boolean loadScreen(String name, String resource) {
         try {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/view/" + resource));
             Parent loadScreen = (Parent) myLoader.load();
             ControlledScreen myScreenController = ((ControlledScreen) myLoader.getController());
             myScreenController.setScreenParent(this);
             addScreen(name, loadScreen);
             return true;
         } catch (IOException ex) {
+            System.out.println("Screen not loaded:" + name + ex);
             return false;
         }
     }

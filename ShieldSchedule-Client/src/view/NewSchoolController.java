@@ -19,7 +19,7 @@ import javax.ws.rs.client.WebTarget;
 /**
  * FXML Controller class
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class NewSchoolController implements Initializable, ControlledScreen {
     @FXML

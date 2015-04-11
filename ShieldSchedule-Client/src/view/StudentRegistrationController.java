@@ -9,17 +9,34 @@ import Main.CSE308GUI;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
  *
- * @author Evan
+ * @author evanguby
  */
 public class StudentRegistrationController implements Initializable, ControlledScreen {
+    @FXML
+    private AnchorPane anchor;
+    @FXML
+    private TextField email;
+    @FXML
+    private TextField confirmedPassword;
+    @FXML
+    private TextField password;
+    @FXML
+    private TextField confirmedEmail;
+    @FXML
+    private TextField name;
+    @FXML
+    private ComboBox<?> school;
 
     ScreensController myController;
-    
     /**
      * Initializes the controller class.
      */
@@ -27,12 +44,17 @@ public class StudentRegistrationController implements Initializable, ControlledS
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
-    
-    public void handleRegister(ActionEvent event){
+
+    @FXML
+    private void handleRegister(ActionEvent event) {
+        
+        System.out.println(name.getText());
         myController.setScreen(CSE308GUI.LoginPageID);
     }
+    
     @Override
-    public void setScreenParent(ScreensController screenPage) {
+    public void setScreenParent(ScreensController screenPage)
+    {
         myController = screenPage;
     }
     

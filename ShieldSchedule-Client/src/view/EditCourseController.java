@@ -16,7 +16,7 @@ import javafx.scene.control.ChoiceBox;
 /**
  * FXML Controller class
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class EditCourseController implements Initializable, ControlledScreen {
     @FXML

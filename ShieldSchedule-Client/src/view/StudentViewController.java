@@ -15,7 +15,7 @@ import javafx.fxml.Initializable;
 /**
  * FXML Controller class
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class StudentViewController implements Initializable, ControlledScreen {
 

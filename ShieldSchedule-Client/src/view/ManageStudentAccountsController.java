@@ -16,7 +16,7 @@ import javafx.scene.control.ListView;
 /**
  * FXML Controller class
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class ManageStudentAccountsController implements Initializable, ControlledScreen {
     @FXML

@@ -16,7 +16,7 @@ import view.ManageSchoolsController;
 import view.ScreensController;
 /**
  *
- * @author Evan
+ * @author Evan Guby
  */
 public class CSE308GUI extends Application {
     
