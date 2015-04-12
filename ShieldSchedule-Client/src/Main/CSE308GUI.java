@@ -32,24 +32,22 @@ public class CSE308GUI extends Application {
     public static String ManageSchoolsID = "ManageSchools";
     public static String NewSchool = "NewSchool.fxml";
     public static String NewSchoolID = "NewSchool";
-    public static String EditSchool = "EditSchool.fxml";
-    public static String EditSchoolID = "EditSchool";
     public static String EditSchoolInfo = "EditSchoolInfo.fxml";
     public static String EditSchoolInfoID = "EditSchoolInfo";
-    public static String EditSchoolCourses = "EditSchoolCourses.fxml";
-    public static String EditSchoolCoursesID = "EditSchoolCourses";
-    public static String EditCourse = "EditCourse.fxml";
-    public static String EditCourseID = "EditCourse";
-    public static String AddCourse = "AddCourse.fxml";
-    public static String AddCourseID = "AddCourse";
+    public static String AddSchoolCourses = "AddSchoolCourses.fxml";
+    public static String AddSchoolCoursesID = "AddSchoolCourses";
     public static String AddSection = "AddSection.fxml";
     public static String AddSectionID = "AddSection";
+    public static String AddCourse = "AddCourse.fxml";
+    public static String AddCourseID = "AddCourse";
     public static String EditSection = "EditSection.fxml";
     public static String EditSectionID = "EditSection";
     public static String ManageStudentAccounts = "ManageStudentAccounts.fxml";
     public static String ManageStudentAccountsID = "ManageStudentAccounts";
     public static String StudentView = "StudentView.fxml";
     public static String StudentViewID = "StudentView";
+    public static String SelectSection = "SelectSection.fxml";
+    public static String SelectSectionID = "SelectSection";
     
     private Stage primaryStage;
     private AnchorPane rootLayout;
@@ -64,16 +62,16 @@ public class CSE308GUI extends Application {
         mainContainer.loadScreen(CSE308GUI.AdminViewID, CSE308GUI.AdminView);
         mainContainer.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
         mainContainer.loadScreen(CSE308GUI.NewSchoolID, CSE308GUI.NewSchool);
-        mainContainer.loadScreen(CSE308GUI.EditSchoolID, CSE308GUI.EditSchool);
         mainContainer.loadScreen(CSE308GUI.EditSchoolInfoID, CSE308GUI.EditSchoolInfo);
-        mainContainer.loadScreen(CSE308GUI.EditSchoolCoursesID, CSE308GUI.EditSchoolCourses);
-        mainContainer.loadScreen(CSE308GUI.EditCourseID, CSE308GUI.EditCourse);
+        mainContainer.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
         mainContainer.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
         mainContainer.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
         mainContainer.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
         mainContainer.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
         mainContainer.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
-        
+        mainContainer.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
+
+                
         mainContainer.setScreen(CSE308GUI.LoginPageID);
             
         Group root = new Group();

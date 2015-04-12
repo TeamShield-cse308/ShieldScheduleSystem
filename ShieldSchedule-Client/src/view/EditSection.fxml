@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.EditSectionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.EditSectionController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Edit Section" underline="true">
          <font>
@@ -17,8 +17,8 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="room" layoutX="112.0" layoutY="63.0" />
-      <TextField fx:id="teacher" layoutX="112.0" layoutY="101.0" />
+      <TextField fx:id="room" layoutX="115.0" layoutY="61.0" />
+      <TextField fx:id="teacher" layoutX="115.0" layoutY="99.0" />
       <Label layoutX="17.0" layoutY="103.0" text="Teacher:">
          <font>
             <Font size="14.0" />
@@ -29,16 +29,16 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleSaveSection" prefHeight="25.0" prefWidth="87.0" text="Save Section" />
+      <Button layoutX="14.0" layoutY="251.0" mnemonicParsing="false" onAction="#handleSaveSection" prefHeight="26.0" prefWidth="107.0" text="Save Section" />
       <Button layoutX="545.0" layoutY="367.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
-      <TextField fx:id="period" layoutX="112.0" layoutY="138.0" />
-      <TextField fx:id="semester" layoutX="110.0" layoutY="174.0" />
+      <TextField fx:id="period" layoutX="115.0" layoutY="136.0" />
+      <TextField fx:id="semester" layoutX="115.0" layoutY="172.0" />
       <Label layoutX="15.0" layoutY="176.0" text="Semester:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="size" layoutX="110.0" layoutY="214.0" />
+      <TextField fx:id="size" layoutX="115.0" layoutY="213.0" />
       <Label layoutX="14.0" layoutY="217.0" text="Class Size:">
          <font>
             <Font size="14.0" />

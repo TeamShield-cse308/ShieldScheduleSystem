@@ -11,23 +11,17 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 
 /**
  * FXML Controller class
  *
  * @author Evan Guby
  */
-public class EditSchoolController implements Initializable, ControlledScreen {
+public class SelectSectionController implements Initializable, ControlledScreen {
     @FXML
-    private TextField periods;
-    @FXML
-    private TextField scheduleDays;
-    @FXML
-    private TextField semesters;
-    @FXML
-    private TextField name;
-
+    private ComboBox<?> section;
     ScreensController myController;
     /**
      * Initializes the controller class.
@@ -38,22 +32,23 @@ public class EditSchoolController implements Initializable, ControlledScreen {
     }    
 
     @FXML
-    private void handleBack(ActionEvent event) {
-        myController.setScreen(CSE308GUI.ManageSchoolsID);
+    private void handleSelectSection(ActionEvent event) {
+        myController.setScreen(CSE308GUI.StudentViewID);
     }
 
     @FXML
-    private void handleEditInfo(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditSchoolInfoID);
+    private void handleNewSection(ActionEvent event) {
+        myController.setScreen(CSE308GUI.AddSectionID);
     }
-    
+
     @FXML
-    private void handleEditCourse(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditSchoolCoursesID);
+    private void handleBack(ActionEvent event) {
+        myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
-    
+
     @Override
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
     }
+    
 }

@@ -12,15 +12,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 
 /**
  * FXML Controller class
  *
  * @author Evan Guby
  */
-public class EditSchoolCoursesController implements Initializable, ControlledScreen {
+public class AddSchoolCoursesController implements Initializable, ControlledScreen {
     @FXML
-    private ChoiceBox<?> course;
+    private ComboBox<String> course;
     ScreensController myController;
 
     /**
@@ -32,8 +33,8 @@ public class EditSchoolCoursesController implements Initializable, ControlledScr
     }    
 
     @FXML
-    private void handleEditCourse(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditCourseID);
+    private void handleSelectCourse(ActionEvent event) {
+        myController.setScreen(CSE308GUI.SelectSectionID);
     }
 
     @FXML
@@ -43,7 +44,7 @@ public class EditSchoolCoursesController implements Initializable, ControlledScr
     
     @FXML
     private void handleBack(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditSchoolID);
+        myController.setScreen(CSE308GUI.StudentViewID);
     }
 
     @Override

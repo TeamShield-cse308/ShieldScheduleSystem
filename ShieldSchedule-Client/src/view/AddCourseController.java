@@ -38,12 +38,12 @@ public class AddCourseController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleSaveSchool(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditSchoolCoursesID);
+        myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
     @FXML
     private void handleBack(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditSchoolCoursesID);
+        myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
     @Override

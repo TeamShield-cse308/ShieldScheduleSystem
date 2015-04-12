@@ -85,7 +85,7 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     @FXML
     private void handleEditSchool(ActionEvent event)
     {
-        myController.setScreen(CSE308GUI.EditSchoolID);
+        myController.setScreen(CSE308GUI.EditSchoolInfoID);
     }
 
     @Override

@@ -35,6 +35,7 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleAddCourses(ActionEvent event) {
+        myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
     @FXML

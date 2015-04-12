@@ -42,12 +42,12 @@ public class AddSectionController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleSaveSection(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditCourseID);
+        myController.setScreen(CSE308GUI.AddCourseID);
     }
 
     @FXML
     private void handleBack(ActionEvent event) {
-        myController.setScreen(CSE308GUI.EditCourseID);
+        myController.setScreen(CSE308GUI.AddCourseID);
     }
     
     @Override
