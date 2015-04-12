@@ -18,21 +18,26 @@ import sss.exceptions.AccountPendingException;
 
 /**
  * Class for persisting Student user representations in the database
- * @author Phillip Elliot
+ * @author Phillip Elliot, Jeffrey Kabot
  */
+@NamedQueries({
+    @NamedQuery(name = "Student.findAllPending",
+            query = "SELECT s FROM Student s WHERE s.state = :state"),
+})
 @Entity
 public class Student extends GenericUser implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     //annotations go here_________________________________________
     
     @ManyToOne
     private School school;
     
+    @Id
     @OneToOne
     private String email;
     
@@ -61,6 +66,8 @@ public class Student extends GenericUser implements Serializable
         password = initPassword;
         email = initEmail;
         school = initSchool;
+        
+        state = AccountState.PENDING;
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
