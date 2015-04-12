@@ -30,6 +30,10 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
     private TextField scheduleDays;
     @FXML
     private TextField periods;
+    @FXML
+    private TextField startingLunch;
+    @FXML
+    private TextField endingLunch;
     /**
      * Initializes the controller class.
      */

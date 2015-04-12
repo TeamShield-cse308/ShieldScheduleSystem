@@ -78,9 +78,20 @@ public class AdminSchoolsBean
      * Modify a school in the database
      * @param name 
      */
-    public void editSchool(String name)
+    public void editSchool(String originalName, String newInfo)
     {
-
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findByName", School.class);
+        try{
+            School sch = query.setParameter("name", originalName).getSingleResult();
+            String name;
+            String semesters;
+            String scheduleDays;
+            String periods;
+            
+        } catch(Exception ex) {
+            
+        }
     }
 
     /**

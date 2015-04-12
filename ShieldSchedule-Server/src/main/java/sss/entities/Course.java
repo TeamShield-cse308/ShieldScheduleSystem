@@ -19,10 +19,7 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 
-@NamedQueries({
-    @NamedQuery(name = "Section.findAllCoursesOfASchool", 
-            query = "SELECT c FROM Course c WHERE s.CourseID = :CourseID"),
-})
+
 
 
 public class Course implements Serializable

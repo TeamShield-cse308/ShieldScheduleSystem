@@ -30,6 +30,10 @@ public class NewSchoolController implements Initializable, ControlledScreen {
     private TextField scheduleDays;
     @FXML
     private TextField periods;
+    @FXML
+    private TextField startingLunch;
+    @FXML
+    private TextField endingLunch;
 
     ScreensController myController;
     /**
