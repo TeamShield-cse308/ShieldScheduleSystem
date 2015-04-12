@@ -24,7 +24,7 @@ import sss.entities.School;
  * Exposes the functionality of the AdminSchoolsBean to the client program
  * @author Jeffrey Kabot
  */
-@Path("admin-schools") //the url at which this web service's resources are accessed
+@Path("admin/schools") //the url at which this web service's resources are accessed
 @RequestScoped
 public class AdminSchoolsREST
 {

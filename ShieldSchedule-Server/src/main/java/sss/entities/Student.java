@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.*;
+import sss.exceptions.AccountActiveException;
+import sss.exceptions.AccountPendingException;
 
 /**
  * Class for persisting Student user representations in the database
@@ -27,8 +29,20 @@ public class Student extends GenericUser implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     //annotations go here_________________________________________
+    
     @ManyToOne
-    private School mySchool;
+    private School school;
+    
+    @OneToOne
+    private String email;
+    
+    //definition of AccountStates
+    private enum AccountState {
+        PENDING, INACTIVE, ACTIVE
+    }
+
+    @OneToOne
+    private AccountState state; 
 
     @ManyToMany
     List<Student> friendsList = new ArrayList<>();
@@ -38,6 +52,16 @@ public class Student extends GenericUser implements Serializable
 
     @OneToOne
     private DesiredSchedule myGeneratedSchedule;
+    
+    //required by JPA
+    protected Student() {};
+    
+    public Student(String initName, String initPassword, String initEmail, School initSchool) {
+        name = initName;
+        password = initPassword;
+        email = initEmail;
+        school = initSchool;
+    }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public Long getId()
@@ -77,7 +101,37 @@ public class Student extends GenericUser implements Serializable
     {
         return "cse308.Student[ id=" + id + " ]";
     }
+    /**
+     * Changes an account from pending to approved
+     */
+    public void approveAccount() {
+        if (state == AccountState.PENDING)
+            state = AccountState.INACTIVE;
+    }
+    
+    /**
+     * Flags a student account as active
+     * @throws AccountActiveException Indicates that the student account is already active
+     * @throws AccountPendingException If the account has not yet been approved
+     */
+    public void activate() throws AccountActiveException, AccountPendingException {
+        if (state == AccountState.INACTIVE)
+            state = AccountState.ACTIVE;
+        else if (state == AccountState.ACTIVE)
+            throw new AccountActiveException(email + " is already active.");
+        else
+            throw new AccountPendingException(email + " is not yet approved.");
+    }
+    
+    /**
+     * Flags a student account as inactive
+     */
+    public void deactivate() {
+        if (state == AccountState.ACTIVE)
+            state = AccountState.INACTIVE;
+    }
 
+    //@TODO all these methods
     public void addFriend(Long id)
     {
 
