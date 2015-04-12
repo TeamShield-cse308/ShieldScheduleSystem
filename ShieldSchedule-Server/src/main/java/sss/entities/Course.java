@@ -10,12 +10,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * Class representing school courses in the database
  * @author Phillip Elliot
  */
 @Entity
+
+@NamedQueries({
+    @NamedQuery(name = "Section.findAllCoursesOfASchool", 
+            query = "SELECT c FROM Course c WHERE s.CourseID = :CourseID"),
+})
+
+
 public class Course implements Serializable
 {
 
