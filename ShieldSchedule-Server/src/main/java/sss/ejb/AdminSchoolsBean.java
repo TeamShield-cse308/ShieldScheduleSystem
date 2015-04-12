@@ -84,10 +84,20 @@ public class AdminSchoolsBean
                 em.createNamedQuery("School.findByName", School.class);
         try{
             School sch = query.setParameter("name", originalName).getSingleResult();
-            String name;
-            String semesters;
-            String scheduleDays;
-            String periods;
+            String[] newSchoolInfo = newInfo.split(" ");
+            sch.setSchoolName(newSchoolInfo[0]);
+            sch.setNumSemesters(Integer.parseInt(newSchoolInfo[1]));
+            sch.setNumScheduleDays(Integer.parseInt(newSchoolInfo[2]));
+            sch.setNumPeriods(Integer.parseInt(newSchoolInfo[3]));
+            sch.setStartingLunchPeriod(Integer.parseInt(newSchoolInfo[4]));
+            sch.setEndingLunchPeriod(Integer.parseInt(newSchoolInfo[5]));
+            //School Updated
+            //Now pass to database
+           em.getTransaction().begin();
+           em.refresh(sch);
+           em.getTransaction().commit();
+           
+           logger.log(Level.INFO, "School data changed in database", sch);
             
         } catch(Exception ex) {
             

@@ -36,12 +36,17 @@
          </font>
       </Label>
       <TextField fx:id="periods" layoutX="119.0" layoutY="179.0" />
-      <Button layoutX="16.0" layoutY="221.0" mnemonicParsing="false" onAction="#handleSaveSchool" text="Save School" />
+      <Button layoutX="20.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleSaveSchool" text="Save School" />
       <Button layoutX="545.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleCancel" text="Back" />
       <Label layoutX="17.0" layoutY="41.0" text="Leave entry blank if its not being changed">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
+      <Label layoutX="17.0" layoutY="214.0" text="Range of Lunch Periods:" underline="true" />
+      <TextField fx:id="startingLunch" layoutX="112.0" layoutY="237.0" prefHeight="26.0" prefWidth="41.0" />
+      <Label layoutX="20.0" layoutY="242.0" text="Starting Period:" />
+      <Label layoutX="165.0" layoutY="242.0" text="Ending Period:" />
+      <TextField fx:id="endingLunch" layoutX="252.0" layoutY="237.0" prefHeight="26.0" prefWidth="41.0" />
    </children>
 </AnchorPane>

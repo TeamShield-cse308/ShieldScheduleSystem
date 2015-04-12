@@ -40,6 +40,8 @@ public class School implements Serializable
     private int numSemesters;
     private int numScheduleDays;
     private int numPeriods;
+    private int startingLunchPeriod;
+    private int endingLunchPeriod;
 
     @OneToMany
     private List<Course> courseList;
@@ -97,7 +99,22 @@ public class School implements Serializable
     {
         this.numPeriods = numPeriods;
     }
-
+    public int getStartingLunchPeriod()
+    {
+        return startingLunchPeriod;
+    }
+    public void setStartingLunchPeriod(int period)
+    {
+        this.startingLunchPeriod = period;
+    }
+    public int getEndingLunchPeriod()
+    {
+        return endingLunchPeriod;
+    }
+    public void setEndingLunchPeriod(int period)
+    {
+        this.endingLunchPeriod = period;
+    }
     public List<Course> getCourseList()
     {
         return courseList;
