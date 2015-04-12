@@ -2,8 +2,10 @@
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/ejb/AdminStudentsBean.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/entities/Section.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/ejb/AdminSchoolsBean.java
+/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/exceptions/AccountActiveException.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/entities/Guest.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/entities/GenericUser.java
+/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/exceptions/AccountPendingException.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/entities/Administrator.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/rest/ApplicationConfig.java
 /Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Server/src/main/java/sss/entities/School.java

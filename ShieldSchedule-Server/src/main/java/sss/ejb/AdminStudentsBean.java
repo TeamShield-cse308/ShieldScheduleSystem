@@ -32,6 +32,6 @@ public class AdminStudentsBean
 
     public void addStudent(String initName, String email, School school)
     {
-        Student student = new Student();
+        //Student student = new Student();
     }
 }
