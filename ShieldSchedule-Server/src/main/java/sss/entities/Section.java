@@ -20,9 +20,10 @@ import javax.persistence.OneToOne;
  */
 @Entity
 
+//@TODO resolve compilation error here
 @NamedQueries({
     @NamedQuery(name = "Section.findAllSectionsOfACourse", 
-            query = "SELECT s FROM Section s WHERE s.CourseID = :CourseID"),
+            query = "SELECT s FROM Section s WHERE s.course.id = :CourseID"),
 })
 
 
@@ -40,7 +41,7 @@ public class Section implements Serializable
     }
 
     @OneToOne
-    private ScheduleBlock schedBlock;
+    private ScheduleBlock scheduleBlock;
 
     @OneToOne
     private Course course;

@@ -24,8 +24,9 @@ import javax.persistence.*;
             query = "SELECT s FROM School s"),
     @NamedQuery(name = "School.findByName", 
             query = "SELECT s FROM School s WHERE s.name = :name"),
-    @NamedQuery(name = "School.findAllCourses",
-            query = "SELECT c FROM School s WHERE")
+//    @TODO resolve compilation error here
+//    @NamedQuery(name = "School.findAllCourses",
+//            query = "SELECT c FROM School s WHERE")
 })
 public class School implements Serializable
 {

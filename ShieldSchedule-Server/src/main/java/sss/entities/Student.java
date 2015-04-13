@@ -38,16 +38,9 @@ public class Student extends GenericUser implements Serializable
     private School school;
     
     @Id
-    @OneToOne
     private String email;
     
-    //definition of AccountStates
-    public enum AccountState {
-        PENDING, INACTIVE, ACTIVE
-    }
-
-    @OneToOne
-    private AccountState state; 
+    private StudentAccountState state; 
 
     @ManyToMany
     List<Student> friendsList = new ArrayList<>();
@@ -67,7 +60,7 @@ public class Student extends GenericUser implements Serializable
         email = initEmail;
         school = initSchool;
         
-        state = AccountState.PENDING;
+        state = StudentAccountState.PENDING;
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -112,8 +105,8 @@ public class Student extends GenericUser implements Serializable
      * Changes an account from pending to approved
      */
     public void approveAccount() {
-        if (state == AccountState.PENDING)
-            state = AccountState.INACTIVE;
+        if (state == StudentAccountState.PENDING)
+            state = StudentAccountState.INACTIVE;
     }
     
     /**
@@ -122,9 +115,9 @@ public class Student extends GenericUser implements Serializable
      * @throws AccountPendingException If the account has not yet been approved
      */
     public void activate() throws AccountActiveException, AccountPendingException {
-        if (state == AccountState.INACTIVE)
-            state = AccountState.ACTIVE;
-        else if (state == AccountState.ACTIVE)
+        if (state == StudentAccountState.INACTIVE)
+            state = StudentAccountState.ACTIVE;
+        else if (state == StudentAccountState.ACTIVE)
             throw new AccountActiveException(email + " is already active.");
         else
             throw new AccountPendingException(email + " is not yet approved.");
@@ -134,8 +127,8 @@ public class Student extends GenericUser implements Serializable
      * Flags a student account as inactive
      */
     public void deactivate() {
-        if (state == AccountState.ACTIVE)
-            state = AccountState.INACTIVE;
+        if (state == StudentAccountState.ACTIVE)
+            state = StudentAccountState.INACTIVE;
     }
 
     //@TODO all these methods
