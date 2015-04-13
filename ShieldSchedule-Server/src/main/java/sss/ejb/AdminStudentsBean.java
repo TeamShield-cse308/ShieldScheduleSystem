@@ -5,12 +5,16 @@
  */
 package sss.ejb;
 
-import java.util.logging.Logger;
+import java.util.List;
 import javax.ejb.Stateful;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import sss.entities.School;
 import sss.entities.Student;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import sss.entities.School;
 
 /**
  *
@@ -32,6 +36,27 @@ public class AdminStudentsBean
 
     public void addStudent(String initName, String email, School school)
     {
+        
+    }
+    public void deleteStudent(String email){
+        
+        TypedQuery<Student> query = em.createNamedQuery("Student.findByEMail", Student.class);
+        
+         try {
+            Student stu = query.setParameter("Email", email).getSingleResult();
+            em.getTransaction().begin();
+            em.remove(stu);
+            em.getTransaction().commit();
+
+            //Logging
+            logger.log(Level.INFO, "Student removed from database", stu);
+        } catch (NoResultException noex) {
+            //Logging
+            logger.log(Level.WARNING, "No students found for removal that match db query", email);
+            //@TODO no such school
+        } catch (Exception ex) {
+            //@TODO generic catch
+        }
         
     }
 }

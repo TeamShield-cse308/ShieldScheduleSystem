@@ -42,7 +42,7 @@ public class Student extends GenericUser implements Serializable
     private String email;
     
     //definition of AccountStates
-    private enum AccountState {
+    public enum AccountState {
         PENDING, INACTIVE, ACTIVE
     }
 

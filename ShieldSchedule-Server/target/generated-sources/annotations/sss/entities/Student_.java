@@ -10,7 +10,7 @@ import sss.entities.School;
 import sss.entities.Student;
 import sss.entities.Student.AccountState;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2015-04-12T18:20:00")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2015-04-13T18:53:41")
 @StaticMetamodel(Student.class)
 public class Student_ { 
 
