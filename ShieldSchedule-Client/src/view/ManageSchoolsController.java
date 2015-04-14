@@ -36,6 +36,8 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb 
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -50,7 +52,7 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
         client.register(SchoolsBodyReader.class);
-        clientTarget = client.target("http://localhost:8080/ShieldSchedule-Server/webresources/admin-schools");
+        clientTarget = client.target("http://localhost:8080/ShieldSchedule-Server/webresources/admin/schools");
         GenericType<List<School>> gtlc = new GenericType<List<School>>()
         {
         };
