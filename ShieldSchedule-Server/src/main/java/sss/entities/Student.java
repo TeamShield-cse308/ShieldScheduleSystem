@@ -22,7 +22,9 @@ import sss.exceptions.AccountPendingException;
  */
 @NamedQueries({
     @NamedQuery(name = "Student.findAllPending",
-            query = "SELECT s FROM Student s WHERE s.state = :state"),
+            query = "SELECT s FROM Student s WHERE s.state = sss.entities.StudentAccountState.PENDING"),
+    @NamedQuery(name = "Student.findByEmail",
+            query = "SELECT s FROM Student s WHERE s.email = :email"),
 })
 @Entity
 public class Student extends GenericUser implements Serializable
@@ -104,7 +106,7 @@ public class Student extends GenericUser implements Serializable
     /**
      * Changes an account from pending to approved
      */
-    public void approveAccount() {
+    public void approve() {
         if (state == StudentAccountState.PENDING)
             state = StudentAccountState.INACTIVE;
     }

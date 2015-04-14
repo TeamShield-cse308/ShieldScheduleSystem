@@ -18,7 +18,7 @@ import sss.entities.School;
 
 /**
  *
- * @author Jeffrey Kabot
+ * @author Jeffrey Kabot, Phillip Elliot
  */
 @Stateful
 public class AdminStudentsBean
@@ -34,22 +34,68 @@ public class AdminStudentsBean
     @PersistenceContext
     private EntityManager em;
 
-    public void addStudent(String initName, String email, School school)
+    /**
+     * Retrieves a list of all pending student accounts.
+     * Pending accounts are those which have been requested but not yet approved.
+     * @return 
+     */
+    public List<Student> getPendingStudents()
     {
+        TypedQuery<Student> query =
+                em.createNamedQuery("Student.findAllPending", Student.class);
         
+        //@TODO needs try catch?
+        List<Student> pendingStudents = query.getResultList();
+        
+        //@TODO logging
+        
+        return pendingStudents;
     }
+    
+    /**
+     * Allows a student account to be approved or denied.
+     * Student accounts are addressed by email.
+     * @param email
+     * @param approved true if the student is approved, false if otherwise
+     */
+    public void approveStudent(String email, boolean approved)
+    {
+        TypedQuery<Student> query = 
+                em.createNamedQuery("Student.findByName", Student.class);
+        query.setParameter("email", email);
+        Student student = query.getSingleResult(); //@TODO error handling?
+        
+        if (approved) {
+            student.approve();
+            em.getTransaction().begin();
+            em.refresh(student); //update the student account status
+            em.getTransaction().commit();
+            //@TODO send message to student
+        }
+        else {
+            em.getTransaction().begin();
+            em.remove(student); //purge the account from the db
+            em.getTransaction().commit();
+            //@TODO send message to student
+        }
+    }
+    
+    /**
+     * Deletes a student account from the database.
+     * @param email 
+     */
     public void deleteStudent(String email){
         
         TypedQuery<Student> query = em.createNamedQuery("Student.findByEMail", Student.class);
         
          try {
-            Student stu = query.setParameter("Email", email).getSingleResult();
+            Student student = query.setParameter("email", email).getSingleResult();
             em.getTransaction().begin();
-            em.remove(stu);
+            em.remove(student);
             em.getTransaction().commit();
 
             //Logging
-            logger.log(Level.INFO, "Student removed from database", stu);
+            logger.log(Level.INFO, "Student removed from database", student);
         } catch (NoResultException noex) {
             //Logging
             logger.log(Level.WARNING, "No students found for removal that match db query", email);

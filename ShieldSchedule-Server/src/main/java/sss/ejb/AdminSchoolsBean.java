@@ -57,13 +57,13 @@ public class AdminSchoolsBean
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
         try {
-            School sch = query.setParameter("name", name).getSingleResult();
+            School school = query.setParameter("name", name).getSingleResult();
             em.getTransaction().begin();
-            em.remove(sch);
+            em.remove(school);
             em.getTransaction().commit();
 
             //Logging
-            logger.log(Level.INFO, "School removed from database", sch);
+            logger.log(Level.INFO, "School removed from database", school);
         } catch (NoResultException noex) {
             //Logging
             logger.log(Level.WARNING, "No schools found for removal that match db query", name);
@@ -73,31 +73,31 @@ public class AdminSchoolsBean
         }
     }
 
-    //@TODO editing schools
     /**
      * Modify a school in the database
-     * @param name 
+     * @param originalName the original identifier for the school
+     * @param newInfo new info for the school, as a string, delimited by spaces
      */
     public void editSchool(String originalName, String newInfo)
     {
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
         try{
-            School sch = query.setParameter("name", originalName).getSingleResult();
+            School school = query.setParameter("name", originalName).getSingleResult();
             String[] newSchoolInfo = newInfo.split(" ");
-            sch.setSchoolName(newSchoolInfo[0]);
-            sch.setNumSemesters(Integer.parseInt(newSchoolInfo[1]));
-            sch.setNumScheduleDays(Integer.parseInt(newSchoolInfo[2]));
-            sch.setNumPeriods(Integer.parseInt(newSchoolInfo[3]));
-            sch.setStartingLunchPeriod(Integer.parseInt(newSchoolInfo[4]));
-            sch.setEndingLunchPeriod(Integer.parseInt(newSchoolInfo[5]));
+            school.setSchoolName(newSchoolInfo[0]);
+            school.setNumSemesters(Integer.parseInt(newSchoolInfo[1]));
+            school.setNumScheduleDays(Integer.parseInt(newSchoolInfo[2]));
+            school.setNumPeriods(Integer.parseInt(newSchoolInfo[3]));
+            school.setStartingLunchPeriod(Integer.parseInt(newSchoolInfo[4]));
+            school.setEndingLunchPeriod(Integer.parseInt(newSchoolInfo[5]));
             //School Updated
             //Now pass to database
-           em.getTransaction().begin();
-           em.refresh(sch);
-           em.getTransaction().commit();
+            em.getTransaction().begin();
+            em.refresh(school);
+            em.getTransaction().commit();
            
-           logger.log(Level.INFO, "School data changed in database", sch);
+           logger.log(Level.INFO, "School data changed in database", school);
             
         } catch(Exception ex) {
             
