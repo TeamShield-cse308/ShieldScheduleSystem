@@ -1,5 +1,6 @@
 ShieldSchedule-Client/build
 ShieldSchedule-Client/dist
 ShieldSchedule-Server/target
-ShieldSchedule-Client/nbproject/private/private.xml
+ShieldSchedule-Server/target/classes/sss/entities/Administrator_.class
 ShieldSchedule-Client/nbproject/private/private.properties
+ShieldSchedule-Client/nbproject/private/private.xml
