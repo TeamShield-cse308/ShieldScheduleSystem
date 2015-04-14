@@ -62,7 +62,7 @@ public class SchoolsBodyReader implements MessageBodyReader<List<School>>
                         parser.next();
                         switch (key) {
                             case "schoolName":
-                                sch.setSchoolName(parser.getString());
+                                sch.setName(parser.getString());
                                 break;
                             case "numPeriods":
                                 sch.setNumPeriods(parser.getString());

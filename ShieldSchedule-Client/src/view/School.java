@@ -9,23 +9,28 @@ import java.io.Serializable;
 
 /**
  * A class providing the client-side representation of a school
+ *
  * @author Jeffrey Kabot
  */
 public class School implements Serializable
 {
-    private String schoolName;
-    private String numPeriods;
+
+    private String name;
     private String numSemesters;
+    private String numPeriods;
     private String numScheduleDays;
 
-    public String getSchoolName()
+    private String startingLunchPeriod;
+    private String endingLunchPeriod;
+
+    public String getName()
     {
-        return schoolName;
+        return name;
     }
 
-    public void setSchoolName(String name)
+    public void setName(String name)
     {
-        this.schoolName = name;
+        this.name = name;
     }
 
     public String getNumPeriods()
@@ -56,5 +61,25 @@ public class School implements Serializable
     public void setNumScheduleDays(String numScheduleDays)
     {
         this.numScheduleDays = numScheduleDays;
+    }
+
+    public String getStartingLunchPeriod()
+    {
+        return startingLunchPeriod;
+    }
+
+    public String getEndingLunchPeriod()
+    {
+        return endingLunchPeriod;
+    }
+
+    public void setStartingLunchPeriod(String startingLunchPeriod)
+    {
+        this.startingLunchPeriod = startingLunchPeriod;
+    }
+
+    public void setEndingLunchPeriod(String endingLunchPeriod)
+    {
+        this.endingLunchPeriod = endingLunchPeriod;
     }
 }

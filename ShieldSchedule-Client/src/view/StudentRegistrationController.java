@@ -106,6 +106,7 @@ public class StudentRegistrationController implements Initializable, ControlledS
         //adapted from oracle javafx / javaee tutorial
         //connect to shield schedule server
         WebTarget clientTarget;
+        ClientBuilder.newBuilder();
         Client client = ClientBuilder.newClient();
         client.register(SchoolsBodyReader.class);
         clientTarget = client.target("http://localhost:8080/ShieldSchedule-Server/webresources/admin-schools");
@@ -118,7 +119,7 @@ public class StudentRegistrationController implements Initializable, ControlledS
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
         for (School sch : schools) {
-            schoolNames.add(sch.getSchoolName());
+            schoolNames.add(sch.getName());
         }
 
         //populate combobox

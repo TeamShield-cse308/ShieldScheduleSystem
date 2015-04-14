@@ -75,13 +75,13 @@ public class School implements Serializable
     /*
      * Getters and Setters
      */
-    public String getSchoolName()
+    public String getName()
     {
         return name;
     }
-    public void setSchoolName(String schoolName)
+    public void setName(String name)
     {
-        this.name = schoolName;
+        this.name = name;
     }
     public int getNumSemesters()
     {

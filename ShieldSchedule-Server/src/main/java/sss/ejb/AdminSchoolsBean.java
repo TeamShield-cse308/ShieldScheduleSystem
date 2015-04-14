@@ -94,7 +94,7 @@ public class AdminSchoolsBean
                     query.setParameter("name", originalName).getSingleResult();
             
             //update the school with the new info
-            school.setSchoolName(newName);
+            school.setName(newName);
             school.setNumSemesters(newSemesters);
             school.setNumScheduleDays(newScheduleDays);
             school.setNumPeriods(newPeriods);
