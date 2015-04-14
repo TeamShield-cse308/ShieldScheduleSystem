@@ -24,7 +24,8 @@ import java.util.logging.Level;
 public class AdminSchoolsBean
 {
     //Logger
-    private static final Logger logger = Logger.getLogger("sss.ejb.AdminSchoolsBean");
+    private static final Logger logger = 
+            Logger.getLogger("sss.ejb.AdminSchoolsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -76,31 +77,29 @@ public class AdminSchoolsBean
     }
 
     
-    //@TODO can't delimit by spaces, as school names contain spaces
-    //e.g. my high school was "Westhampton Beach"
+    //@TODO excessive parameters... package into a structure ??
     /**
      * Modify a school in the database
      * @param originalName the original identifier for the school
-     * @param newInfo new info for the school, as a string, delimited by spaces
      */
-    public void editSchool(String originalName, String newInfo)
+    public void editSchool(String originalName, String newName, 
+            int newSemesters, int newPeriods, int newScheduleDays, 
+            int newStartLunchPeriod, int newEndLunchPeriod)
     {
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
         try{
             //find the school to be edited
-            School school = query.setParameter("name", originalName).getSingleResult();
-            
-            //split the incoming info by spaces
-            String[] newSchoolInfo = newInfo.split(" ");
+            School school = 
+                    query.setParameter("name", originalName).getSingleResult();
             
             //update the school with the new info
-            school.setSchoolName(newSchoolInfo[0]);
-            school.setNumSemesters(Integer.parseInt(newSchoolInfo[1]));
-            school.setNumScheduleDays(Integer.parseInt(newSchoolInfo[2]));
-            school.setNumPeriods(Integer.parseInt(newSchoolInfo[3]));
-            school.setStartingLunchPeriod(Integer.parseInt(newSchoolInfo[4]));
-            school.setEndingLunchPeriod(Integer.parseInt(newSchoolInfo[5]));
+            school.setSchoolName(newName);
+            school.setNumSemesters(newSemesters);
+            school.setNumScheduleDays(newScheduleDays);
+            school.setNumPeriods(newPeriods);
+            school.setStartingLunchPeriod(newStartLunchPeriod);
+            school.setEndingLunchPeriod(newEndLunchPeriod);
             
             //School Updated
             //Now pass to database

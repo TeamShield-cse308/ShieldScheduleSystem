@@ -19,6 +19,11 @@ import javax.inject.Inject;
 import sss.ejb.AdminStudentsBean;
 import javax.ws.rs.POST;
 import javax.enterprise.context.RequestScoped;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * REST Web Service
@@ -35,6 +40,9 @@ public class AdminStudentsResource
     
     @Inject
     private AdminStudentsBean adminStudentsBean;
+    
+    //The parser for incoming JSON messages
+    ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Creates a new instance of AdminStudentsREST
@@ -72,7 +80,17 @@ public class AdminStudentsResource
     @Consumes("application/json")
     public void approveStudent(String content)
     {
-        //@TODO parse JSON content string
-        adminStudentsBean.approveStudent("a@b.com", true);
+        try {
+            JsonNode node = mapper.readTree(content);
+            //@TODO ensure correct JSON keys
+            String email = node.get("email").asText();
+            boolean approved = node.get("approved").asBoolean();
+            adminStudentsBean.approveStudent(email, approved);
+            //@TODO error handling
+            
+            //@TODO logging
+        } catch (IOException ex) {
+            Logger.getLogger(AdminStudentsResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

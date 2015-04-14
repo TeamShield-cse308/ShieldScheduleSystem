@@ -28,7 +28,8 @@ public class AdminStudentsBean
     // "Insert Code > Add Business Method")
     
     //Logger
-    private static final Logger logger = Logger.getLogger("sss.ejb.AdminSchoolsBean");
+    private static final Logger logger = 
+            Logger.getLogger("sss.ejb.AdminSchoolsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -97,7 +98,8 @@ public class AdminStudentsBean
      */
     public void deleteStudent(String email){
         
-        TypedQuery<Student> query = em.createNamedQuery("Student.findByEMail", Student.class);
+        TypedQuery<Student> query = 
+                em.createNamedQuery("Student.findByEMail", Student.class);
         
          try {
             Student student = query.setParameter("email", email).getSingleResult();

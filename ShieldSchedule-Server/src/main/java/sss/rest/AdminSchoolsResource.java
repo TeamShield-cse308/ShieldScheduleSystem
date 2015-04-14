@@ -19,28 +19,40 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import sss.ejb.AdminSchoolsBean;
 import sss.entities.School;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
- * REST Web Service
- * Exposes the functionality of the AdminSchoolsBean to the client program
+ * REST Web Service Exposes the functionality of the AdminSchoolsBean to the
+ * client program
+ * 
+ * Some code adapted from http://www.studytrails.com/java/json/java-jackson-json-tree-parsing.jsp
+ *
  * @author Jeffrey Kabot
  */
 @Path("admin/schools") //the url at which this web service's resources are accessed
 @RequestScoped
 public class AdminSchoolsResource
 {
+
     //test
+
     @Context
     private UriInfo context;
 
     //link the bean whose functionallity we expose
     @Inject
     private AdminSchoolsBean adminSchoolsBean;
-    
+
     //Logger
-    private static final Logger logger = Logger.getLogger("sss.rest.AdminSchoolsREST");
+    private static final Logger logger = 
+            Logger.getLogger("sss.rest.AdminSchoolsREST");
     
-    
+    //the reader for JSON messages
+    ObjectMapper mapper = new ObjectMapper();
+
     /**
      * Creates a new instance of AdminSchoolsREST
      */
@@ -49,8 +61,9 @@ public class AdminSchoolsResource
     }
 
     /**
-     * Retrieves representation of an instance of sss.rest.AdminSchoolsREST
-     * This default GET retrieves all the schools in the system's database
+     * Retrieves representation of an instance of sss.rest.AdminSchoolsREST This
+     * default GET retrieves all the schools in the system's database
+     *
      * @return an instance of java.lang.String
      */
     @GET
@@ -62,6 +75,7 @@ public class AdminSchoolsResource
 
     /**
      * POST method for creating a school
+     *
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
@@ -70,40 +84,75 @@ public class AdminSchoolsResource
     @Consumes("application/json")
     public void addSchool(String content)
     {
-        //@TODO parse JSON content string
-//        String name = "TEST_SCHOOL_NAME";
-//        int semesters = 4;
-//        int periods = 9;
-//        int scheduleDays = 5;
-//        int startLunch = 3;
-//        int endLunch = 6;
-        //@TODO no placeholder
-        adminSchoolsBean.addSchool("TEST_SCHOOL_NAME", 4, 9, 5,
-                6, 3);
+        try {
+            //@TODO ensure correct JSON keys
+            JsonNode node = mapper.readTree(content);
+            String name = node.get("name").asText();
+            int numSemesters = node.get("numSemesters").asInt();
+            int numPeriods = node.get("numPeriods").asInt();
+            int numScheduleDays = node.get("numScheduleDays").asInt();
+            int startLunch = node.get("startingLunchPeriod").asInt();
+            int endLunch = node.get("endingLunchPeriod").asInt();
+            
+            adminSchoolsBean.addSchool(name, numSemesters, numPeriods, 
+                    numScheduleDays, startLunch, endLunch);
+            
+            //@TODO logging
+            
+            //@TODO error handling
+        } catch (IOException ioex) {
+            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ioex);
+        }
     }
-    
+
     /**
      * Resource for editing a particular school
-     * @param content 
+     *
+     * @param content
      */
     @POST
     @Path("/edit")
     @Consumes("application/json")
     public void editSchool(String content)
     {
-        //@TODO parse JSON content string
-        //@TODO no placeholder
-        adminSchoolsBean.editSchool("TEST_SCHOOL_NAME", "NEW_SCHOOL_NAME 2 5 2 2 4");
+        try {
+            //@TODO ensure correct JSON keys
+            JsonNode node = mapper.readTree(content);
+            String oldName = node.get("oldName").asText();
+            String newName = node.get("newName").asText();
+            int newSemesters = node.get("newSemesters").asInt();
+            int newPeriods = node.get("newPeriods").asInt();
+            int newScheduleDays = node.get("newScheduleDays").asInt();
+            int newStartLunch = node.get("newStartingLunchPeriod").asInt();
+            int newEndLunch = node.get("newEndingLunchPeriod").asInt();
+            
+            adminSchoolsBean.editSchool(oldName, newName, newSemesters, 
+                    newPeriods, newScheduleDays, newStartLunch, newEndLunch);
+        } 
+        catch(IOException ioex) {
+            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ioex);
+        }
     }
+
     //@TODO POST or DELETE?
+
     @POST
     @Path("/delete")
     @Consumes("application/json")
     public void deleteSchool(String content)
     {
-        //@TODO parse JSON content string
-        //@TODO no placeholder
-        adminSchoolsBean.deleteSchool("TEST_SCHOOL_NAME");
+        try {
+            JsonNode node = mapper.readTree(content);
+
+            //@TODO ensure correct JSON key
+            String name = node.get("name").asText();
+            adminSchoolsBean.deleteSchool(name);
+            
+            //@TODO logging
+            //@TODO error handling
+        } catch (IOException ex) {
+            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
 }
