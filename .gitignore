@@ -3,3 +3,4 @@ ShieldSchedule-Client/dist
 ShieldSchedule-Server/target
 ShieldSchedule-Client/nbproject/private/private.xml
 ShieldSchedule-Client/nbproject/private/private.properties
+/ShieldSchedule-Shared/target/

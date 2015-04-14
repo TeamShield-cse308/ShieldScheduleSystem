@@ -5,6 +5,7 @@
  */
 package sss.ejb;
 
+import shield.server.ejb.AdminSchoolsBean;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import javax.persistence.EntityManager;
@@ -14,7 +15,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import static org.junit.Assert.*;
-import sss.entities.School;
+import shield.server.entities.School;
 
 /**
  *

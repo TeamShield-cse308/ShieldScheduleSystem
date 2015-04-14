@@ -5,6 +5,7 @@
  */
 package sss.ejb;
 
+import shield.server.ejb.AdminStudentsBean;
 import java.util.List;
 import javax.ejb.embeddable.EJBContainer;
 import org.junit.After;
@@ -13,7 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sss.entities.Student;
+import shield.server.entities.Student;
 
 /**
  *
