@@ -18,6 +18,7 @@ import sss.entities.Student;
 import javax.inject.Inject;
 import sss.ejb.AdminStudentsBean;
 import javax.ws.rs.POST;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * REST Web Service
@@ -25,6 +26,7 @@ import javax.ws.rs.POST;
  * @author Jeffrey Kabot
  */
 @Path("admin/students")
+@RequestScoped
 public class AdminStudentsResource
 {
 
