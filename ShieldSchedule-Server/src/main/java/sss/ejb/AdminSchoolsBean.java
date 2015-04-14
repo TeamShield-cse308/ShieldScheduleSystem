@@ -37,15 +37,17 @@ public class AdminSchoolsBean
      * @param initScheduleDays  the number of days in a schedule cycle
      * @param initPeriods       the number of schedule blocks in the school day
      */
-    public void addSchool(String initName, int initSemesters, int initScheduleDays, int initPeriods)
+    public void addSchool(String initName, int initSemesters, int initPeriods, 
+            int initScheduleDays, int initStartLunchPeriod, int initEndLunchPeriod)
     {
-        School sch = new School(initName, initSemesters, initScheduleDays, initPeriods);
+        School school = new School(initName, initSemesters, initPeriods, 
+                initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
         em.getTransaction().begin();
-        em.persist(sch);
+        em.persist(school);
         em.getTransaction().commit();
 
         //Logging
-        logger.log(Level.INFO, "New school added to database", sch);
+        logger.log(Level.INFO, "New school added to database", school);
     }
 
     /**
@@ -73,6 +75,9 @@ public class AdminSchoolsBean
         }
     }
 
+    
+    //@TODO can't delimit by spaces, as school names contain spaces
+    //e.g. my high school was "Westhampton Beach"
     /**
      * Modify a school in the database
      * @param originalName the original identifier for the school
@@ -83,14 +88,20 @@ public class AdminSchoolsBean
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
         try{
+            //find the school to be edited
             School school = query.setParameter("name", originalName).getSingleResult();
+            
+            //split the incoming info by spaces
             String[] newSchoolInfo = newInfo.split(" ");
+            
+            //update the school with the new info
             school.setSchoolName(newSchoolInfo[0]);
             school.setNumSemesters(Integer.parseInt(newSchoolInfo[1]));
             school.setNumScheduleDays(Integer.parseInt(newSchoolInfo[2]));
             school.setNumPeriods(Integer.parseInt(newSchoolInfo[3]));
             school.setStartingLunchPeriod(Integer.parseInt(newSchoolInfo[4]));
             school.setEndingLunchPeriod(Integer.parseInt(newSchoolInfo[5]));
+            
             //School Updated
             //Now pass to database
             em.getTransaction().begin();

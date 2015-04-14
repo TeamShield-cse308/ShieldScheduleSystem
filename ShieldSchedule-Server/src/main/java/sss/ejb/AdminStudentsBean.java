@@ -33,6 +33,19 @@ public class AdminStudentsBean
     //reference to the perisstence layer
     @PersistenceContext
     private EntityManager em;
+    
+    public List<Student> getAllStudents()
+    {
+        TypedQuery<Student> query = 
+                em.createNamedQuery("Student.findAll", Student.class);
+        
+        //@TODO needs try/catch?
+        List<Student> students = query.getResultList();
+        
+        //@TODO logging
+        
+        return students;
+    }
 
     /**
      * Retrieves a list of all pending student accounts.
@@ -60,12 +73,12 @@ public class AdminStudentsBean
      */
     public void approveStudent(String email, boolean approved)
     {
-        TypedQuery<Student> query = 
-                em.createNamedQuery("Student.findByName", Student.class);
-        query.setParameter("email", email);
-        Student student = query.getSingleResult(); //@TODO error handling?
-        
+
         if (approved) {
+            TypedQuery<Student> query =
+                    em.createNamedQuery("Student.findByName", Student.class);
+            query.setParameter("email", email);
+            Student student = query.getSingleResult(); //@TODO error handling?
             student.approve();
             em.getTransaction().begin();
             em.refresh(student); //update the student account status
@@ -73,9 +86,7 @@ public class AdminStudentsBean
             //@TODO send message to student
         }
         else {
-            em.getTransaction().begin();
-            em.remove(student); //purge the account from the db
-            em.getTransaction().commit();
+            deleteStudent(email);
             //@TODO send message to student
         }
     }

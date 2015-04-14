@@ -32,7 +32,8 @@ public class ApplicationConfig extends Application
      */
     private void addRestResourceClasses(Set<Class<?>> resources)
     {
-        resources.add(sss.rest.AdminSchoolsREST.class);
+        resources.add(sss.rest.AdminSchoolsResource.class);
+        resources.add(sss.rest.AdminStudentsResource.class);
     }
     
 }

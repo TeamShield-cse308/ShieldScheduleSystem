@@ -21,6 +21,8 @@ import sss.exceptions.AccountPendingException;
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @NamedQueries({
+    @NamedQuery(name = "Student.findAll",
+            query = "SELECT s FROM Student s"),
     @NamedQuery(name = "Student.findAllPending",
             query = "SELECT s FROM Student s WHERE s.state = sss.entities.StudentAccountState.PENDING"),
     @NamedQuery(name = "Student.findByEmail",

@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.*;
+import java.util.Vector;
 
 /**
  * Class representing Schools in the database
@@ -54,13 +55,20 @@ public class School implements Serializable
     //required by JPA
     protected School(){}
 
-    public School(String initName, int initSemesters, int initScheduleDays, int initPeriods)
+    public School(String initName, int initSemesters, int initScheduleDays, 
+            int initPeriods, int initStartLunchPeriod, int initEndLunchPeriod)
     {
         name = initName;
         //@TODO enfroce # semesters from 1 to 4
         numSemesters = initSemesters;
         numScheduleDays = initScheduleDays;
         numPeriods = initPeriods;
+        
+        startingLunchPeriod = initStartLunchPeriod;
+        endingLunchPeriod = initEndLunchPeriod;
+        
+        courseList = new Vector<Course>();
+        studentList = new Vector<Student>();
     }
 
     
