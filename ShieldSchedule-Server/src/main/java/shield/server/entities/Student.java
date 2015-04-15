@@ -24,7 +24,7 @@ import shield.server.exceptions.AccountPendingException;
     @NamedQuery(name = "Student.findAll",
             query = "SELECT s FROM Student s"),
     @NamedQuery(name = "Student.findAllPending",
-            query = "SELECT s FROM Student s WHERE s.state = sss.entities.StudentAccountState.PENDING"),
+            query = "SELECT s FROM Student s WHERE s.state = shield.server.entities.StudentAccountState.PENDING"),
     @NamedQuery(name = "Student.findByEmail",
             query = "SELECT s FROM Student s WHERE s.email = :email"),
 })

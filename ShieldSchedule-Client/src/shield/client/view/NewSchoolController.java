@@ -5,6 +5,7 @@
  */
 package shield.client.view;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +19,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
-import shield.shared.dto.School;
+import shield.shared.dto.SimpleSchool;
 import shield.client.web.MessageExchange;
 
 /**
@@ -66,7 +67,7 @@ public class NewSchoolController implements Initializable, ControlledScreen
         String initStartingLunchPeriod = startingLunch.getText();
         String initEndingLunchPeriod = endingLunch.getText();
 
-        School school = new School();
+        SimpleSchool school = new SimpleSchool();
         school.name = initSchoolName;
         school.numSemesters = initSemesters;
         school.numScheduleDays = initScheduleDays;
@@ -75,14 +76,14 @@ public class NewSchoolController implements Initializable, ControlledScreen
         school.endingLunchPeriod = initEndingLunchPeriod;
 
         //connect to server
-        ClientBuilder.newBuilder();
+        WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
         //@TODO register a json MessageBodyWriter
-//        client.register(JacksonFeature.class);
-        WebTarget clientTarget = client.target(MessageExchange.ADD_SCHOOL_URL);
+        client.register(JacksonJsonProvider.class);
+        clientTarget = client.target(MessageExchange.ADD_SCHOOL_URL);
         //send the new school request
         clientTarget.request().post(Entity.entity(school,
-                MediaType.APPLICATION_JSON), School.class);
+                MediaType.APPLICATION_JSON), SimpleSchool.class);
 
     }
 

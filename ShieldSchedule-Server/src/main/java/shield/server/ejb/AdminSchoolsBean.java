@@ -43,9 +43,9 @@ public class AdminSchoolsBean
     {
         School school = new School(initName, initSemesters, initPeriods, 
                 initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(school);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
 
         //Logging
         logger.log(Level.INFO, "New school added to database", school);
@@ -61,9 +61,9 @@ public class AdminSchoolsBean
                 em.createNamedQuery("School.findByName", School.class);
         try {
             School school = query.setParameter("name", name).getSingleResult();
-            em.getTransaction().begin();
+//            em.getTransaction().begin();
             em.remove(school);
-            em.getTransaction().commit();
+//            em.getTransaction().commit();
 
             //Logging
             logger.log(Level.INFO, "School removed from database", school);
@@ -103,9 +103,9 @@ public class AdminSchoolsBean
             
             //School Updated
             //Now pass to database
-            em.getTransaction().begin();
+//            em.getTransaction().begin();
             em.refresh(school);
-            em.getTransaction().commit();
+//            em.getTransaction().commit();
            
            logger.log(Level.INFO, "School data changed in database", school);
             

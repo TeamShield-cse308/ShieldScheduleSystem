@@ -81,9 +81,9 @@ public class AdminStudentsBean
             query.setParameter("email", email);
             Student student = query.getSingleResult(); //@TODO error handling?
             student.approve();
-            em.getTransaction().begin();
+//            em.getTransaction().begin();
             em.refresh(student); //update the student account status
-            em.getTransaction().commit();
+//            em.getTransaction().commit();
             //@TODO send message to student
         }
         else {
@@ -103,9 +103,9 @@ public class AdminStudentsBean
         
          try {
             Student student = query.setParameter("email", email).getSingleResult();
-            em.getTransaction().begin();
+//            em.getTransaction().begin();
             em.remove(student);
-            em.getTransaction().commit();
+//            em.getTransaction().commit();
 
             //Logging
             logger.log(Level.INFO, "Student removed from database", student);

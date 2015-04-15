@@ -15,14 +15,17 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
+//import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import shield.server.ejb.AdminSchoolsBean;
 import shield.server.entities.School;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
+
+import shield.shared.dto.SimpleSchool;
 
 /**
  * REST Web Service Exposes the functionality of the AdminSchoolsBean to the
@@ -68,16 +71,30 @@ public class AdminSchoolsResource
      */
     @GET
     @Produces("application/json")
-    public List<School> getAllSchools()
+    public List<SimpleSchool> getAllSchools()
     {
-        return adminSchoolsBean.getAllSchools();
+        List<School> allSchools = adminSchoolsBean.getAllSchools();
+        List<SimpleSchool> translatedSchools = new ArrayList<>();
+        SimpleSchool s;
+        for (School school : allSchools)
+        {
+            s = new SimpleSchool();
+            s.name = school.getName();
+            s.numPeriods = "" + school.getNumPeriods();
+            s.numSemesters = "" + school.getNumSemesters();
+            s.startingLunchPeriod = "" + school.getStartingLunchPeriod();
+            s.endingLunchPeriod = "" + school.getEndingLunchPeriod();
+            s.numScheduleDays = "" + school.getNumScheduleDays();
+            translatedSchools.add(s);
+        }
+        return translatedSchools;
     }
 
     /**
      * POST method for creating a school
      *
      * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
+//     * @return an HTTP response with content of the updated or created resource.
      */
     @POST
     @Path("/add")
@@ -135,7 +152,10 @@ public class AdminSchoolsResource
     }
 
     //@TODO POST or DELETE?
-
+    /**
+     * Resource for removing a school
+     * @param content 
+     */
     @POST
     @Path("/delete")
     @Consumes("application/json")

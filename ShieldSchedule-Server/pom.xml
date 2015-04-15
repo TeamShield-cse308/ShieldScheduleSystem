@@ -34,6 +34,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>Shield</groupId>
+            <artifactId>ShieldSchedule-Shared</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>

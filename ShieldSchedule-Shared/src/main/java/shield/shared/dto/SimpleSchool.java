@@ -9,7 +9,7 @@ package shield.shared.dto;
  * A class providing the network-transferable object representation of a school
  * @author Jeffrey Kabot
  */
-public class School
+public class SimpleSchool
 {
     public String name;
     public String numSemesters;

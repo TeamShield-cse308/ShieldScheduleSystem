@@ -5,6 +5,7 @@
  */
 package shield.client.view;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import shield.client.web.MessageExchange;
-import shield.shared.dto.School;
+import shield.shared.dto.SimpleSchool;
 
 
 /**
@@ -58,18 +59,18 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         //connect to shield schedule server
         WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
-        client.register(SchoolsBodyReader.class);
+        client.register(JacksonJsonProvider.class);
         clientTarget = client.target(MessageExchange.GET_ALL_SCHOOLS_URL);
-        GenericType<List<School>> gtlc = new GenericType<List<School>>()
+        GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
         {
         };
 
         //get a list of all schools in database, transmitted from server in JSON
-        List<School> schools = clientTarget.request("application/json").get(gtlc);
+        List<SimpleSchool> schools = clientTarget.request("application/json").get(gtlc);
 
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
-        for (School sch : schools) {
+        for (SimpleSchool sch : schools) {
             schoolNames.add(sch.name);
         }
 

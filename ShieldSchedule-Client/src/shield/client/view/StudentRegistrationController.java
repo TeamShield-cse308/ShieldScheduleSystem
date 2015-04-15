@@ -23,8 +23,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import shield.shared.dto.School;
+import shield.shared.dto.SimpleSchool;
 import shield.client.web.MessageExchange;
+
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+//import com.fasterxml.jackson.jaxrs.
 
 /**
  * FXML Controller class
@@ -113,19 +116,22 @@ public class StudentRegistrationController implements Initializable, ControlledS
         WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
         
-        //Register a message body reader
-        client.register(SchoolsBodyReader.class);
+        //Register a message body reader provider
+        client.register(JacksonJsonProvider.class);
+        
+        //target the web resource with the list of all chools
         clientTarget = client.target(MessageExchange.GET_ALL_SCHOOLS_URL);
-        GenericType<List<School>> gtlc = new GenericType<List<School>>()
+        
+        GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
         {
         };
 
         //get a list of all schools in database, transmitted from server in JSON
-        List<School> schools = clientTarget.request("application/json").get(gtlc);
+        List<SimpleSchool> schools = clientTarget.request("application/json").get(gtlc);
 
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
-        for (School sch : schools) {
+        for (SimpleSchool sch : schools) {
             schoolNames.add(sch.name);
         }
 
