@@ -5,35 +5,35 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.StudentViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.StudentViewController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Logged in as Student" underline="true">
+      <Label layoutX="14.0" layoutY="14.0" text="Welcome  " underline="true">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleViewSchedules" text="View Schedules" />
-      <Button layoutX="14.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleAddCourses" text="Add Courses" />
-      <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
-      <ListView layoutX="438.0" layoutY="28.0" prefHeight="148.0" prefWidth="156.0" />
-      <Label layoutX="438.0" layoutY="6.0" text="Friends">
+      <Button layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleViewSchedules" text="View Schedules" />
+      <Button layoutX="14.0" layoutY="108.0" mnemonicParsing="false" onAction="#handleAddCourses" text="Design a Schedule" />
+      <TextField layoutX="383.0" layoutY="296.0" prefHeight="25.0" prefWidth="116.0" />
+      <Button layoutX="499.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
+      <Button layoutX="574.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleAcceptSelected" text="Accept Selected" />
+      <Button layoutX="650.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
+      <ListView layoutX="383.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
+      <Label layoutX="383.0" layoutY="17.0" text="Friends">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ListView layoutX="438.0" layoutY="208.0" prefHeight="82.0" prefWidth="156.0" />
-      <Label layoutX="438.0" layoutY="185.0" text="Friend Requests">
+      <ListView layoutX="554.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
+      <Label layoutX="554.0" layoutY="17.0" text="Friend Requests">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="437.0" layoutY="297.0" mnemonicParsing="false" onAction="#handleAcceptSelected" text="Accept Selected" />
-      <Label layoutX="437.0" layoutY="330.0" text="Find Friends">
+      <Label layoutX="383.0" layoutY="274.0" text="Find Friends">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="438.0" layoutY="349.0" prefHeight="25.0" prefWidth="116.0" />
-      <Button layoutX="554.0" layoutY="349.0" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
    </children>
 </AnchorPane>

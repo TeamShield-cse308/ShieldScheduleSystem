@@ -77,7 +77,7 @@ public class AdminStudentsBean
 
         if (approved) {
             TypedQuery<Student> query =
-                    em.createNamedQuery("Student.findByName", Student.class);
+                    em.createNamedQuery("Student.findByEmail", Student.class);
             query.setParameter("email", email);
             Student student = query.getSingleResult(); //@TODO error handling?
             student.approve();

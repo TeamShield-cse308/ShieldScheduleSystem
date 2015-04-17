@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.AddCourseController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.AddCourseController">
    <children>
       <Label layoutX="14.0" layoutY="14.0" text="Add Course" underline="true">
          <font>
@@ -29,9 +29,9 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleSaveSchool" prefHeight="26.0" prefWidth="104.0" text="Save Course" />
-      <Button layoutX="545.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
+      <Button layoutX="664.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
       <TextField fx:id="semesters" layoutX="111.0" layoutY="122.0" />
+      <Button layoutX="14.0" layoutY="163.0" mnemonicParsing="false" onAction="#handleSaveSchool" prefHeight="26.0" prefWidth="104.0" text="Save Course" />
       <Label layoutX="283.0" layoutY="125.0" text="Seperate each semester with a comma" />
    </children>
 </AnchorPane>
