@@ -94,12 +94,12 @@ public class AdminSchoolsBean
                     query.setParameter("name", originalName).getSingleResult();
             
             //update the school with the new info
-            school.setName(newName);
-            school.setNumSemesters(newSemesters);
-            school.setNumScheduleDays(newScheduleDays);
-            school.setNumPeriods(newPeriods);
-            school.setStartingLunchPeriod(newStartLunchPeriod);
-            school.setEndingLunchPeriod(newEndLunchPeriod);
+            school.setSchoolName(newName);
+            school.setSemesters(newSemesters);
+            school.setScheduleDays(newScheduleDays);
+            school.setPeriods(newPeriods);
+            school.setStartingLunch(newStartLunchPeriod);
+            school.setEndingLunch(newEndLunchPeriod);
             
             //School Updated
             //Now pass to database
