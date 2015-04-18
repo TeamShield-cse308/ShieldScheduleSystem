@@ -10,12 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * The class representing Administrator users in our database
  * @author Phillip Elliot
  */
 @Entity
+@Table(name="admin")
 public class Administrator extends GenericUser implements Serializable
 {
 

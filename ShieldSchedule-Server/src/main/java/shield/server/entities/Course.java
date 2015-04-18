@@ -30,7 +30,7 @@ public class Course implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String courseName;
+    private String name;
 
     private int semester;
 
