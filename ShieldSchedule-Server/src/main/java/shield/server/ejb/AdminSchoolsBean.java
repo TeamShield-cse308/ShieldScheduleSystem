@@ -4,8 +4,12 @@
  * and open the template in the editor.
  */
 package shield.server.ejb;
-
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
+import static java.util.jar.Pack200.Packer.PASS;
 import javax.ejb.Stateful;
 import shield.server.entities.School;
 import javax.persistence.EntityManager;
@@ -14,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import static javax.ws.rs.Priorities.USER;
 
 /**
  * A javabean that provides functionality to add, delete, and edit schools
@@ -41,11 +46,32 @@ public class AdminSchoolsBean
     public void addSchool(String initName, int initSemesters, int initPeriods, 
             int initScheduleDays, int initStartLunchPeriod, int initEndLunchPeriod)
     {
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
         School school = new School(initName, initSemesters, initPeriods, 
                 initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
 //        em.getTransaction().begin();
-        em.persist(school);
+        Connection conn = null;
+        Statement stmt = null;
+        
+        try {
+            logger.log(Level.INFO, "We made it here", school);
+            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
+            
+            stmt = conn.createStatement();
+            String sql = "INSERT INTO School VALUES (" +2+",\'" + initName + "\', " + initSemesters + ", "
+                     + initPeriods + ", " + initScheduleDays + ", " + initStartLunchPeriod + ", "
+                     + initEndLunchPeriod + ")";
+           // System.out.println("sql");
+            stmt.executeUpdate(sql);
+            logger.log(Level.INFO, sql, school);
 //        em.getTransaction().commit();
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
 
         //Logging
         logger.log(Level.INFO, "New school added to database", school);

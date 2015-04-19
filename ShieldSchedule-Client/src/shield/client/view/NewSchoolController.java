@@ -79,14 +79,16 @@ public class NewSchoolController implements Initializable, ControlledScreen
         WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
         //@TODO register a json MessageBodyWriter
-        client.register(JacksonJsonProvider.class);
+        //client.register(JacksonJsonProvider.class);
         clientTarget = client.target(MessageExchange.ADD_SCHOOL_URL);
-        System.out.println(clientTarget.getUri().toString());
+        
+        //System.out.println(clientTarget.getUri().toString());
         
         //send the new school request
-        clientTarget.request().post(Entity.entity(school,
-                MediaType.APPLICATION_JSON), SimpleSchool.class);
-
+        //clientTarget.request().post(Entity.entity(school,
+        //        MediaType.APPLICATION_JSON), SimpleSchool.class);
+        clientTarget.request().post(Entity.entity(school, MediaType.APPLICATION_JSON));
+        System.out.println("");
     }
 
     @FXML

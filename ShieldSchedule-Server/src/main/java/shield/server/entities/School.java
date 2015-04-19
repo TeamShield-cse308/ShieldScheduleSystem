@@ -25,6 +25,8 @@ import java.util.Vector;
             query = "SELECT s FROM School s"),
     @NamedQuery(name = "School.findByName", 
             query = "SELECT s FROM School s WHERE s.schoolName = :name"),
+    //@NamedQuery(name = "School.AddSchool", 
+    //        query = "INSERT INTO school (SCHOOLNAME, SEMESTERS,SCHEDULEDAYS,PERIODS,STARTINGLUNCH,ENDINGLUNCH)VALUES (:name, :semesters, :scheduledays, :startinglunch, : endinglunch)"),
 //    @TODO resolve compilation error here
 //    @NamedQuery(name = "School.findAllCourses",
 //            query = "SELECT c FROM School s WHERE")
