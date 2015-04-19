@@ -88,7 +88,7 @@ public class NewSchoolController implements Initializable, ControlledScreen
         //clientTarget.request().post(Entity.entity(school,
         //        MediaType.APPLICATION_JSON), SimpleSchool.class);
         clientTarget.request().post(Entity.entity(school, MediaType.APPLICATION_JSON));
-        System.out.println("");
+        //System.out.println("");
     }
 
     @FXML

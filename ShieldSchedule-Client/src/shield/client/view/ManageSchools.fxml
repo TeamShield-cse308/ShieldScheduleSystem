@@ -23,5 +23,6 @@
       </ComboBox>
       <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#handleNewSchool" text="New School" />
       <Button layoutX="179.0" layoutY="87.0" mnemonicParsing="false" onAction="#handleEditSchool" text="Edit School" />
+      <Button layoutX="277.0" layoutY="87.0" mnemonicParsing="false" onAction="#handleDeleteSchool" text="Delete School" />
    </children>
 </AnchorPane>

@@ -76,15 +76,10 @@ public class StudentRegistrationController implements Initializable, ControlledS
             student.password = password.getText();
             student.school = school.getPromptText();
 
-            //connect to server
             WebTarget clientTarget;
             Client client = ClientBuilder.newClient();
-            //@TODO register a json MessageBodyWriter
-            client.register(JacksonJsonProvider.class);
             clientTarget = client.target(MessageExchange.ADD_STUDENT_URL);
-            //send the new school request
-            clientTarget.request().post(Entity.entity(student,
-                    MediaType.APPLICATION_JSON), SimpleStudent.class);
+            clientTarget.request().post(Entity.entity(student, MediaType.APPLICATION_JSON));
             
             //CLEAR FIELDS
             email.clear();
