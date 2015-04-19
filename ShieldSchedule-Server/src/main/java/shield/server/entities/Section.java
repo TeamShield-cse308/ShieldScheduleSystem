@@ -23,7 +23,7 @@ import javax.persistence.OneToOne;
 //@TODO resolve compilation error here
 @NamedQueries({
     @NamedQuery(name = "Section.findAllSectionsOfACourse", 
-            query = "SELECT s FROM Section s WHERE s.course.id = :CourseID"),
+            query = "SELECT s FROM Section s WHERE s.courseID = :CourseID"),
 })
 
 
@@ -41,16 +41,16 @@ public class Section implements Serializable
     }
 
     @OneToOne
-    private ScheduleBlock scheduleBlock;
+    private ScheduleBlock scheduleBlockID;
 
     @OneToOne
-    private Course course;
+    private Course courseID;
 
-    private int roomNumber;
+    private int room;
 
     private String teacher;
 
-    private int sizeOfClass;
+    private int classSize;
 
     public void setId(Long id)
     {

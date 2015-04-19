@@ -81,6 +81,8 @@ public class NewSchoolController implements Initializable, ControlledScreen
         //@TODO register a json MessageBodyWriter
         client.register(JacksonJsonProvider.class);
         clientTarget = client.target(MessageExchange.ADD_SCHOOL_URL);
+        System.out.println(clientTarget.getUri().toString());
+        
         //send the new school request
         clientTarget.request().post(Entity.entity(school,
                 MediaType.APPLICATION_JSON), SimpleSchool.class);

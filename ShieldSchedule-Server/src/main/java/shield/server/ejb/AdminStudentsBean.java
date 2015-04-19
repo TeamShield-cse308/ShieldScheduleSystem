@@ -65,6 +65,23 @@ public class AdminStudentsBean
         
         return pendingStudents;
     }
+    /*
+    * Add a student to the database
+    */
+    public void addStudent(String initName, String email, String password, String school)
+    {
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findByName", School.class);
+        query.setParameter(1, school);
+        School schoolE = query.getSingleResult();
+        Student student = new Student(initName, password, email, schoolE);
+//        em.getTransaction().begin();
+        em.persist(student);
+//        em.getTransaction().commit();
+
+        //Logging
+        logger.log(Level.INFO, "New school added to database", school);
+    }
     
     /**
      * Allows a student account to be approved or denied.
@@ -77,7 +94,7 @@ public class AdminStudentsBean
 
         if (approved) {
             TypedQuery<Student> query =
-                    em.createNamedQuery("Student.findByName", Student.class);
+                    em.createNamedQuery("Student.findByEmail", Student.class);
             query.setParameter("email", email);
             Student student = query.getSingleResult(); //@TODO error handling?
             student.approve();

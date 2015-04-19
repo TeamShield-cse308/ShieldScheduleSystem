@@ -79,12 +79,12 @@ public class AdminSchoolsResource
         for (School school : allSchools)
         {
             s = new SimpleSchool();
-            s.name = school.getName();
-            s.numPeriods = "" + school.getNumPeriods();
-            s.numSemesters = "" + school.getNumSemesters();
-            s.startingLunchPeriod = "" + school.getStartingLunchPeriod();
-            s.endingLunchPeriod = "" + school.getEndingLunchPeriod();
-            s.numScheduleDays = "" + school.getNumScheduleDays();
+            s.name = school.getSchoolName();
+            s.numPeriods = "" + school.getPeriods();
+            s.numSemesters = "" + school.getSemesters();
+            s.startingLunchPeriod = "" + school.getStartingLunch();
+            s.endingLunchPeriod = "" + school.getEndingLunch();
+            s.numScheduleDays = "" + school.getScheduleDays();
             translatedSchools.add(s);
         }
         return translatedSchools;

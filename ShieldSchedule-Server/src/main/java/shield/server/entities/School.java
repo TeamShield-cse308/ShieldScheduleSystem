@@ -24,7 +24,7 @@ import java.util.Vector;
     @NamedQuery(name = "School.findAll", 
             query = "SELECT s FROM School s"),
     @NamedQuery(name = "School.findByName", 
-            query = "SELECT s FROM School s WHERE s.name = :name"),
+            query = "SELECT s FROM School s WHERE s.schoolName = :name"),
 //    @TODO resolve compilation error here
 //    @NamedQuery(name = "School.findAllCourses",
 //            query = "SELECT c FROM School s WHERE")
@@ -38,12 +38,12 @@ public class School implements Serializable
     private Long id;
 
     //annotations below________________
-    private String name;
-    private int numSemesters;
-    private int numScheduleDays;
-    private int numPeriods;
-    private int startingLunchPeriod;
-    private int endingLunchPeriod;
+    private String schoolName;
+    private int semesters;
+    private int scheduleDays;
+    private int periods;
+    private int startingLunch;
+    private int endingLunch;
 
     @OneToMany
     private List<Course> courseList;
@@ -58,14 +58,14 @@ public class School implements Serializable
     public School(String initName, int initSemesters, int initScheduleDays, 
             int initPeriods, int initStartLunchPeriod, int initEndLunchPeriod)
     {
-        name = initName;
+        schoolName = initName;
         //@TODO enfroce # semesters from 1 to 4
-        numSemesters = initSemesters;
-        numScheduleDays = initScheduleDays;
-        numPeriods = initPeriods;
+        semesters = initSemesters;
+        scheduleDays = initScheduleDays;
+        periods = initPeriods;
         
-        startingLunchPeriod = initStartLunchPeriod;
-        endingLunchPeriod = initEndLunchPeriod;
+        startingLunch = initStartLunchPeriod;
+        endingLunch = initEndLunchPeriod;
         
         courseList = new Vector<Course>();
         studentList = new Vector<Student>();
@@ -75,54 +75,54 @@ public class School implements Serializable
     /*
      * Getters and Setters
      */
-    public String getName()
+    public String getSchoolName()
     {
-        return name;
+        return schoolName;
     }
-    public void setName(String name)
+    public void setSchoolName(String name)
     {
-        this.name = name;
+        this.schoolName = name;
     }
-    public int getNumSemesters()
+    public int getSemesters()
     {
-        return numSemesters;
+        return semesters;
     }
     //@TODO enforce validity
-    public void setNumSemesters(int numSemesters)
+    public void setSemesters(int numSemesters)
     {
-        this.numSemesters = numSemesters;
+        this.semesters = numSemesters;
     }
-    public int getNumScheduleDays()
+    public int getScheduleDays()
     {
-        return numScheduleDays;
+        return scheduleDays;
     }
-    public void setNumScheduleDays(int numScheduleDays)
+    public void setScheduleDays(int numScheduleDays)
     {
-        this.numScheduleDays = numScheduleDays;
+        this.scheduleDays = numScheduleDays;
     }
-    public int getNumPeriods()
+    public int getPeriods()
     {
-        return numPeriods;
+        return periods;
     }
-    public void setNumPeriods(int numPeriods)
+    public void setPeriods(int numPeriods)
     {
-        this.numPeriods = numPeriods;
+        this.periods = numPeriods;
     }
-    public int getStartingLunchPeriod()
+    public int getStartingLunch()
     {
-        return startingLunchPeriod;
+        return startingLunch;
     }
-    public void setStartingLunchPeriod(int period)
+    public void setStartingLunch(int period)
     {
-        this.startingLunchPeriod = period;
+        this.startingLunch = period;
     }
-    public int getEndingLunchPeriod()
+    public int getEndingLunch()
     {
-        return endingLunchPeriod;
+        return endingLunch;
     }
-    public void setEndingLunchPeriod(int period)
+    public void setEndingLunch(int period)
     {
-        this.endingLunchPeriod = period;
+        this.endingLunch = period;
     }
     public List<Course> getCourseList()
     {
