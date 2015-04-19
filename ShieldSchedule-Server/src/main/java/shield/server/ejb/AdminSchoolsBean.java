@@ -62,7 +62,7 @@ public class AdminSchoolsBean
             conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
             
             stmt = conn.createStatement();
-            String sql = "INSERT INTO School VALUES (" +2+",\'" + initName + "\', " + initSemesters + ", "
+            String sql = "INSERT INTO School (SCHOOLNAME,SEMESTERS,SCHEDULEDAYS,PERIODS,STARTINGLUNCH,ENDINGLUNCH) VALUES (\'" + initName + "\', " + initSemesters + ", "
                      + initPeriods + ", " + initScheduleDays + ", " + initStartLunchPeriod + ", "
                      + initEndLunchPeriod + ")";
            // System.out.println("sql");
