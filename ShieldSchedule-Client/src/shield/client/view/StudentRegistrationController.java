@@ -7,26 +7,28 @@ package shield.client.view;
 
 import shield.client.main.CSE308GUI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-//import javafx.scene.control.Alert;
-//import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
-import shield.shared.dto.SimpleSchool;
+
+import shield.shared.dto.SimpleStudent;
 import shield.client.web.MessageExchange;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.PasswordField;
+import javafx.scene.layout.AnchorPane;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import shield.shared.dto.SimpleSchool;
 //import com.fasterxml.jackson.jaxrs.
 
 /**
@@ -34,8 +36,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
  *
  * @author evanguby
  */
-public class StudentRegistrationController implements Initializable, ControlledScreen
-{
+public class StudentRegistrationController implements Initializable, ControlledScreen {
 
     @FXML
     private AnchorPane anchor;
@@ -58,19 +59,33 @@ public class StudentRegistrationController implements Initializable, ControlledS
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
         populateSchoolsBox();
     }
 
     @FXML
-    private void handleRegister(ActionEvent event)
-    {
+    private void handleRegister(ActionEvent event) {
         //Check if email already registered/ add to database 
         //Set account to inactive
         if (email.getText().indexOf('@') != -1 && email.getText().equals(confirmedEmail.getText()) && password.getText().equals(confirmedPassword.getText())) {
             //Add account to DB / Check if it already exists
+            SimpleStudent student = new SimpleStudent();
+            student.state = "Pending";
+            student.email = email.getText();
+            student.name = name.getText();
+            student.password = password.getText();
+            student.school = school.getPromptText();
 
+            //connect to server
+            WebTarget clientTarget;
+            Client client = ClientBuilder.newClient();
+            //@TODO register a json MessageBodyWriter
+            client.register(JacksonJsonProvider.class);
+            clientTarget = client.target(MessageExchange.ADD_STUDENT_URL);
+            //send the new school request
+            clientTarget.request().post(Entity.entity(student,
+                    MediaType.APPLICATION_JSON), SimpleStudent.class);
+            
             //CLEAR FIELDS
             email.clear();
             confirmedEmail.clear();
@@ -82,19 +97,19 @@ public class StudentRegistrationController implements Initializable, ControlledS
         } else {
             //Check to see if it email for password not correct
             if (email.getText().indexOf('@') == -1) {
-               // Alert alert = new Alert(AlertType.INFORMATION);
+                // Alert alert = new Alert(AlertType.INFORMATION);
                 //alert.setTitle("Input Error");
                 //alert.setHeaderText("Invalid Email");
                 //alert.setContentText("Please enter a valid email");
                 // alert.show();
             } else if (!(email.getText().equals(confirmedEmail.getText()))) {
-               // Alert alert = new Alert(AlertType.INFORMATION);
+                // Alert alert = new Alert(AlertType.INFORMATION);
                 // alert.setTitle("Input Error");
                 // alert.setHeaderText("Check Emails");
                 // alert.setContentText("Entered email addressed do not match.");
                 // alert.show();
             } else if (!(password.getText().equals(confirmedPassword.getText()))) {
-               // Alert alert = new Alert(AlertType.INFORMATION);
+                // Alert alert = new Alert(AlertType.INFORMATION);
                 // alert.setTitle("Input Error");
                 // alert.setHeaderText("Check Passwords");
                 // alert.setContentText("Entered passwords do not match.");
@@ -104,26 +119,34 @@ public class StudentRegistrationController implements Initializable, ControlledS
     }
 
     @Override
-    public void setScreenParent(ScreensController screenPage)
-    {
+    public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
     }
 
-    public void populateSchoolsBox()
-    {
+    @FXML
+    public void handleBack(ActionEvent event) {
+        email.clear();
+        confirmedEmail.clear();
+        password.clear();
+        confirmedPassword.clear();
+        name.clear();
+        //Cant figure out how to reset school box
+        myController.setScreen(CSE308GUI.LoginPageID);
+    }
+
+    public void populateSchoolsBox() {
         //adapted from oracle javafx / javaee tutorial
         //connect to shield schedule server
         WebTarget clientTarget;
         Client client = ClientBuilder.newClient();
-        
+
         //Register a message body reader provider
         client.register(JacksonJsonProvider.class);
-        
+
         //target the web resource with the list of all chools
         clientTarget = client.target(MessageExchange.GET_ALL_SCHOOLS_URL);
-        
-        GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
-        {
+
+        GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>() {
         };
 
         //get a list of all schools in database, transmitted from server in JSON
