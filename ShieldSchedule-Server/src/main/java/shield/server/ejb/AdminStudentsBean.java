@@ -77,11 +77,9 @@ public class AdminStudentsBean
     {
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
-        logger.log(Level.INFO, school, school);
         query.setParameter("name", school);
         School schoolE = query.getSingleResult();
         long id = schoolE.getID();
-        logger.log(Level.INFO, email, schoolE);
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
@@ -97,7 +95,8 @@ public class AdminStudentsBean
 
             stmt = conn.createStatement();
             String sql = "INSERT INTO Student (email,password,SchoolID,State, name) VALUES (\'" + email + "\', \'" + password + "\', "
-                    + id + ",\' " + StudentAccountState.PENDING + "\',\'" + initName +"'/)";
+                    + id + ",\'" + StudentAccountState.PENDING + "\',\'" + initName +"\')";
+            logger.log(Level.INFO,sql, st);
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, null, ex);

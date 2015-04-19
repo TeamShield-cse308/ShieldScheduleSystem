@@ -74,7 +74,7 @@ public class StudentRegistrationController implements Initializable, ControlledS
             student.email = email.getText();
             student.name = name.getText();
             student.password = password.getText();
-            student.school = school.getPromptText();
+            student.school = school.getValue();
 
             WebTarget clientTarget;
             Client client = ClientBuilder.newClient();
