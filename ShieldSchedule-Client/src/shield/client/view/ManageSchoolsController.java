@@ -5,31 +5,23 @@
  */
 package shield.client.view;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import shield.client.web.MessageExchange;
+import javax.ws.rs.core.Response;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResources;
 import shield.shared.dto.SimpleSchool;
 
-
 /**
- * FXML Controller class 
- * Some code adapted from
- * http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/javafx_json_tutorial/javafx_javaee7_json_tutorial.html#section2s1
+ * FXML Controller class Some code adapted from
  *
  * @author Evan Guby, Jeffrey Kabot
  */
@@ -42,6 +34,10 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
 
     ScreensController myController;
 
+    private ServerAccessPoint getSchools =
+            new ServerAccessPoint(ServerResources.GET_ALL_SCHOOLS_URL);
+    private ServerAccessPoint deleteSchool =
+            new ServerAccessPoint(ServerResources.DELETE_SCHOOL_URL);
 
     /**
      * Initializes the controller class.
@@ -50,25 +46,26 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
      * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
+    public void initialize(URL url,
+            ResourceBundle rb)
     {
         populateSchoolsBox();
     }
 
     public void populateSchoolsBox()
     {
-        //adapted from oracle javafx / javaee tutorial
-        //connect to shield schedule server
-        WebTarget clientTarget;
-        Client client = ClientBuilder.newClient();
-        client.register(JacksonJsonProvider.class);
-        clientTarget = client.target(MessageExchange.GET_ALL_SCHOOLS_URL);
+        //request list of schools
+        Response rsp = getSchools.request();
+        
+        //check the response status code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
+            //@TODO error handling   
+        }
         GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
         {
         };
-
-        //get a list of all schools in database, transmitted from server in JSON
-        List<SimpleSchool> schools = clientTarget.request("application/json").get(gtlc);
+        //read schools from http response
+        List<SimpleSchool> schools = rsp.readEntity(gtlc);
 
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
@@ -92,20 +89,22 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     {
         myController.setScreen(CSE308GUI.NewSchoolID);
     }
+
     @FXML
     private void handleDeleteSchool(ActionEvent event)
     {
-        WebTarget clientTarget;
-        Client client = ClientBuilder.newClient();
-        //@TODO register a json MessageBodyWriter
-        //client.register(JacksonJsonProvider.class);
-        clientTarget = client.target(MessageExchange.DELETE_SCHOOL_URL);
-        
+        //get the school name
         String content = schoolsBox.getValue().toString();
         
-        clientTarget.request().post(Entity.entity(content, MediaType.APPLICATION_JSON));
-        System.out.println("");
+        //send it to the server
+        Response rsp = deleteSchool.request(content);
         
+        //check response status code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO handle error code
+        }
+
         myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
         myController.setScreen(CSE308GUI.ManageSchoolsID);
     }

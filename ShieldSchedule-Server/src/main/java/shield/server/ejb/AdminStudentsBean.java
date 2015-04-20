@@ -47,7 +47,7 @@ public class AdminStudentsBean
     public List<Student> getAllStudents()
     {
         List<Student> students = null;
-        
+
         //Create the entity manager and set up the query for all students
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> query =
@@ -77,7 +77,7 @@ public class AdminStudentsBean
     public List<Student> getPendingStudents()
     {
         List<Student> pendingStudents = null;
-        
+
         //Create the Entity Manager and set up the query for pending students
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> query =
@@ -92,7 +92,7 @@ public class AdminStudentsBean
             em.close();
             em = null;
         }
-        
+
         return pendingStudents;
     }
 
@@ -119,7 +119,9 @@ public class AdminStudentsBean
             //find the appropriate school
             School school = query.getSingleResult();
             Student student = new Student(initName, initEmail, initPassword, school);
+            em.getTransaction().begin();
             em.persist(student); //insert the student
+            em.getTransaction().commit();
             logger.log(Level.INFO, "New student inserted to database {0}", student);
         } catch (NoResultException noex) {
             logger.log(Level.WARNING, "No school found with name {0}", initSchool);
@@ -174,6 +176,7 @@ public class AdminStudentsBean
         try {
             //query the email and approve or delete the student
             Student student = query.getSingleResult();
+            em.getTransaction().begin();
             if (approved) {
                 student.approve();
                 logger.log(Level.INFO, "Student account {0} approved", student);
@@ -183,6 +186,7 @@ public class AdminStudentsBean
                 logger.log(Level.INFO, "Student account {0} deleted", student);
                 //@TODO send message to student?
             }
+            em.getTransaction().commit();
         } catch (NoResultException noex) {
             logger.log(Level.WARNING, "No such account with email {0} found in database", email);
         } finally {

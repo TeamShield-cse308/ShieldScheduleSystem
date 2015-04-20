@@ -62,7 +62,9 @@ public class AdminSchoolsBean
 
         try {
             //add the school
+            em.getTransaction().begin();
             em.persist(school);
+            em.getTransaction().commit();
             logger.log(Level.INFO, "New school added to database {0}", school);
         } catch (EntityExistsException eeex) {
             logger.log(Level.WARNING, "Collision on school ID within database");
@@ -116,7 +118,9 @@ public class AdminSchoolsBean
         try {
             //search the school and remove it from database
             School school = query.getSingleResult();
+            em.getTransaction().begin();
             em.remove(school);
+            em.getTransaction().commit();
             logger.log(Level.INFO, "School {0} removed from database", school);
         } catch (NoResultException noex) {
             logger.log(Level.WARNING, "No such school with name {0} found in database", name);
@@ -144,23 +148,22 @@ public class AdminSchoolsBean
             int newStartLunchPeriod,
             int newEndLunchPeriod)
     {
-
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", originalName);
         try {
-            //execute query
+            //execute query and update school info
             School school = query.getSingleResult();
-            //update the school with the new info
+            em.getTransaction().begin();
             school.setSchoolName(newName);
             school.setSemesters(newSemesters);
             school.setScheduleDays(newScheduleDays);
             school.setPeriods(newPeriods);
             school.setStartingLunch(newStartLunchPeriod);
             school.setEndingLunch(newEndLunchPeriod);
-            
+            em.getTransaction().commit();
             //@TODO change this log?
             logger.log(Level.INFO, "School data changed in database for school with ID: {0}", school.getID());
 

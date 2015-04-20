@@ -17,7 +17,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
 import shield.shared.dto.SimpleStudent;
-import shield.client.web.MessageExchange;
+import shield.client.web.ServerResources;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import java.util.ArrayList;
@@ -25,18 +25,19 @@ import java.util.List;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.AnchorPane;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import shield.client.web.ServerAccessPoint;
 import shield.shared.dto.SimpleSchool;
 //import com.fasterxml.jackson.jaxrs.
 
 /**
  * FXML Controller class
  *
- * @author evanguby
+ * @author Evan Guby, Jeffrey Kabot
  */
-public class StudentRegistrationController implements Initializable, ControlledScreen {
+public class StudentRegistrationController implements Initializable, ControlledScreen
+{
 
     @FXML
     private AnchorPane anchor;
@@ -53,18 +54,24 @@ public class StudentRegistrationController implements Initializable, ControlledS
     @FXML
     private ComboBox<String> school;
 
+    private ServerAccessPoint newStudent =
+            new ServerAccessPoint(ServerResources.ADD_STUDENT_URL);
+
     ScreensController myController;
 
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url,
+            ResourceBundle rb)
+    {
         populateSchoolsBox();
     }
 
     @FXML
-    private void handleRegister(ActionEvent event) {
+    private void handleRegister(ActionEvent event)
+    {
         //Check if email already registered/ add to database 
         //Set account to inactive
         if (email.getText().indexOf('@') != -1 && email.getText().equals(confirmedEmail.getText()) && password.getText().equals(confirmedPassword.getText())) {
@@ -76,10 +83,13 @@ public class StudentRegistrationController implements Initializable, ControlledS
             student.password = password.getText();
             student.school = school.getValue();
 
-            WebTarget clientTarget;
-            Client client = ClientBuilder.newClient();
-            clientTarget = client.target(MessageExchange.ADD_STUDENT_URL);
-            clientTarget.request().post(Entity.entity(student, MediaType.APPLICATION_JSON));
+            //transmit new student form to server
+            Response rsp = newStudent.request(student);
+            //check response code
+            if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+            {
+                //@TODO handle error code
+            }
             
             //CLEAR FIELDS
             email.clear();
@@ -114,12 +124,14 @@ public class StudentRegistrationController implements Initializable, ControlledS
     }
 
     @Override
-    public void setScreenParent(ScreensController screenPage) {
+    public void setScreenParent(ScreensController screenPage)
+    {
         myController = screenPage;
     }
 
     @FXML
-    public void handleBack(ActionEvent event) {
+    public void handleBack(ActionEvent event)
+    {
         email.clear();
         confirmedEmail.clear();
         password.clear();
@@ -129,7 +141,8 @@ public class StudentRegistrationController implements Initializable, ControlledS
         myController.setScreen(CSE308GUI.LoginPageID);
     }
 
-    public void populateSchoolsBox() {
+    public void populateSchoolsBox()
+    {
         //adapted from oracle javafx / javaee tutorial
         //connect to shield schedule server
         WebTarget clientTarget;
@@ -139,9 +152,10 @@ public class StudentRegistrationController implements Initializable, ControlledS
         client.register(JacksonJsonProvider.class);
 
         //target the web resource with the list of all chools
-        clientTarget = client.target(MessageExchange.GET_ALL_SCHOOLS_URL);
+        clientTarget = client.target(ServerResources.GET_ALL_SCHOOLS_URL);
 
-        GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>() {
+        GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
+        {
         };
 
         //get a list of all schools in database, transmitted from server in JSON

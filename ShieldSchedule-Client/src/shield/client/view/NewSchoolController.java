@@ -5,7 +5,6 @@
  */
 package shield.client.view;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,18 +12,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import shield.client.web.ServerAccessPoint;
 
 import shield.shared.dto.SimpleSchool;
-import shield.client.web.MessageExchange;
+import shield.client.web.ServerResources;
 
 /**
- * FXML Controller class jax-rs code adapted from
- * http://www.hascode.com/2013/12/jax-rs-2-0-rest-client-features-by-example/
+ * FXML Controller class 
  *
  * @author Evan Guby, Jeffrey Kabot
  */
@@ -43,6 +38,9 @@ public class NewSchoolController implements Initializable, ControlledScreen
     private TextField startingLunch;
     @FXML
     private TextField endingLunch;
+    
+    private ServerAccessPoint addSchool = 
+            new ServerAccessPoint(ServerResources.ADD_SCHOOL_URL);
 
     ScreensController myController;
 
@@ -75,20 +73,14 @@ public class NewSchoolController implements Initializable, ControlledScreen
         school.startingLunchPeriod = initStartingLunchPeriod;
         school.endingLunchPeriod = initEndingLunchPeriod;
 
-        //connect to server
-        WebTarget clientTarget;
-        Client client = ClientBuilder.newClient();
-        //@TODO register a json MessageBodyWriter
-        //client.register(JacksonJsonProvider.class);
-        clientTarget = client.target(MessageExchange.ADD_SCHOOL_URL);
-        
-        //System.out.println(clientTarget.getUri().toString());
-        
-        //send the new school request
-        //clientTarget.request().post(Entity.entity(school,
-        //        MediaType.APPLICATION_JSON), SimpleSchool.class);
-        clientTarget.request().post(Entity.entity(school, MediaType.APPLICATION_JSON));
-        System.out.println("");
+
+        //transmit the school
+        Response rsp = addSchool.request(school);
+        //check server code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling
+        }
         
         myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
         myController.setScreen(CSE308GUI.ManageSchoolsID);
