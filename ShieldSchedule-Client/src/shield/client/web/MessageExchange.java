@@ -25,4 +25,7 @@ public class MessageExchange
     
     public static final String ADD_STUDENT_URL = 
             "http://localhost:8080/ShieldSchedule-Server/webresources/admin/students/add";
+    
+    public static final String DELETE_SCHOOL_URL = 
+            "http://localhost:8080/ShieldSchedule-Server/webresources/admin/schools/delete";
 }

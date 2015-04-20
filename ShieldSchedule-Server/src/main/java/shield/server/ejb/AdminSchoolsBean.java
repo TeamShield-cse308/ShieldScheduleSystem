@@ -86,20 +86,31 @@ public class AdminSchoolsBean {
     public void deleteSchool(String name) {
         TypedQuery<School> query
                 = em.createNamedQuery("School.findByName", School.class);
-        try {
-            School school = query.setParameter("name", name).getSingleResult();
+       // try {
+        //    School school = query.setParameter("name", name).getSingleResult();
 //            em.getTransaction().begin();
-            em.remove(school);
+        //    em.remove(school);
 //            em.getTransaction().commit();
 
             //Logging
-            logger.log(Level.INFO, "School removed from database", school);
-        } catch (NoResultException noex) {
-            //Logging
-            logger.log(Level.WARNING, "No schools found for removal that match db query", name);
-            //@TODO no such school
-        } catch (Exception ex) {
-            //@TODO generic catch
+        //    logger.log(Level.INFO, "School removed from database", school);
+       // } catch (NoResultException noex) {
+        //    //Logging
+        //    logger.log(Level.WARNING, "No schools found for removal that match db query", name);
+        //    //@TODO no such school
+       // } catch (Exception ex) {
+      //      //@TODO generic catch
+      //  }
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
+
+            stmt = conn.createStatement();
+            String sql = "DELETE FROM school WHERE name = '" + name + "'";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -152,11 +163,7 @@ public class AdminSchoolsBean {
         List<School> schools = query.getResultList();
         //@TODO logging
         logger.log(Level.INFO, "Retrieving all schools in DB", schools);
-<<<<<<< HEAD
-        em.close();
-=======
 
->>>>>>> origin/master
         return schools;
     }
 }

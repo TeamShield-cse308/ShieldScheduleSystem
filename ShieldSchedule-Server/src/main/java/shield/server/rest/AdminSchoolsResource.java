@@ -161,18 +161,19 @@ public class AdminSchoolsResource
     @Consumes("application/json")
     public void deleteSchool(String content)
     {
-        try {
-            JsonNode node = mapper.readTree(content);
+        //try {
+           // JsonNode node = mapper.readTree(content);
 
-            //@TODO ensure correct JSON key
-            String name = node.get("name").asText();
+            ///@TODO ensure correct JSON key
+           // String name = node.get("name").asText();
+            String name = content;
             adminSchoolsBean.deleteSchool(name);
             
             //@TODO logging
             //@TODO error handling
-        } catch (IOException ex) {
-            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       // } catch (IOException ex) {
+          //  Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ex);
+        //}
     }
 
 }

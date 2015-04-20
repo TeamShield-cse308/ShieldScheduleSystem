@@ -18,8 +18,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import shield.client.web.MessageExchange;
 import shield.shared.dto.SimpleSchool;
 
@@ -89,6 +91,23 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     private void handleNewSchool(ActionEvent event)
     {
         myController.setScreen(CSE308GUI.NewSchoolID);
+    }
+    @FXML
+    private void handleDeleteSchool(ActionEvent event)
+    {
+        WebTarget clientTarget;
+        Client client = ClientBuilder.newClient();
+        //@TODO register a json MessageBodyWriter
+        //client.register(JacksonJsonProvider.class);
+        clientTarget = client.target(MessageExchange.DELETE_SCHOOL_URL);
+        
+        String content = schoolsBox.getValue().toString();
+        
+        clientTarget.request().post(Entity.entity(content, MediaType.APPLICATION_JSON));
+        System.out.println("");
+        
+        myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
+        myController.setScreen(CSE308GUI.ManageSchoolsID);
     }
 
     @FXML

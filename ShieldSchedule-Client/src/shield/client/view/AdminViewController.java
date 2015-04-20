@@ -34,6 +34,7 @@ public class AdminViewController implements Initializable, ControlledScreen {
     
     @FXML
     private void handleManageSchools(ActionEvent event) {
+        //myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
         myController.setScreen(CSE308GUI.ManageSchoolsID);
     }
 
