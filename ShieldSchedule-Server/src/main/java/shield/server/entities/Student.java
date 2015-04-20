@@ -18,16 +18,16 @@ import shield.server.exceptions.AccountPendingException;
 
 /**
  * Class for persisting Student user representations in the database
+ *
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @NamedQueries({
     @NamedQuery(name = "Student.findAll",
             query = "SELECT s FROM Student s"),
     @NamedQuery(name = "Student.findAllPending",
-            query = "SELECT s FROM Student s WHERE s.state = shield.server.entities.StudentAccountState.PENDING"),
+            query = "SELECT s FROM Student s WHERE s.accountState = shield.server.entities.StudentAccountState.PENDING"),
     @NamedQuery(name = "Student.findByEmail",
-            query = "SELECT s FROM Student s WHERE s.email = :email"),
-})
+            query = "SELECT s FROM Student s WHERE s.email = :email"),})
 @Entity
 public class Student extends GenericUser implements Serializable
 {
@@ -37,14 +37,14 @@ public class Student extends GenericUser implements Serializable
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     //annotations go here_________________________________________
-    
+
     @ManyToOne
     private School school;
-    
+
     @Id
     private String email;
-    
-    private StudentAccountState state; 
+
+    private StudentAccountState accountState;
 
     @ManyToMany
     List<Student> friendsList = new ArrayList<>();
@@ -54,17 +54,18 @@ public class Student extends GenericUser implements Serializable
 
     @OneToOne
     private DesiredSchedule myGeneratedSchedule;
-    
+
     //required by JPA
-    protected Student() {};
+    protected Student(){}
     
-    public Student(String initName, String initPassword, String initEmail, School initSchool) {
+    public Student(String initName, String initEmail, String initPassword, School initSchool)
+    {
         name = initName;
-        password = initPassword;
         email = initEmail;
+        password = initPassword;
         school = initSchool;
-        
-        state = StudentAccountState.PENDING;
+
+        accountState = StudentAccountState.PENDING;
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -105,34 +106,43 @@ public class Student extends GenericUser implements Serializable
     {
         return "cse308.Student[ id=" + id + " ]";
     }
+
     /**
      * Changes an account from pending to approved
      */
-    public void approve() {
-        if (state == StudentAccountState.PENDING)
-            state = StudentAccountState.INACTIVE;
+    public void approve()
+    {
+        if (accountState == StudentAccountState.PENDING) {
+            accountState = StudentAccountState.INACTIVE;
+        }
     }
-    
+
     /**
      * Flags a student account as active
-     * @throws AccountActiveException Indicates that the student account is already active
+     *
+     * @throws AccountActiveException Indicates that the student account is
+     * already active
      * @throws AccountPendingException If the account has not yet been approved
      */
-    public void activate() throws AccountActiveException, AccountPendingException {
-        if (state == StudentAccountState.INACTIVE)
-            state = StudentAccountState.ACTIVE;
-        else if (state == StudentAccountState.ACTIVE)
+    public void activate() throws AccountActiveException, AccountPendingException
+    {
+        if (accountState == StudentAccountState.INACTIVE) {
+            accountState = StudentAccountState.ACTIVE;
+        } else if (accountState == StudentAccountState.ACTIVE) {
             throw new AccountActiveException(email + " is already active.");
-        else
+        } else {
             throw new AccountPendingException(email + " is not yet approved.");
+        }
     }
-    
+
     /**
      * Flags a student account as inactive
      */
-    public void deactivate() {
-        if (state == StudentAccountState.ACTIVE)
-            state = StudentAccountState.INACTIVE;
+    public void deactivate()
+    {
+        if (accountState == StudentAccountState.ACTIVE) {
+            accountState = StudentAccountState.INACTIVE;
+        }
     }
 
     //@TODO all these methods
@@ -160,10 +170,11 @@ public class Student extends GenericUser implements Serializable
     {
 
     }
-    public String getEmail(){
+
+    public String getEmail()
+    {
         return email;
     }
-    
 
     public void editCourse(Course course)
     {
