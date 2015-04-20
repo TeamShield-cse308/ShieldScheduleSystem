@@ -11,4 +11,5 @@ package shield.client.view;
  */
 public interface ControlledScreen {
     public void setScreenParent(ScreensController screenPage);
+    public void populatePage();
 }

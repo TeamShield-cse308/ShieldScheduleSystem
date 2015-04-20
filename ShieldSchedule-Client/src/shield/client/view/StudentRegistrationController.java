@@ -171,4 +171,8 @@ public class StudentRegistrationController implements Initializable, ControlledS
         schoolsBox.getItems().addAll(schoolNames);
     }
 
+    @Override
+    public void populatePage() {
+    }
+
 }

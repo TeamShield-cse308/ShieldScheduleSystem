@@ -7,6 +7,7 @@ package shield.client.view;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
@@ -20,6 +21,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import shield.client.main.CSE308GUI;
+import shield.shared.dto.SimpleSchool;
 
 /**
  *
@@ -28,7 +31,9 @@ import javafx.util.Duration;
 public class ScreensController extends StackPane {
 
     private HashMap<String, Node> screens = new HashMap<>();
-
+    private String school;
+    private List<SimpleSchool> schools;
+    
     public ScreensController() {
         super();
     }
@@ -47,6 +52,7 @@ public class ScreensController extends StackPane {
             Parent loadScreen = (Parent) myLoader.load();
             ControlledScreen myScreenController = ((ControlledScreen) myLoader.getController());
             myScreenController.setScreenParent(this);
+            myScreenController.populatePage();
             addScreen(name, loadScreen);
             return true;
         } catch (IOException ex) {
@@ -64,7 +70,7 @@ public class ScreensController extends StackPane {
                 getChildren().add(0, screens.get(name));
 
             } else {
-                
+
                 getChildren().add(screens.get(name));
 
             }
@@ -82,6 +88,34 @@ public class ScreensController extends StackPane {
 
         } else {
             return true;
+        }
+    }
+    
+    public String getSchool(){
+        return school;
+    }
+    public void setSchool(String school){
+        this.school = school;
+    }
+    public List<SimpleSchool> getSchools(){
+        return schools;
+    }
+    public void setSchools(List<SimpleSchool> schools){
+        this.schools = schools;
+    }
+    
+    public void loadSchoolInfoScreen(){
+        try {
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource("/shield/client/view/" + CSE308GUI.EditSchoolInfo));
+            Parent loadScreen = (Parent) myLoader.load();
+            EditSchoolInfoController myScreenController = ((EditSchoolInfoController) myLoader.getController());
+            myScreenController.setScreenParent(this);
+            myScreenController.populatePage();
+            addScreen(CSE308GUI.EditSchoolInfoID, loadScreen);
+            return;
+        } catch (IOException ex) {
+            System.out.println("Screen not loaded:" + CSE308GUI.EditSchoolInfoID + ex);
+            return;
         }
     }
 }

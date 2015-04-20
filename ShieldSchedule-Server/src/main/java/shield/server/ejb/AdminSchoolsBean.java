@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.persistence.EntityExistsException;
 import shield.server.util.DatabaseConnection;
+import shield.shared.dto.SimpleSchool;
 
 /**
  * A javabean that provides functionality to add, delete, and edit schools To be
@@ -98,8 +99,11 @@ public class AdminSchoolsBean
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
-        try
-        {
+//<<<<<<< Updated upstrea
+//=======
+        try {
+//<<<<<<< Updated upstream
+//>>>>>>> Stashed changes
             //search the school and remove it from database
             School school = query.getSingleResult();
             em.getTransaction().begin();
@@ -121,6 +125,15 @@ public class AdminSchoolsBean
             //Close the entity manager
             em.close();
             em = null;
+////=======
+//            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
+//
+//            stmt = conn.createStatement();
+//            String sql = "DELETE FROM school WHERE schoolname = \'" + name + "\'";
+//            stmt.executeUpdate(sql);
+//        } catch (SQLException ex) {
+//            logger.log(Level.SEVERE, null, ex);
+////>>>>>>> Stashed changes
         }
     }
 
@@ -205,5 +218,31 @@ public class AdminSchoolsBean
             em = null;
         }
         return schools;
+    }
+
+    public SimpleSchool getSchool(String name) {
+        School sch = null;
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findSchoolByName", School.class);
+        query.setParameter("name", name);
+        try {
+            sch = query.getSingleResult();
+            logger.log(Level.INFO, "Retrieving school from DB", sch);
+        } catch (Exception ex) {
+            //@TODO
+        } finally {
+            //Close the entity manager
+            em.close();
+            em = null;
+        }
+        SimpleSchool ss = new SimpleSchool();
+        ss.endingLunchPeriod = sch.getEndingLunch();
+        ss.name = sch.getSchoolName();
+        ss.startingLunchPeriod = sch.getStartingLunch();
+        ss.numSemesters = sch.getSemesters();
+        ss.numScheduleDays = sch.getScheduleDays();
+        ss.numPeriods = sch.getPeriods();
+        return ss;
     }
 }
