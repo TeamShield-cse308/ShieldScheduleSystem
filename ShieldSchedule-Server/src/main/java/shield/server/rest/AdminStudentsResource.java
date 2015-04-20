@@ -62,10 +62,11 @@ public class AdminStudentsResource
      * @return an instance of java.lang.String
      */
     @GET
+    @Path("/approved")
     @Produces("application/json")
     public Response getStudents()
     {
-        List<Student> students = adminStudentsBean.getAllStudents();
+        List<Student> students = adminStudentsBean.getApprovedStudents();
 
         List<SimpleStudent> simpleStudents = new ArrayList<>();
         SimpleStudent s;

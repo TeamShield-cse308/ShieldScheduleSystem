@@ -40,14 +40,14 @@ public class AdminStudentsBean
      *
      * @return The list of student accounts.
      */
-    public List<Student> getAllStudents()
+    public List<Student> getApprovedStudents()
     {
         List<Student> students = null;
 
         //Create the entity manager and set up the query for all students
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> query =
-                em.createNamedQuery("Student.findAll", Student.class);
+                em.createNamedQuery("Student.findAllApproved", Student.class);
 
         try
         {

@@ -30,12 +30,15 @@ public class ManageStudentAccountsController implements Initializable, Controlle
 {
 
     @FXML
-    private ListView<?> existing;
+    private ListView<?> existing = new ListView<>();
     @FXML
-    private ListView<?> requested;
+    private ListView<?> requested = new ListView<>();
 
-    private ServerAccessPoint getAllStudents =
-            new ServerAccessPoint(ServerResources.GET_ALL_STUDENTS_URL);
+    private final ServerAccessPoint getApprovedStudents =
+            new ServerAccessPoint(ServerResources.GET_APPROVED_STUDENTS_URL);
+    
+    private final ServerAccessPoint getPendingStudents =
+            new ServerAccessPoint(ServerResources.GET_PENDING_STUDENTS_URL);
 
     ScreensController myController;
 
@@ -46,13 +49,14 @@ public class ManageStudentAccountsController implements Initializable, Controlle
     public void initialize(URL url,
             ResourceBundle rb)
     {
-        populateStudentField();
+        populateApprovedStudentField();
+        populatePendingStudentField();
     }
 
-    public void populateStudentField()
+    public void populateApprovedStudentField()
     {
         //get the list of students
-        Response rsp = getAllStudents.request();
+        Response rsp = getApprovedStudents.request();
         //check response code
         if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
             //@TODO error handling
@@ -74,6 +78,33 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         Collection stus = studentNames;
         existing.getItems().clear();
         existing.getItems().addAll(stus);
+    }
+    
+    public void populatePendingStudentField()
+    {
+        //get the list of students
+        Response rsp = getPendingStudents.request();
+        //check response code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
+            //@TODO error handling
+        }
+        GenericType<List<SimpleStudent>> gtlc = new GenericType<List<SimpleStudent>>()
+        {
+        };
+
+        //read students from server response
+        List<SimpleStudent> students = rsp.readEntity(gtlc);
+
+        //extract student names
+        ArrayList<String> studentNames = new ArrayList();
+        for (SimpleStudent sch : students) {
+            studentNames.add(sch.name);
+        }
+
+        //populate combobox
+        Collection stus = studentNames;
+        requested.getItems().clear();
+        requested.getItems().addAll(stus);
     }
 
     @FXML

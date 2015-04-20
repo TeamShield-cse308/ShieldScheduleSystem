@@ -34,8 +34,8 @@ public final class ServerResources
     /**
      * The location of the web resource exposing the list of all students.
      */
-    public static final String GET_ALL_STUDENTS_URL =
-            SERVER_BASE_URL + "/webresources/admin/students";
+    public static final String GET_APPROVED_STUDENTS_URL =
+            SERVER_BASE_URL + "/webresources/admin/students/approved";
     /**
      * The location of the web resource exposing the list of pending students.
      */

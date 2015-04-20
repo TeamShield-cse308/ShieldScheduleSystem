@@ -12,14 +12,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 
 import shield.shared.dto.SimpleStudent;
 import shield.client.web.ServerResources;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.ComboBox;
@@ -52,10 +48,12 @@ public class StudentRegistrationController implements Initializable, ControlledS
     @FXML
     private TextField name;
     @FXML
-    private ComboBox<String> school;
+    private ComboBox<String> schoolsBox;
 
-    private ServerAccessPoint newStudent =
+    private final ServerAccessPoint newStudent =
             new ServerAccessPoint(ServerResources.ADD_STUDENT_URL);
+    private final ServerAccessPoint getSchools =
+            new ServerAccessPoint(ServerResources.GET_ALL_SCHOOLS_URL);
 
     ScreensController myController;
 
@@ -74,22 +72,23 @@ public class StudentRegistrationController implements Initializable, ControlledS
     {
         //Check if email already registered/ add to database 
         //Set account to inactive
-        if (email.getText().indexOf('@') != -1 && email.getText().equals(confirmedEmail.getText()) && password.getText().equals(confirmedPassword.getText())) {
-            //Add account to DB / Check if it already exists
+        if (email.getText().indexOf('@') != -1 && email.getText().equals(confirmedEmail.getText()) && password.getText().equals(confirmedPassword.getText()))
+        {
+            //create a student DTO
             SimpleStudent student = new SimpleStudent();
             student.email = email.getText();
             student.name = name.getText();
             student.password = password.getText();
-            student.school = school.getValue();
+            student.school = schoolsBox.getValue();
 
             //transmit new student form to server
             Response rsp = newStudent.request(student);
             //check response code
             if (rsp.getStatus() != Response.Status.OK.getStatusCode())
             {
-                //@TODO handle error code
+                //@TODO handle error codes
             }
-            
+
             //CLEAR FIELDS
             email.clear();
             confirmedEmail.clear();
@@ -98,21 +97,25 @@ public class StudentRegistrationController implements Initializable, ControlledS
             name.clear();
             //Cant figure out how to reset school box
             myController.setScreen(CSE308GUI.LoginPageID);
-        } else {
+        } else
+        {
             //Check to see if it email for password not correct
-            if (email.getText().indexOf('@') == -1) {
+            if (email.getText().indexOf('@') == -1)
+            {
                 // Alert alert = new Alert(AlertType.INFORMATION);
                 //alert.setTitle("Input Error");
                 //alert.setHeaderText("Invalid Email");
                 //alert.setContentText("Please enter a valid email");
                 // alert.show();
-            } else if (!(email.getText().equals(confirmedEmail.getText()))) {
+            } else if (!(email.getText().equals(confirmedEmail.getText())))
+            {
                 // Alert alert = new Alert(AlertType.INFORMATION);
                 // alert.setTitle("Input Error");
                 // alert.setHeaderText("Check Emails");
                 // alert.setContentText("Entered email addressed do not match.");
                 // alert.show();
-            } else if (!(password.getText().equals(confirmedPassword.getText()))) {
+            } else if (!(password.getText().equals(confirmedPassword.getText())))
+            {
                 // Alert alert = new Alert(AlertType.INFORMATION);
                 // alert.setTitle("Input Error");
                 // alert.setHeaderText("Check Passwords");
@@ -142,33 +145,30 @@ public class StudentRegistrationController implements Initializable, ControlledS
 
     public void populateSchoolsBox()
     {
-        //adapted from oracle javafx / javaee tutorial
-        //connect to shield schedule server
-        WebTarget clientTarget;
-        Client client = ClientBuilder.newClient();
+        //request list of schools
+        Response rsp = getSchools.request();
 
-        //Register a message body reader provider
-        client.register(JacksonJsonProvider.class);
-
-        //target the web resource with the list of all chools
-        clientTarget = client.target(ServerResources.GET_ALL_SCHOOLS_URL);
-
+        //check the response status code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling   
+        }
         GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
         {
         };
-
-        //get a list of all schools in database, transmitted from server in JSON
-        List<SimpleSchool> schools = clientTarget.request("application/json").get(gtlc);
+        //read schools from http response
+        List<SimpleSchool> schools = rsp.readEntity(gtlc);
 
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
-        for (SimpleSchool sch : schools) {
+        for (SimpleSchool sch : schools)
+        {
             schoolNames.add(sch.name);
         }
 
         //populate combobox
-        school.getItems().clear();
-        school.getItems().addAll(schoolNames);
+        schoolsBox.getItems().clear();
+        schoolsBox.getItems().addAll(schoolNames);
     }
 
 }
