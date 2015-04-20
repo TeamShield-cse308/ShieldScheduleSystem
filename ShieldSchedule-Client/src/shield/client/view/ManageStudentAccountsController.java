@@ -70,6 +70,11 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
             //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
         }
         GenericType<List<SimpleStudent>> gtlc = new GenericType<List<SimpleStudent>>()
         {
@@ -98,7 +103,11 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         //check response code
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
-            //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
         }
         GenericType<List<SimpleStudent>> gtlc = new GenericType<List<SimpleStudent>>()
         {
@@ -135,6 +144,17 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
             //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.CONFLICT.getStatusCode())
+            {
+                //account approved already
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //account not exist
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
         }
         populateApprovedStudentField();
         populatePendingStudentField();
@@ -149,6 +169,14 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
             //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //account not exist
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
         }
         populateApprovedStudentField();
         populatePendingStudentField();
@@ -181,6 +209,14 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
             //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //account not exist
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
         }
         populateApprovedStudentField();
         populatePendingStudentField();

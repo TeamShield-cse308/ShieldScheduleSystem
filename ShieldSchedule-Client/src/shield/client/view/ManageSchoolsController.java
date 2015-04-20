@@ -39,6 +39,8 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     private final ServerAccessPoint deleteSchool =
             new ServerAccessPoint(ServerResources.DELETE_SCHOOL_URL);
 
+    private List<SimpleSchool> schoolsList = null;
+
     /**
      * Initializes the controller class.
      *
@@ -56,22 +58,24 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     {
         //request list of schools
         Response rsp = getSchools.request();
-        
+
         //check the response status code
-        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
             //@TODO error handling   
         }
         GenericType<List<SimpleSchool>> gtlc = new GenericType<List<SimpleSchool>>()
         {
         };
         //read schools from http response
-        List<SimpleSchool> schools = rsp.readEntity(gtlc);
+        schoolsList = rsp.readEntity(gtlc);
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
-        for (SimpleSchool sch : schools) {
+        for (SimpleSchool sch : schoolsList)
+        {
             schoolNames.add(sch.name);
         }
-        myController.setSchools(schools);
+        myController.setSchools(schoolsList);
         //populate combobox
         schoolsBox.getItems().clear();
         schoolsBox.getItems().addAll(schoolNames);
@@ -92,16 +96,25 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     @FXML
     private void handleDeleteSchool(ActionEvent event)
     {
-        //get the school name
-        String content = schoolsBox.getValue().toString();
-        
+        //get the school to delete
+        int idx = schoolsBox.getSelectionModel().getSelectedIndex();
+        SimpleSchool school = schoolsList.get(idx);
+
         //send it to the server
-        Response rsp = deleteSchool.request(content);
-        
+        Response rsp = deleteSchool.request(school);
+
         //check response status code
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
             //@TODO handle error code
+            int code = rsp.getStatus();
+            if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //invalid school name
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happenedF
+            }
         }
 
         myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
@@ -116,7 +129,6 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
 //        myController.updateSchoolInfoScreen();
         myController.loadSchoolInfoScreen();
         myController.setScreen(CSE308GUI.EditSchoolInfoID);
-        
 
     }
 
