@@ -152,7 +152,7 @@ public class AdminSchoolsBean
         List<School> schools = query.getResultList();
         //@TODO logging
         logger.log(Level.INFO, "Retrieving all schools in DB", schools);
-        
+        em.close();
         return schools;
     }
 }

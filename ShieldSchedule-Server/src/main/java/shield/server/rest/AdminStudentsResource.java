@@ -22,8 +22,12 @@ import javax.enterprise.context.RequestScoped;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import shield.server.entities.School;
+import shield.shared.dto.SimpleSchool;
+import shield.shared.dto.SimpleStudent;
 
 /**
  * REST Web Service
@@ -57,9 +61,21 @@ public class AdminStudentsResource
      */
     @GET
     @Produces("application/json")
-    public List<Student> getStudents()
+    public List<SimpleStudent> getStudents()
     {
-        return adminStudentsBean.getAllStudents();
+        List<Student> students = adminStudentsBean.getAllStudents();
+        
+        List<SimpleStudent> translatedStudents = new ArrayList<>();
+        SimpleStudent s;
+        for (Student student : students)
+        {
+            s = new SimpleStudent();
+            s.name = student.getName();
+            s.email = student.getEmail();
+            
+            translatedStudents.add(s);
+        }
+        return translatedStudents;
     }
     
     @GET

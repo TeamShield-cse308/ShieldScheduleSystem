@@ -160,6 +160,10 @@ public class Student extends GenericUser implements Serializable
     {
 
     }
+    public String getEmail(){
+        return email;
+    }
+    
 
     public void editCourse(Course course)
     {

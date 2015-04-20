@@ -24,8 +24,13 @@ public abstract class GenericUser implements Serializable
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    private Long id;
 
-    protected String name;
-    protected String password;
+    String name;
+    String password;
+    
+    public String getName()
+    {
+        return name;
+    }
     
     //required by JPA
     //protected GenericUser() {}

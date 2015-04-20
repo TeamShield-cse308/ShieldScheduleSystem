@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.persistence.Query;
 import shield.server.entities.School;
 
 /**
@@ -40,10 +41,10 @@ public class AdminStudentsBean
         TypedQuery<Student> query = 
                 em.createNamedQuery("Student.findAll", Student.class);
         
-        //@TODO needs try/catch?
-        List<Student> students = query.getResultList();
         
+        List<Student> students = query.getResultList(); //query doesnt work        
         //@TODO logging
+        logger.log(Level.INFO, "Retrieving all students in DB", students);
         
         return students;
     }
