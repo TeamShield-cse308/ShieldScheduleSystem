@@ -38,7 +38,6 @@ public class Student extends GenericUser implements Serializable
     private static final long serialVersionUID = 1L;
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     //annotations go here_________________________________________
 
     @ManyToOne
@@ -77,21 +76,21 @@ public class Student extends GenericUser implements Serializable
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public Long getId()
+    public String getId()
     {
-        return id;
+        return email;
     }
 
-    public void setId(Long id)
+    public void setId(String id)
     {
-        this.id = id;
+        this.email = id;
     }
 
     @Override
     public int hashCode()
     {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (email != null ? email.hashCode() : 0);
         return hash;
     }
 
@@ -104,7 +103,7 @@ public class Student extends GenericUser implements Serializable
             return false;
         }
         Student other = (Student) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.email == null && other.email != null) || (this.email != null && !this.email.equals(other.email)))
         {
             return false;
         }
@@ -114,7 +113,7 @@ public class Student extends GenericUser implements Serializable
     @Override
     public String toString()
     {
-        return "cse308.Student[ id=" + id + " ]";
+        return "cse308.Student[ id=" + email + " ]";
     }
 
     /**
