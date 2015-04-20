@@ -5,12 +5,7 @@
  */
 package shield.server.ejb;
 
-import java.sql.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
-import static java.util.jar.Pack200.Packer.PASS;
 import javax.ejb.Stateful;
 import shield.server.entities.School;
 import javax.persistence.EntityManager;
@@ -19,7 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import static javax.ws.rs.Priorities.USER;
+import javax.persistence.EntityExistsException;
+import shield.server.util.DatabaseConnection;
 
 /**
  * A javabean that provides functionality to add, delete, and edit schools To be
@@ -28,12 +24,12 @@ import static javax.ws.rs.Priorities.USER;
  * @author Jeffrey Kabot
  */
 @Stateful
-public class AdminSchoolsBean {
+public class AdminSchoolsBean
+{
 
     //Logger
-
-    private static final Logger logger
-            = Logger.getLogger("sss.ejb.AdminSchoolsBean");
+    private static final Logger logger =
+            Logger.getLogger("sss.ejb.AdminSchoolsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -47,35 +43,61 @@ public class AdminSchoolsBean {
      * year
      * @param initScheduleDays the number of days in a schedule cycle
      * @param initPeriods the number of schedule blocks in the school day
+     * @param initStartLunchPeriod the starting lunch period
+     * @param initEndLunchPeriod the ending lunchperiod
      */
-    public void addSchool(String initName, int initSemesters, int initPeriods,
-            int initScheduleDays, int initStartLunchPeriod, int initEndLunchPeriod) {
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
+    public void addSchool(String initName,
+            int initSemesters,
+            int initPeriods,
+            int initScheduleDays,
+            int initStartLunchPeriod,
+            int initEndLunchPeriod)
+    {
+        //create the entity manager
+        em = DatabaseConnection.getEntityManager();
+
+        //new school entity
         School school = new School(initName, initSemesters, initPeriods,
                 initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
-//        em.getTransaction().begin();
-        Connection conn = null;
-        Statement stmt = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
-
-            stmt = conn.createStatement();
-            String sql = "INSERT INTO School (SCHOOLNAME,SEMESTERS,SCHEDULEDAYS,PERIODS,STARTINGLUNCH,ENDINGLUNCH) VALUES (\'" + initName + "\', " + initSemesters + ", "
-                    + initPeriods + ", " + initScheduleDays + ", " + initStartLunchPeriod + ", "
-                    + initEndLunchPeriod + ")";
-            stmt.executeUpdate(sql);
-        } catch (SQLException ex) {
+            //add the school
+            em.persist(school);
+            logger.log(Level.INFO, "New school added to database {0}", school);
+        } catch (EntityExistsException eeex) {
+            logger.log(Level.WARNING, "Collision on school ID within database");
+            //@TODO message to client
+        } catch (Exception ex) {
+            //@TODO collision on school name?
             logger.log(Level.SEVERE, null, ex);
+        } finally {
+            //close the entity manager
+            em.close();
+            em = null;
         }
 
-        //Logging
-        logger.log(Level.INFO, "New school added to database", school);
+        //        try {
+        //            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        //        } catch (Exception ex) {
+        //            logger.log(Level.SEVERE, null, ex);
+        //        }
+        //        School school = new School(initName, initSemesters, initPeriods,
+        //                initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
+        ////        em.getTransaction().begin();
+        //        Connection conn = null;
+        //        Statement stmt = null;
+        //
+        //        try {
+        //            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
+        //
+        //            stmt = conn.createStatement();
+        //            String sql = "INSERT INTO School (SCHOOLNAME,SEMESTERS,SCHEDULEDAYS,PERIODS,STARTINGLUNCH,ENDINGLUNCH) VALUES (\'" + initName + "\', " + initSemesters + ", "
+        //                    + initPeriods + ", " + initScheduleDays + ", " + initStartLunchPeriod + ", "
+        //                    + initEndLunchPeriod + ")";
+        //            stmt.executeUpdate(sql);
+        //        } catch (SQLException ex) {
+        //            logger.log(Level.SEVERE, null, ex);
+        //        }
     }
 
     /**
@@ -83,53 +105,54 @@ public class AdminSchoolsBean {
      *
      * @param name the named of the school to remove
      */
-    public void deleteSchool(String name) {
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findByName", School.class);
-       // try {
-        //    School school = query.setParameter("name", name).getSingleResult();
-//            em.getTransaction().begin();
-        //    em.remove(school);
-//            em.getTransaction().commit();
+    public void deleteSchool(String name)
+    {
+        //Create the entity manager and set up the query by school name
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findByName", School.class);
+        query.setParameter("name", name);
 
-            //Logging
-        //    logger.log(Level.INFO, "School removed from database", school);
-       // } catch (NoResultException noex) {
-        //    //Logging
-        //    logger.log(Level.WARNING, "No schools found for removal that match db query", name);
-        //    //@TODO no such school
-       // } catch (Exception ex) {
-      //      //@TODO generic catch
-      //  }
-        Connection conn = null;
-        Statement stmt = null;
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
-
-            stmt = conn.createStatement();
-            String sql = "DELETE FROM school WHERE name = '" + name + "'";
-            stmt.executeUpdate(sql);
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            //search the school and remove it from database
+            School school = query.getSingleResult();
+            em.remove(school);
+            logger.log(Level.INFO, "School {0} removed from database", school);
+        } catch (NoResultException noex) {
+            logger.log(Level.WARNING, "No such school with name {0} found in database", name);
+            //@TODO no such school message to client
+        } catch (Exception ex) {
+            //@TODO generic catch
+        } finally {
+            //Close the entity manager
+            em.close();
+            em = null;
         }
     }
 
-    //@TODO excessive parameters... package into a structure ??
+    //@TODO excessive parameters?... package into a structure ??
     /**
      * Modify a school in the database
      *
      * @param originalName the original identifier for the school
      */
-    public void editSchool(String originalName, String newName,
-            int newSemesters, int newPeriods, int newScheduleDays,
-            int newStartLunchPeriod, int newEndLunchPeriod) {
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findByName", School.class);
-        try {
-            //find the school to be edited
-            School school
-                    = query.setParameter("name", originalName).getSingleResult();
+    public void editSchool(String originalName,
+            String newName,
+            int newSemesters,
+            int newPeriods,
+            int newScheduleDays,
+            int newStartLunchPeriod,
+            int newEndLunchPeriod)
+    {
 
+        //Create the entity manager and set up the query by school name
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findByName", School.class);
+        query.setParameter("name", originalName);
+        try {
+            //execute query
+            School school = query.getSingleResult();
             //update the school with the new info
             school.setSchoolName(newName);
             school.setSemesters(newSemesters);
@@ -137,17 +160,17 @@ public class AdminSchoolsBean {
             school.setPeriods(newPeriods);
             school.setStartingLunch(newStartLunchPeriod);
             school.setEndingLunch(newEndLunchPeriod);
+            
+            //@TODO change this log?
+            logger.log(Level.INFO, "School data changed in database for school with ID: {0}", school.getID());
 
-            //School Updated
-            //Now pass to database
-//            em.getTransaction().begin();
-            em.refresh(school);
-//            em.getTransaction().commit();
-
-            logger.log(Level.INFO, "School data changed in database", school);
-
-        } catch (Exception ex) {
-
+        } catch (NoResultException noex) {
+            logger.log(Level.WARNING, "No such school with name {0} found in database", originalName);
+            //@TODO message back to client
+        } finally {
+            //close the entity manager
+            em.close();
+            em = null;
         }
     }
 
@@ -156,14 +179,24 @@ public class AdminSchoolsBean {
      *
      * @return the list of all schools
      */
-    public List<School> getAllSchools() {
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findAll", School.class);
-        //@TODO needs try / catch?
-        List<School> schools = query.getResultList();
-        //@TODO logging
-        logger.log(Level.INFO, "Retrieving all schools in DB", schools);
+    public List<School> getAllSchools()
+    {
+        List<School> schools = null;
 
+        // Create the entity manager and set up the query for all schools
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findAll", School.class);
+        try {
+            schools = query.getResultList();
+            logger.log(Level.INFO, "Retrieving all schools in DB", schools);
+        } catch (Exception ex) {
+            //@TODO
+        } finally {
+            //Close the entity manager
+            em.close();
+            em = null;
+        }
         return schools;
     }
 }
