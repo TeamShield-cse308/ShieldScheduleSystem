@@ -139,4 +139,8 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         myController = screenPage;
     }
 
+    @Override
+    public void populatePage() {
+    }
+
 }

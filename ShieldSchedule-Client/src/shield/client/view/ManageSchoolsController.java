@@ -49,10 +49,10 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     public void initialize(URL url,
             ResourceBundle rb)
     {
-        populateSchoolsBox();
+        //populateSchoolsBox();
     }
 
-    public void populateSchoolsBox()
+    public void populatePage()
     {
         //request list of schools
         Response rsp = getSchools.request();
@@ -66,13 +66,12 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         };
         //read schools from http response
         List<SimpleSchool> schools = rsp.readEntity(gtlc);
-
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
         for (SimpleSchool sch : schools) {
             schoolNames.add(sch.name);
         }
-
+        myController.setSchools(schools);
         //populate combobox
         schoolsBox.getItems().clear();
         schoolsBox.getItems().addAll(schoolNames);
@@ -112,7 +111,13 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     @FXML
     private void handleEditSchool(ActionEvent event)
     {
+        String content = schoolsBox.getValue().toString();
+        myController.setSchool(content);
+//        myController.updateSchoolInfoScreen();
+        myController.loadSchoolInfoScreen();
         myController.setScreen(CSE308GUI.EditSchoolInfoID);
+        
+
     }
 
     @Override

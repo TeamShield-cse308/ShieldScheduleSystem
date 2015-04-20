@@ -30,6 +30,12 @@ public final class ServerResources
      */
     public static final String DELETE_SCHOOL_URL =
             SERVER_BASE_URL + "/webresources/admin/schools/delete";
+    
+    /**
+     * The location of the web resource accepting delete school requests.
+     */
+    public static final String GET_SCHOOL_URL =
+            SERVER_BASE_URL + "/webresources/admin/schools/getSchool";
 
     /**
      * The location of the web resource exposing the list of all students.

@@ -103,4 +103,8 @@ public class NewSchoolController implements Initializable, ControlledScreen
         myController = screenPage;
     }
 
+    @Override
+    public void populatePage() {
+    }
+
 }

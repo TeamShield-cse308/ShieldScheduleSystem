@@ -54,5 +54,9 @@ public class EditSectionController implements Initializable, ControlledScreen  {
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
     }
+
+    @Override
+    public void populatePage() {
+    }
     
 }

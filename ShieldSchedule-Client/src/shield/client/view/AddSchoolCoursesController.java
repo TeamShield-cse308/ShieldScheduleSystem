@@ -51,5 +51,9 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
     }
+
+    @Override
+    public void populatePage() {
+    }
     
 }

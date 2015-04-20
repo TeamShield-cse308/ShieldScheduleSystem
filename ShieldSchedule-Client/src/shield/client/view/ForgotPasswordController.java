@@ -38,6 +38,10 @@ public class ForgotPasswordController implements Initializable, ControlledScreen
         myController = screenPage;
     }
 
+    @Override
+    public void populatePage() {
+    }
+
     
     
 }

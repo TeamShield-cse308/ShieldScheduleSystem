@@ -47,4 +47,8 @@ public class AdminViewController implements Initializable, ControlledScreen {
     private void handleLogout(ActionEvent event) {
         myController.setScreen(CSE308GUI.LoginPageID);
     }
+
+    @Override
+    public void populatePage() {
+    }
 }

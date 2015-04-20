@@ -83,7 +83,7 @@ public class AdminSchoolsResource
         {
             s = new SimpleSchool();
             s.name = school.getSchoolName();
-            s.numPeriods = school.getPeriods();
+            s.numPeriods =school.getPeriods();
             s.numSemesters = school.getSemesters();
             s.startingLunchPeriod = school.getStartingLunch();
             s.endingLunchPeriod = school.getEndingLunch();
@@ -177,6 +177,22 @@ public class AdminSchoolsResource
             logger.log(Level.SEVERE, null, ex);
             return Response.serverError().build();
         }
+    }
+    
+    /**
+     * Retrieves representation of an instance of sss.rest.AdminSchoolsREST This
+     * default GET retrieves a single school in the system's database
+     *
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Path("/getSchool")
+    @Produces("application/json")
+    public SimpleSchool getSchool(String content)
+    {
+        String name = content;
+        SimpleSchool sch = adminSchoolsBean.getSchool(name);
+        return sch;
     }
 
 }
