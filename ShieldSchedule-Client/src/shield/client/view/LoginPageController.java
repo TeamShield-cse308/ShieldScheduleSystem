@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResources;
 import shield.shared.dto.LoginCredentials;
-import javafx.scene.control.Alert;
+import shield.shared.dto.SimpleStudent;
 
 /**
  * FXML Controller class
@@ -60,7 +60,6 @@ public class LoginPageController implements Initializable, ControlledScreen
             Response rsp = AUTHENTICATE.request(login);
             if (rsp.getStatus() != Response.Status.OK.getStatusCode())
             {
-                Alert alert;
                 int code = rsp.getStatus();
                 if (code == Response.Status.UNAUTHORIZED.getStatusCode())
                 {
@@ -79,8 +78,10 @@ public class LoginPageController implements Initializable, ControlledScreen
                 {
                     //something terrible happened
                 }
+                return;
             } else
             {
+                SimpleStudent student = rsp.readEntity(SimpleStudent.class);
                 myController.setScreen(CSE308GUI.StudentViewID);
             }
         }
