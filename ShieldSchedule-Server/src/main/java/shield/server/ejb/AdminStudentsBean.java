@@ -52,7 +52,7 @@ public class AdminStudentsBean
         try
         {
             students = query.getResultList();
-            logger.log(Level.INFO, "Retrieving all students in DB", students);
+            logger.log(Level.INFO, "Retrieving all approved students in DB", students);
         } catch (Exception ex)
         {
             logger.log(Level.SEVERE, null, ex);

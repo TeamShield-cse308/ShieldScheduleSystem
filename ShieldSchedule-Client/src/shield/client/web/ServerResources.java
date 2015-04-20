@@ -52,4 +52,7 @@ public final class ServerResources
      */
     public static final String ADD_STUDENT_URL =
             SERVER_BASE_URL + "/webresources/admin/students/add";
+    
+    public static final String APPROVE_STUDENT_URL = 
+            SERVER_BASE_URL + "/webresources/admin/students/approve";
 }

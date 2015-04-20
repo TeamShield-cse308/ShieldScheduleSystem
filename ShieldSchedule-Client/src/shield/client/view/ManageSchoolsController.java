@@ -34,9 +34,9 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
 
     ScreensController myController;
 
-    private ServerAccessPoint getSchools =
+    private final ServerAccessPoint getSchools =
             new ServerAccessPoint(ServerResources.GET_ALL_SCHOOLS_URL);
-    private ServerAccessPoint deleteSchool =
+    private final ServerAccessPoint deleteSchool =
             new ServerAccessPoint(ServerResources.DELETE_SCHOOL_URL);
 
     /**

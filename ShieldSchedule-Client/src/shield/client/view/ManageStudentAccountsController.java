@@ -39,6 +39,12 @@ public class ManageStudentAccountsController implements Initializable, Controlle
     
     private final ServerAccessPoint getPendingStudents =
             new ServerAccessPoint(ServerResources.GET_PENDING_STUDENTS_URL);
+    
+    private final ServerAccessPoint approveStudent = 
+            new ServerAccessPoint(ServerResources.APPROVE_STUDENT_URL);
+    
+    private List<SimpleStudent> approvedStudents = null;
+    private List<SimpleStudent> pendingStudents = null;
 
     ScreensController myController;
 
@@ -66,11 +72,11 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         };
 
         //read students from server response
-        List<SimpleStudent> students = rsp.readEntity(gtlc);
+        approvedStudents = rsp.readEntity(gtlc);
 
         //extract student names
         ArrayList<String> studentNames = new ArrayList();
-        for (SimpleStudent sch : students) {
+        for (SimpleStudent sch : approvedStudents) {
             studentNames.add(sch.name);
         }
 
@@ -93,11 +99,11 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         };
 
         //read students from server response
-        List<SimpleStudent> students = rsp.readEntity(gtlc);
+        pendingStudents = rsp.readEntity(gtlc);
 
         //extract student names
         ArrayList<String> studentNames = new ArrayList();
-        for (SimpleStudent sch : students) {
+        for (SimpleStudent sch : pendingStudents) {
             studentNames.add(sch.name);
         }
 
@@ -116,6 +122,14 @@ public class ManageStudentAccountsController implements Initializable, Controlle
     @FXML
     private void handleAcceptSelected(ActionEvent event)
     {
+        int idx = requested.getSelectionModel().getSelectedIndex();
+        SimpleStudent student = pendingStudents.get(idx);
+        Response rsp = approveStudent.request(student);
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
+            //@TODO error handling
+        }
+        populateApprovedStudentField();
+        populatePendingStudentField();
     }
 
     @FXML
