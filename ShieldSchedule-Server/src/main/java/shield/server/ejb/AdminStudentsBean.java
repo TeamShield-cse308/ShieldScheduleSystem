@@ -5,6 +5,10 @@
  */
 package shield.server.ejb;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import javax.ejb.Stateful;
 import shield.server.entities.Student;
@@ -16,6 +20,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.persistence.Query;
 import shield.server.entities.School;
+import shield.server.entities.StudentAccountState;
 
 /**
  *
@@ -73,15 +78,33 @@ public class AdminStudentsBean
     {
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
-        query.setParameter(1, school);
+        query.setParameter("name", school);
         School schoolE = query.getSingleResult();
-        Student student = new Student(initName, password, email, schoolE);
-//        em.getTransaction().begin();
-        em.persist(student);
-//        em.getTransaction().commit();
+        long id = schoolE.getID();
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        Student st = new Student(initName, password, email, schoolE);
+        
+        Connection conn = null;
+        Statement stmt = null;
+
+        try {
+            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
+
+            stmt = conn.createStatement();
+            String sql = "INSERT INTO Student (email,password,SchoolID,State, name) VALUES (\'" + email + "\', \'" + password + "\', "
+                    + id + ",\'" + StudentAccountState.PENDING + "\',\'" + initName +"\')";
+            logger.log(Level.INFO,sql, st);
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
 
         //Logging
-        logger.log(Level.INFO, "New school added to database", school);
+        logger.log(Level.INFO, "New student added to database", school);
     }
     
     /**

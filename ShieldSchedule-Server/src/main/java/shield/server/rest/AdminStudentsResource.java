@@ -109,4 +109,33 @@ public class AdminStudentsResource
             Logger.getLogger(AdminStudentsResource.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    /**
+     * POST method for adding a student
+     *
+     * @param content representation for the resource
+//     * @return an HTTP response with content of the updated or created resource.
+     */
+    @POST
+    @Path("/add")
+    @Consumes("application/json")
+    public void addStudent(String content)
+    {
+        try {
+            //@TODO ensure correct JSON keys
+            JsonNode node = mapper.readTree(content);
+            String name = node.get("name").asText();
+            String email = node.get("email").asText();
+            String state = node.get("state").asText();
+            String password = node.get("password").asText();
+            String school = node.get("school").asText();
+            
+            adminStudentsBean.addStudent(name, email, password, school);
+            
+            //@TODO logging
+            
+            //@TODO error handling
+        } catch (IOException ioex) {
+            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ioex);
+        }
+    }
 }
