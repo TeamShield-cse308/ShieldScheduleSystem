@@ -51,7 +51,7 @@ public class AdminSchoolsBean
             int initPeriods,
             int initScheduleDays,
             int initStartLunchPeriod,
-            int initEndLunchPeriod)
+            int initEndLunchPeriod) throws EntityExistsException
     {
         //create the entity manager
         em = DatabaseConnection.getEntityManager();
@@ -60,46 +60,29 @@ public class AdminSchoolsBean
         School school = new School(initName, initSemesters, initPeriods,
                 initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
 
-        try {
+        try
+        {
             //add the school
             em.getTransaction().begin();
             em.persist(school);
             em.getTransaction().commit();
             logger.log(Level.INFO, "New school added to database {0}", school);
-        } catch (EntityExistsException eeex) {
+        } catch (EntityExistsException eeex)
+        {
+            //a school with that id already exists in database
             logger.log(Level.WARNING, "Collision on school ID within database");
-            //@TODO message to client
-        } catch (Exception ex) {
-            //@TODO collision on school name?
+            throw eeex;
+        } catch (Exception ex)
+        {
+            //something terrible happened
             logger.log(Level.SEVERE, null, ex);
-        } finally {
+            throw ex;
+        } finally
+        {
             //close the entity manager
             em.close();
             em = null;
         }
-
-        //        try {
-        //            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        //        } catch (Exception ex) {
-        //            logger.log(Level.SEVERE, null, ex);
-        //        }
-        //        School school = new School(initName, initSemesters, initPeriods,
-        //                initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
-        ////        em.getTransaction().begin();
-        //        Connection conn = null;
-        //        Statement stmt = null;
-        //
-        //        try {
-        //            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
-        //
-        //            stmt = conn.createStatement();
-        //            String sql = "INSERT INTO School (SCHOOLNAME,SEMESTERS,SCHEDULEDAYS,PERIODS,STARTINGLUNCH,ENDINGLUNCH) VALUES (\'" + initName + "\', " + initSemesters + ", "
-        //                    + initPeriods + ", " + initScheduleDays + ", " + initStartLunchPeriod + ", "
-        //                    + initEndLunchPeriod + ")";
-        //            stmt.executeUpdate(sql);
-        //        } catch (SQLException ex) {
-        //            logger.log(Level.SEVERE, null, ex);
-        //        }
     }
 
     /**
@@ -107,7 +90,7 @@ public class AdminSchoolsBean
      *
      * @param name the named of the school to remove
      */
-    public void deleteSchool(String name)
+    public void deleteSchool(String name) throws NoResultException
     {
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
@@ -115,19 +98,26 @@ public class AdminSchoolsBean
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
-        try {
+        try
+        {
             //search the school and remove it from database
             School school = query.getSingleResult();
             em.getTransaction().begin();
             em.remove(school);
             em.getTransaction().commit();
             logger.log(Level.INFO, "School {0} removed from database", school);
-        } catch (NoResultException noex) {
+        } catch (NoResultException noex)
+        {
+            //school not found
             logger.log(Level.WARNING, "No such school with name {0} found in database", name);
-            //@TODO no such school message to client
-        } catch (Exception ex) {
-            //@TODO generic catch
-        } finally {
+            throw noex;
+        } catch (Exception ex)
+        {
+            //something terrible happened
+            logger.log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;
@@ -135,29 +125,30 @@ public class AdminSchoolsBean
     }
 
     //@TODO excessive parameters?... package into a structure ??
+    
+    //@TODO change school name?
     /**
      * Modify a school in the database
      *
      * @param originalName the original identifier for the school
      */
-    public void editSchool(String originalName,
-            String newName,
+    public void editSchool(String name,
             int newSemesters,
             int newPeriods,
             int newScheduleDays,
             int newStartLunchPeriod,
-            int newEndLunchPeriod)
+            int newEndLunchPeriod) throws NoResultException
     {
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
-        query.setParameter("name", originalName);
-        try {
+        query.setParameter("name", name);
+        try
+        {
             //execute query and update school info
             School school = query.getSingleResult();
             em.getTransaction().begin();
-            school.setSchoolName(newName);
             school.setSemesters(newSemesters);
             school.setScheduleDays(newScheduleDays);
             school.setPeriods(newPeriods);
@@ -167,10 +158,17 @@ public class AdminSchoolsBean
             //@TODO change this log?
             logger.log(Level.INFO, "School data changed in database for school with ID: {0}", school.getID());
 
-        } catch (NoResultException noex) {
-            logger.log(Level.WARNING, "No such school with name {0} found in database", originalName);
-            //@TODO message back to client
-        } finally {
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No such school with name {0} found in database", name);
+            throw nrex;
+        } catch (Exception ex)
+        {
+            //something terrible happened
+            logger.log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally
+        {
             //close the entity manager
             em.close();
             em = null;
@@ -190,12 +188,16 @@ public class AdminSchoolsBean
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
                 em.createNamedQuery("School.findAll", School.class);
-        try {
+        try
+        {
             schools = query.getResultList();
             logger.log(Level.INFO, "Retrieving all schools in DB", schools);
-        } catch (Exception ex) {
-            //@TODO
-        } finally {
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;

@@ -12,9 +12,9 @@ package shield.shared.dto;
 public class SimpleSchool
 {
     public String name;
-    public String numSemesters;
-    public String numPeriods;
-    public String numScheduleDays;
-    public String startingLunchPeriod;
-    public String endingLunchPeriod;
+    public int numSemesters;
+    public int numPeriods;
+    public int numScheduleDays;
+    public int startingLunchPeriod;
+    public int endingLunchPeriod;
 }

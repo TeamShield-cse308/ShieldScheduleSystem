@@ -5,43 +5,38 @@
  */
 package shield.server.entities;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 /**
  * Class representing generic users in the database
  * @author Phillip Elliot
  */
-public abstract class GenericUser implements Serializable
+@MappedSuperclass
+public abstract class GenericUser
 {
-
-//    private static final long serialVersionUID = 1L;
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long id;
-
-    String name;
-    String password;
+    protected String name;
+    protected String password;
     
     public String getName()
     {
         return name;
     }
-    
-    //required by JPA
-    //protected GenericUser() {}
-    
-    /*public GenericUser(String initName, String initPassword)
+    //@TODO check error conditions on new name
+    public void setName(String newName)
     {
-        //@TODO validity checking on name and password
-        name = initName;
-        password = initPassword;
-    }*/
-
+        name = newName;
+    }
+    
+    public String getPassword()
+    {
+        return password;
+    }
+    //@TODO check error conditions on new password
+    public void setPassword(String newPassword)
+    {
+        password = newPassword;
+    }
+    
 //    public Long getId()
 //    {
 //        return id;

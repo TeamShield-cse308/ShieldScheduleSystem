@@ -7,12 +7,10 @@ package shield.server.rest;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PUT;
 import java.util.List;
 import shield.server.entities.Student;
 import javax.inject.Inject;
@@ -20,13 +18,14 @@ import shield.server.ejb.AdminStudentsBean;
 import javax.ws.rs.POST;
 import javax.enterprise.context.RequestScoped;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import shield.server.entities.School;
-import shield.shared.dto.SimpleSchool;
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
+import shield.server.exceptions.AccountApprovedException;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -39,12 +38,14 @@ import shield.shared.dto.SimpleStudent;
 public class AdminStudentsResource
 {
 
+    private static final Logger logger = Logger.getLogger(AdminStudentsResource.class.getName());
+
     @Context
     private UriInfo context;
-    
+
     @Inject
     private AdminStudentsBean adminStudentsBean;
-    
+
     //The parser for incoming JSON messages
     ObjectMapper mapper = new ObjectMapper();
 
@@ -57,85 +58,130 @@ public class AdminStudentsResource
 
     /**
      * Retrieves representation of an instance of sss.ejb.AdminStudentsREST
+     *
      * @return an instance of java.lang.String
      */
     @GET
     @Produces("application/json")
-    public List<SimpleStudent> getStudents()
+    public Response getStudents()
     {
         List<Student> students = adminStudentsBean.getAllStudents();
-        
-        List<SimpleStudent> translatedStudents = new ArrayList<>();
+
+        List<SimpleStudent> simpleStudents = new ArrayList<>();
         SimpleStudent s;
         for (Student student : students)
         {
+            logger.log(Level.INFO, "Polling Student with name {0}", student.getName());
             s = new SimpleStudent();
             s.name = student.getName();
             s.email = student.getEmail();
-            
-            translatedStudents.add(s);
+
+            simpleStudents.add(s);
         }
-        return translatedStudents;
+        GenericEntity<List<SimpleStudent>> wrapper = 
+                new GenericEntity<List<SimpleStudent>>(simpleStudents) {};
+        return Response.ok(wrapper).build();
     }
-    
+
     @GET
     @Path("/pending")
     @Produces("application/json")
     public List<Student> getPendingStudents()
     {
+        //@TODO convert to simple representation, convert to response
         return adminStudentsBean.getPendingStudents();
     }
 
     /**
-     * PUT method for updating or creating an instance of AdminStudentsREST
+     * POST method for adding a student
+     *
+     * @param content representation for the resource // * @return an HTTP
+     * response with content of the updated or created resource.
+     */
+    @POST
+    @Path("/add")
+    @Consumes("application/json")
+    public Response addStudent(SimpleStudent student)
+    {
+        try
+        {
+            //@TODO ensure correct JSON keys
+//            JsonNode node = mapper.readTree(content);
+//            String name = node.get("name").asText();
+//            String email = node.get("email").asText();
+//            String password = node.get("password").asText();
+//            String school = node.get("school").asText();
+
+            adminStudentsBean.addStudent(student.name, student.email, student.password, student.school);
+            logger.log(Level.INFO, "OK Response");
+            return Response.ok(student).build();
+            //@TODO error handling
+        } catch (EntityExistsException eeex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    /**
+     * POST method for approving a student
+     *
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
     @POST
     @Path("/approve")
     @Consumes("application/json")
-    public void approveStudent(String content)
+    public Response approveStudent(SimpleStudent student)
     {
-        try {
-            JsonNode node = mapper.readTree(content);
-            //@TODO ensure correct JSON keys
-            String email = node.get("email").asText();
-            boolean approved = node.get("approved").asBoolean();
-            adminStudentsBean.approveStudent(email, approved);
-            //@TODO error handling
-            
-            //@TODO logging
-        } catch (IOException ex) {
-            Logger.getLogger(AdminStudentsResource.class.getName()).log(Level.SEVERE, null, ex);
+        try
+        {
+            adminStudentsBean.approveStudent(student.email, true);
+            logger.log(Level.INFO, "OK response");
+            return Response.ok(student).build();
+        } catch (AccountApprovedException aaex)
+        {
+            logger.log(Level.WARNING, "Account Approved, CONFLICT response", aaex);
+            return Response.status(Response.Status.CONFLICT).build();
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No such account, BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
         }
     }
+
     /**
-     * POST method for adding a student
+     * POST method for deleting a student
      *
      * @param content representation for the resource
-//     * @return an HTTP response with content of the updated or created resource.
+     * @return an HTTP response with content of the updated or created resource.
      */
     @POST
-    @Path("/add")
+    @Path("/delete")
     @Consumes("application/json")
-    public void addStudent(String content)
+    public Response deleteStudent(SimpleStudent student)
     {
-        try {
-            //@TODO ensure correct JSON keys
-            JsonNode node = mapper.readTree(content);
-            String name = node.get("name").asText();
-            String email = node.get("email").asText();
-            String state = node.get("state").asText();
-            String password = node.get("password").asText();
-            String school = node.get("school").asText();
-            
-            adminStudentsBean.addStudent(name, email, password, school);
-            
-            //@TODO logging
-            
-            //@TODO error handling
-        } catch (IOException ioex) {
-            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ioex);
+        try
+        {
+            adminStudentsBean.approveStudent(student.email, false);
+            logger.log(Level.INFO, "OK response");
+            return Response.ok(student).build();
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No such account, BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
         }
     }
 }

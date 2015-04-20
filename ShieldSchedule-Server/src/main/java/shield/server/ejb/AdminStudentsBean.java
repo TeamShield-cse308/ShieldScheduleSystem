@@ -5,10 +5,6 @@
  */
 package shield.server.ejb;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import javax.ejb.Stateful;
 import shield.server.entities.Student;
@@ -18,9 +14,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.persistence.Query;
+import javax.persistence.EntityExistsException;
 import shield.server.entities.School;
-import shield.server.entities.StudentAccountState;
+import shield.server.exceptions.AccountApprovedException;
 import shield.server.util.DatabaseConnection;
 
 /**
@@ -53,13 +49,16 @@ public class AdminStudentsBean
         TypedQuery<Student> query =
                 em.createNamedQuery("Student.findAll", Student.class);
 
-        try {
+        try
+        {
             students = query.getResultList();
             logger.log(Level.INFO, "Retrieving all students in DB", students);
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             logger.log(Level.SEVERE, null, ex);
-            //@TODO logging
-        } finally {
+            throw ex;
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;
@@ -82,12 +81,16 @@ public class AdminStudentsBean
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> query =
                 em.createNamedQuery("Student.findAllPending", Student.class);
-        try {
+        try
+        {
             pendingStudents = query.getResultList();
             logger.log(Level.INFO, "Retrieving all pending student account requests");
-        } catch (Exception ex) {
-            //@TODO logging
-        } finally {
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally
+        {
             //Close the Entity Manager
             em.close();
             em = null;
@@ -107,7 +110,7 @@ public class AdminStudentsBean
     public void addStudent(String initName,
             String initEmail,
             String initPassword,
-            String initSchool)
+            String initSchool) throws NoResultException, EntityExistsException
     {
         //Create the Entity Manager and set up the query for school
         em = DatabaseConnection.getEntityManager();
@@ -115,7 +118,8 @@ public class AdminStudentsBean
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", initSchool);
 
-        try {
+        try
+        {
             //find the appropriate school
             School school = query.getSingleResult();
             Student student = new Student(initName, initEmail, initPassword, school);
@@ -123,38 +127,25 @@ public class AdminStudentsBean
             em.persist(student); //insert the student
             em.getTransaction().commit();
             logger.log(Level.INFO, "New student inserted to database {0}", student);
-        } catch (NoResultException noex) {
+        } catch (NoResultException nrex)
+        {
             logger.log(Level.WARNING, "No school found with name {0}", initSchool);
-            //@TODO more errors?
-            //@TODO message back to client
-        } finally {
+            throw nrex;
+        } catch (EntityExistsException eeex)
+        {
+            logger.log(Level.WARNING, "Student with email {0} already exists", initEmail);
+            throw eeex;
+        } catch (Exception ex)
+        {
+            //something terrible happened
+            logger.log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally
+        {
             //close the Entity Manager
             em.close();
             em = null;
         }
-//        School schoolE = query.getSingleResult();
-//        long id = schoolE.getID();
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver").newInstance();
-//        } catch (Exception ex) {
-//            logger.log(Level.SEVERE, null, ex);
-//        }
-//        Student st = new Student(initName, password, email, schoolE);
-
-//        Connection conn = null;
-//        Statement stmt = null;
-//
-//        try {
-//            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
-//
-//            stmt = conn.createStatement();
-//            String sql = "INSERT INTO Student (email,password,SchoolID,State, name) VALUES (\'" + email + "\', \'" + password + "\', " +
-//                    id + ",\'" + StudentAccountState.PENDING + "\',\'" + initName + "\')";
-//            logger.log(Level.INFO, sql, st);
-//            stmt.executeUpdate(sql);
-//        } catch (SQLException ex) {
-//            logger.log(Level.SEVERE, null, ex);
-//        }
     }
 
     /**
@@ -163,9 +154,11 @@ public class AdminStudentsBean
      *
      * @param email The ID of the student account
      * @param approved true if the student is approved, false if deleted
+     * @throws AccountApprovedException when an account has already been
+     * approved
      */
     public void approveStudent(String email,
-            boolean approved)
+            boolean approved) throws AccountApprovedException, NoResultException
     {
         //Create the Entity Manager and set up the query for the student
         em = DatabaseConnection.getEntityManager();
@@ -173,39 +166,38 @@ public class AdminStudentsBean
                 em.createNamedQuery("Student.findByEmail", Student.class);
         query.setParameter("email", email);
 
-        try {
+        try
+        {
             //query the email and approve or delete the student
             Student student = query.getSingleResult();
             em.getTransaction().begin();
-            if (approved) {
+            if (approved)
+            {
                 student.approve();
                 logger.log(Level.INFO, "Student account {0} approved", student);
                 //@TODO send message to student?
-            } else {
+            } else
+            {
                 em.remove(student);
                 logger.log(Level.INFO, "Student account {0} deleted", student);
                 //@TODO send message to student?
             }
             em.getTransaction().commit();
-        } catch (NoResultException noex) {
+        } catch (NoResultException nrex)
+        {
             logger.log(Level.WARNING, "No such account with email {0} found in database", email);
-        } finally {
+            throw nrex;
+        } catch (Exception ex)
+        {
+            //something terrible happened
+            logger.log(Level.SEVERE, null, ex);
+            throw ex;
+        } finally
+        {
             //close the Entity Manager
             em.close();
             em = null;
         }
-//        if (approved) {
-//
-//            Student student = query.getSingleResult(); //@TODO error handling?
-//            student.approve();
-////            em.getTransaction().begin();
-//            em.refresh(student); //update the student account status
-////            em.getTransaction().commit();
-//            //@TODO send message to student
-//        } else {
-//            deleteStudent(email);
-//            //@TODO send message to student
-//        }
     }
 
     //
@@ -222,7 +214,8 @@ public class AdminStudentsBean
         TypedQuery<Student> query =
                 em.createNamedQuery("Student.findByEMail", Student.class);
 
-        try {
+        try
+        {
             Student student = query.setParameter("email", email).getSingleResult();
 //            em.getTransaction().begin();
             em.remove(student);
@@ -230,11 +223,13 @@ public class AdminStudentsBean
 
             //Logging
             logger.log(Level.INFO, "Student removed from database", student);
-        } catch (NoResultException noex) {
+        } catch (NoResultException noex)
+        {
             //Logging
             logger.log(Level.WARNING, "No students found for removal that match db query", email);
             //@TODO no such school
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             //@TODO generic catch
         }
 

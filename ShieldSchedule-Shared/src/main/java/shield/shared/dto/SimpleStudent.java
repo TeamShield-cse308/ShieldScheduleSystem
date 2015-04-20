@@ -15,5 +15,4 @@ public class SimpleStudent
     public String email;
     public String password;
     public String school;
-    public String state;
 }

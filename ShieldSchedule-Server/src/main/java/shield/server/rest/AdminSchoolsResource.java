@@ -20,18 +20,21 @@ import javax.ws.rs.POST;
 import shield.server.ejb.AdminSchoolsBean;
 import shield.server.entities.School;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.Response;
 
 import shield.shared.dto.SimpleSchool;
 
 /**
  * REST Web Service Exposes the functionality of the AdminSchoolsBean to the
  * client program
- * 
- * Some code adapted from http://www.studytrails.com/java/json/java-jackson-json-tree-parsing.jsp
+ *
+ * Some code adapted from
+ * http://www.studytrails.com/java/json/java-jackson-json-tree-parsing.jsp
  *
  * @author Jeffrey Kabot
  */
@@ -41,7 +44,6 @@ public class AdminSchoolsResource
 {
 
     //test
-
     @Context
     private UriInfo context;
 
@@ -50,9 +52,9 @@ public class AdminSchoolsResource
     private AdminSchoolsBean adminSchoolsBean;
 
     //Logger
-    private static final Logger logger = 
+    private static final Logger logger =
             Logger.getLogger("sss.rest.AdminSchoolsREST");
-    
+
     //the reader for JSON messages
     ObjectMapper mapper = new ObjectMapper();
 
@@ -71,54 +73,67 @@ public class AdminSchoolsResource
      */
     @GET
     @Produces("application/json")
-    public List<SimpleSchool> getAllSchools()
+    public Response getAllSchools()
     {
         List<School> allSchools = adminSchoolsBean.getAllSchools();
-        List<SimpleSchool> translatedSchools = new ArrayList<>();
+        List<SimpleSchool> simpleSchools = new ArrayList<>();
         SimpleSchool s;
         for (School school : allSchools)
         {
             s = new SimpleSchool();
             s.name = school.getSchoolName();
-            s.numPeriods = "" + school.getPeriods();
-            s.numSemesters = "" + school.getSemesters();
-            s.startingLunchPeriod = "" + school.getStartingLunch();
-            s.endingLunchPeriod = "" + school.getEndingLunch();
-            s.numScheduleDays = "" + school.getScheduleDays();
-            translatedSchools.add(s);
+            s.numPeriods = school.getPeriods();
+            s.numSemesters = school.getSemesters();
+            s.startingLunchPeriod = school.getStartingLunch();
+            s.endingLunchPeriod = school.getEndingLunch();
+            s.numScheduleDays = school.getScheduleDays();
+            simpleSchools.add(s);
         }
-        return translatedSchools;
+        GenericEntity<List<SimpleSchool>> wrapper = 
+                new GenericEntity<List<SimpleSchool>>(simpleSchools) {};
+        return Response.ok(wrapper).build();
     }
 
     /**
      * POST method for creating a school
      *
-     * @param content representation for the resource
-//     * @return an HTTP response with content of the updated or created resource.
+     * @param school
+     * @return response to client
      */
     @POST
     @Path("/add")
     @Consumes("application/json")
-    public void addSchool(String content)
+    public Response addSchool(SimpleSchool school)
     {
-        try {
-            //@TODO ensure correct JSON keys
-            JsonNode node = mapper.readTree(content);
-            String name = node.get("name").asText();
-            int numSemesters = node.get("numSemesters").asInt();
-            int numPeriods = node.get("numPeriods").asInt();
-            int numScheduleDays = node.get("numScheduleDays").asInt();
-            int startLunch = node.get("startingLunchPeriod").asInt();
-            int endLunch = node.get("endingLunchPeriod").asInt();
-            
-            adminSchoolsBean.addSchool(name, numSemesters, numPeriods, 
-                    numScheduleDays, startLunch, endLunch);
-            
-            //@TODO logging
-            
+        try
+        {
+//            //@TODO ensure correct JSON keys
+//            JsonNode node = mapper.readTree(content);
+//            String name = node.get("name").asText();
+//            int numSemesters = node.get("numSemesters").asInt();
+//            int numPeriods = node.get("numPeriods").asInt();
+//            int numScheduleDays = node.get("numScheduleDays").asInt();
+//            int startLunch = node.get("startingLunchPeriod").asInt();
+//            int endLunch = node.get("endingLunchPeriod").asInt();
+
+            adminSchoolsBean.addSchool(school.name, school.numSemesters, school.numPeriods,
+                    school.numScheduleDays, school.startingLunchPeriod, school.endingLunchPeriod);
+
+            return Response.ok(school).build();
             //@TODO error handling
-        } catch (IOException ioex) {
-            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ioex);
+        } catch (EntityExistsException eeex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST response");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NoResultException eeex)
+        {
+            //@TODO disambiguate with previous exception
+            logger.log(Level.WARNING, "BAD REQUEST response");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
         }
     }
 
@@ -130,50 +145,47 @@ public class AdminSchoolsResource
     @POST
     @Path("/edit")
     @Consumes("application/json")
-    public void editSchool(String content)
+    public Response editSchool(SimpleSchool school)
     {
-        try {
-            //@TODO ensure correct JSON keys
-            JsonNode node = mapper.readTree(content);
-            String oldName = node.get("oldName").asText();
-            String newName = node.get("newName").asText();
-            int newSemesters = node.get("newSemesters").asInt();
-            int newPeriods = node.get("newPeriods").asInt();
-            int newScheduleDays = node.get("newScheduleDays").asInt();
-            int newStartLunch = node.get("newStartingLunchPeriod").asInt();
-            int newEndLunch = node.get("newEndingLunchPeriod").asInt();
-            
-            adminSchoolsBean.editSchool(oldName, newName, newSemesters, 
-                    newPeriods, newScheduleDays, newStartLunch, newEndLunch);
-        } 
-        catch(IOException ioex) {
-            Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ioex);
+        try
+        {
+            adminSchoolsBean.editSchool(school.name, school.numSemesters, school.numPeriods,
+                    school.numScheduleDays, school.startingLunchPeriod, school.endingLunchPeriod);
+            return Response.ok(school).build();
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
         }
     }
 
-    //@TODO POST or DELETE?
     /**
      * Resource for removing a school
-     * @param content 
+     *
+     * @param content
      */
     @POST
     @Path("/delete")
     @Consumes("application/json")
-    public void deleteSchool(String content)
+    public Response deleteSchool(SimpleSchool school)
     {
-        //try {
-           // JsonNode node = mapper.readTree(content);
-
-            ///@TODO ensure correct JSON key
-           // String name = node.get("name").asText();
-            String name = content;
-            adminSchoolsBean.deleteSchool(name);
-            
-            //@TODO logging
-            //@TODO error handling
-       // } catch (IOException ex) {
-          //  Logger.getLogger(AdminSchoolsResource.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        try
+        {
+            adminSchoolsBean.deleteSchool(school.name);
+            return Response.ok(school).build();
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
+        }
     }
 
 }

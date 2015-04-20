@@ -9,11 +9,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.*;
 import shield.server.exceptions.AccountActiveException;
+import shield.server.exceptions.AccountApprovedException;
 import shield.server.exceptions.AccountPendingException;
 
 /**
@@ -21,13 +20,15 @@ import shield.server.exceptions.AccountPendingException;
  *
  * @author Phillip Elliot, Jeffrey Kabot
  */
-@NamedQueries({
-    @NamedQuery(name = "Student.findAll",
-            query = "SELECT s FROM Student s"),
-    @NamedQuery(name = "Student.findAllPending",
-            query = "SELECT s FROM Student s WHERE s.accountState = shield.server.entities.StudentAccountState.PENDING"),
-    @NamedQuery(name = "Student.findByEmail",
-            query = "SELECT s FROM Student s WHERE s.email = :email"),})
+@NamedQueries(
+        {
+            @NamedQuery(name = "Student.findAll",
+                    query = "SELECT s FROM Student s"),
+            @NamedQuery(name = "Student.findAllPending",
+                    query = "SELECT s FROM Student s WHERE s.accountState = shield.server.entities.StudentAccountState.PENDING"),
+            @NamedQuery(name = "Student.findByEmail",
+                    query = "SELECT s FROM Student s WHERE s.email = :email"),
+        })
 @Entity
 public class Student extends GenericUser implements Serializable
 {
@@ -56,9 +57,14 @@ public class Student extends GenericUser implements Serializable
     private DesiredSchedule myGeneratedSchedule;
 
     //required by JPA
-    protected Student(){}
-    
-    public Student(String initName, String initEmail, String initPassword, School initSchool)
+    protected Student()
+    {
+    }
+
+    public Student(String initName,
+            String initEmail,
+            String initPassword,
+            School initSchool)
     {
         name = initName;
         email = initEmail;
@@ -91,11 +97,13 @@ public class Student extends GenericUser implements Serializable
     public boolean equals(Object object)
     {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Student)) {
+        if (!(object instanceof Student))
+        {
             return false;
         }
         Student other = (Student) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        {
             return false;
         }
         return true;
@@ -109,11 +117,18 @@ public class Student extends GenericUser implements Serializable
 
     /**
      * Changes an account from pending to approved
+     *
+     * @throws AccountApprovedException Indicates that an account is already
+     * approved
      */
-    public void approve()
+    public void approve() throws AccountApprovedException
     {
-        if (accountState == StudentAccountState.PENDING) {
+        if (accountState == StudentAccountState.PENDING)
+        {
             accountState = StudentAccountState.INACTIVE;
+        } else
+        {
+            throw new AccountApprovedException(email + " is already approved.");
         }
     }
 
@@ -126,11 +141,14 @@ public class Student extends GenericUser implements Serializable
      */
     public void activate() throws AccountActiveException, AccountPendingException
     {
-        if (accountState == StudentAccountState.INACTIVE) {
+        if (accountState == StudentAccountState.INACTIVE)
+        {
             accountState = StudentAccountState.ACTIVE;
-        } else if (accountState == StudentAccountState.ACTIVE) {
+        } else if (accountState == StudentAccountState.ACTIVE)
+        {
             throw new AccountActiveException(email + " is already active.");
-        } else {
+        } else
+        {
             throw new AccountPendingException(email + " is not yet approved.");
         }
     }
@@ -140,9 +158,20 @@ public class Student extends GenericUser implements Serializable
      */
     public void deactivate()
     {
-        if (accountState == StudentAccountState.ACTIVE) {
+        if (accountState == StudentAccountState.ACTIVE)
+        {
             accountState = StudentAccountState.INACTIVE;
         }
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
+
+    public School getSchool()
+    {
+        return school;
     }
 
     //@TODO all these methods
@@ -156,32 +185,14 @@ public class Student extends GenericUser implements Serializable
 
     }
 
-    public void sendFriendRequest(Long id)
+    public void addFriendRequest(Long id)
     {
 
     }
 
-    public void enterCourse(Course course)
-    {
-
-    }
-
-    public void viewCourse()
-    {
-
-    }
-
-    public String getEmail()
-    {
-        return email;
-    }
-
-    public void editCourse(Course course)
-    {
-
-    }
-
-    public Course viewAllCourses(Long id, int year, String semester)
+    public Course viewAllCourses(Long id,
+            int year,
+            String semester)
     {
         //@TODO valid return
         return null;
@@ -192,16 +203,14 @@ public class Student extends GenericUser implements Serializable
 
     }
 
-    public DesiredSchedule viewDesiredSchedule()
+    public AssignedSchedule viewAssignedSchedule()
     {
-        //@TODO valid return
-        return null;
+        return myAssignedSchedule;
     }
 
-    public DesiredSchedule exportDesiredSchedule()
+    public DesiredSchedule viewDesiredSchedule()
     {
-        //@TODO valid return
-        return null;
+        return myGeneratedSchedule;
     }
 
 }
