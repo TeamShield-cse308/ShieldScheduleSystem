@@ -27,8 +27,6 @@ import java.util.Vector;
             query = "SELECT s FROM School s WHERE s.schoolName = :name"),
     @NamedQuery(name = "School.findSchoolIDByName", 
             query = "SELECT s.id FROM School s WHERE s.schoolName = :name"),
-    //@NamedQuery(name = "School.AddSchool", 
-    //        query = "INSERT INTO school (SCHOOLNAME, SEMESTERS,SCHEDULEDAYS,PERIODS,STARTINGLUNCH,ENDINGLUNCH)VALUES (:name, :semesters, :scheduledays, :startinglunch, : endinglunch)"),
 //    @TODO resolve compilation error here
 //    @NamedQuery(name = "School.findAllCourses",
 //            query = "SELECT c FROM School s WHERE")
@@ -63,7 +61,8 @@ public class School implements Serializable
             int initPeriods, int initStartLunchPeriod, int initEndLunchPeriod)
     {
         schoolName = initName;
-        //@TODO enfroce # semesters from 1 to 4
+        
+        //@TODO enforce constraints
         semesters = initSemesters;
         scheduleDays = initScheduleDays;
         periods = initPeriods;
@@ -91,7 +90,7 @@ public class School implements Serializable
     {
         return semesters;
     }
-    //@TODO enforce validity
+    //@TODO enforce constraints
     public void setSemesters(int numSemesters)
     {
         this.semesters = numSemesters;

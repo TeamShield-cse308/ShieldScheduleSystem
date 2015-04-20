@@ -199,39 +199,4 @@ public class AdminStudentsBean
             em = null;
         }
     }
-
-    //
-    /**
-     * Deletes a student account from the database.
-     *
-     * @param email
-     * @deprecated Use {@link approveStudent(String, boolean)} instead
-     */
-    @Deprecated
-    public void deleteStudent(String email)
-    {
-
-        TypedQuery<Student> query =
-                em.createNamedQuery("Student.findByEMail", Student.class);
-
-        try
-        {
-            Student student = query.setParameter("email", email).getSingleResult();
-//            em.getTransaction().begin();
-            em.remove(student);
-//            em.getTransaction().commit();
-
-            //Logging
-            logger.log(Level.INFO, "Student removed from database", student);
-        } catch (NoResultException noex)
-        {
-            //Logging
-            logger.log(Level.WARNING, "No students found for removal that match db query", email);
-            //@TODO no such school
-        } catch (Exception ex)
-        {
-            //@TODO generic catch
-        }
-
-    }
 }

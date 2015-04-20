@@ -46,19 +46,18 @@ public class AuthenticationBean
 
         logger.log(Level.INFO, "User attempts log in with name {0}", username);
 
-        //Student users log in using their email
         try
         {
-            if (username.indexOf('@') != -1)
+            if (username.indexOf('@') != -1) //Student users log in using their email
             {
                 //set up the query
                 TypedQuery<Student> query =
                         em.createNamedQuery("Student.findByEmail", Student.class);
                 query.setParameter("email", username);
-
+                
+                //find the right account with that email
                 Student student = query.getSingleResult();
 
-                //if correct password
                 if (student.getPassword().equals(password))
                 {
                     student.activate();
@@ -71,17 +70,16 @@ public class AuthenticationBean
                 }
             } else //Administrators don't have @ symbol in their username
             {
-                //setup the query
+                //set up the query
                 TypedQuery<Administrator> query =
                         em.createNamedQuery("Administrator.findByUserame", Administrator.class);
                 query.setParameter("username", username);
-
+                
+                //find the admin with that username
                 Administrator admin = query.getSingleResult();
 
-                //if correct password
                 if (admin.getPassword().equals(password))
                 {
-                    //@TODO successfully log in
                     logger.log(Level.INFO, "Admin {0} logged in", username);
                     return admin;
                 } else
@@ -92,6 +90,7 @@ public class AuthenticationBean
             }
         } catch (NoResultException nrex)
         {
+            //no matching account
             logger.log(Level.WARNING, "No such account with username {0} found in database", username);
             throw nrex;
         } catch (Exception ex)

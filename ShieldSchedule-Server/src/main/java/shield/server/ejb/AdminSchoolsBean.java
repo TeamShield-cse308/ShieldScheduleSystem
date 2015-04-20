@@ -124,13 +124,16 @@ public class AdminSchoolsBean
         }
     }
 
-    //@TODO excessive parameters?... package into a structure ??
-    
-    //@TODO change school name?
     /**
-     * Modify a school in the database
+     * Modify a school in the database.
      *
-     * @param originalName the original identifier for the school
+     * @param name
+     * @param newSemesters
+     * @param newPeriods
+     * @param newScheduleDays
+     * @param newStartLunchPeriod
+     * @param newEndLunchPeriod
+     * @throws NoResultException
      */
     public void editSchool(String name,
             int newSemesters,
@@ -155,12 +158,11 @@ public class AdminSchoolsBean
             school.setStartingLunch(newStartLunchPeriod);
             school.setEndingLunch(newEndLunchPeriod);
             em.getTransaction().commit();
-            //@TODO change this log?
-            logger.log(Level.INFO, "School data changed in database for school with ID: {0}", school.getID());
+            logger.log(Level.INFO, "Updated properties for school: {0}", name);
 
         } catch (NoResultException nrex)
         {
-            logger.log(Level.WARNING, "No such school with name {0} found in database", name);
+            logger.log(Level.WARNING, "No school with name {0} found in database", name);
             throw nrex;
         } catch (Exception ex)
         {

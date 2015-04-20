@@ -77,7 +77,6 @@ public class StudentRegistrationController implements Initializable, ControlledS
         if (email.getText().indexOf('@') != -1 && email.getText().equals(confirmedEmail.getText()) && password.getText().equals(confirmedPassword.getText())) {
             //Add account to DB / Check if it already exists
             SimpleStudent student = new SimpleStudent();
-            student.state = "Pending";
             student.email = email.getText();
             student.name = name.getText();
             student.password = password.getText();

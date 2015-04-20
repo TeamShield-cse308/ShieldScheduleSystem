@@ -20,7 +20,6 @@ import javax.persistence.OneToOne;
  */
 @Entity
 
-//@TODO resolve compilation error here
 @NamedQueries({
     @NamedQuery(name = "Section.findAllSectionsOfACourse", 
             query = "SELECT s FROM Section s WHERE s.courseID = :CourseID"),

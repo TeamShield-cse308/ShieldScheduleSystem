@@ -57,6 +57,7 @@ public class NewSchoolController implements Initializable, ControlledScreen
     private void handleCreateSchool(ActionEvent event)
     {
         //retrieve school data
+        //@TODO ensure user can't enter non-integers for integer fields
         String initSchoolName = name.getText();
         String initSemesters = semesters.getText();
         String initScheduleDays = scheduleDays.getText();
@@ -67,11 +68,11 @@ public class NewSchoolController implements Initializable, ControlledScreen
 
         SimpleSchool school = new SimpleSchool();
         school.name = initSchoolName;
-        school.numSemesters = initSemesters;
-        school.numScheduleDays = initScheduleDays;
-        school.numPeriods = initPeriods;
-        school.startingLunchPeriod = initStartingLunchPeriod;
-        school.endingLunchPeriod = initEndingLunchPeriod;
+        school.numSemesters = Integer.parseInt(initSemesters);
+        school.numScheduleDays = Integer.parseInt(initScheduleDays);
+        school.numPeriods = Integer.parseInt(initPeriods);
+        school.startingLunchPeriod = Integer.parseInt(initStartingLunchPeriod);
+        school.endingLunchPeriod = Integer.parseInt(initEndingLunchPeriod);
 
 
         //transmit the school

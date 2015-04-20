@@ -71,25 +71,41 @@ public class AdminStudentsResource
         SimpleStudent s;
         for (Student student : students)
         {
-            logger.log(Level.INFO, "Polling Student with name {0}", student.getName());
             s = new SimpleStudent();
             s.name = student.getName();
             s.email = student.getEmail();
 
             simpleStudents.add(s);
         }
-        GenericEntity<List<SimpleStudent>> wrapper = 
-                new GenericEntity<List<SimpleStudent>>(simpleStudents) {};
+        GenericEntity<List<SimpleStudent>> wrapper =
+                new GenericEntity<List<SimpleStudent>>(simpleStudents)
+                {
+                };
         return Response.ok(wrapper).build();
     }
 
     @GET
     @Path("/pending")
     @Produces("application/json")
-    public List<Student> getPendingStudents()
+    public Response getPendingStudents()
     {
-        //@TODO convert to simple representation, convert to response
-        return adminStudentsBean.getPendingStudents();
+        List<Student> pendingStudents = adminStudentsBean.getPendingStudents();
+
+        List<SimpleStudent> simpleStudents = new ArrayList<>();
+        SimpleStudent s;
+        for (Student student : pendingStudents)
+        {
+            s = new SimpleStudent();
+            s.name = student.getName();
+            s.email = student.getEmail();
+
+            simpleStudents.add(s);
+        }
+        GenericEntity<List<SimpleStudent>> wrapper =
+                new GenericEntity<List<SimpleStudent>>(simpleStudents)
+                {
+                };
+        return Response.ok(wrapper).build();
     }
 
     /**
@@ -105,17 +121,9 @@ public class AdminStudentsResource
     {
         try
         {
-            //@TODO ensure correct JSON keys
-//            JsonNode node = mapper.readTree(content);
-//            String name = node.get("name").asText();
-//            String email = node.get("email").asText();
-//            String password = node.get("password").asText();
-//            String school = node.get("school").asText();
-
             adminStudentsBean.addStudent(student.name, student.email, student.password, student.school);
             logger.log(Level.INFO, "OK Response");
             return Response.ok(student).build();
-            //@TODO error handling
         } catch (EntityExistsException eeex)
         {
             logger.log(Level.WARNING, "BAD REQUEST");

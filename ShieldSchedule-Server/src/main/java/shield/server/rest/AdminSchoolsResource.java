@@ -52,8 +52,9 @@ public class AdminSchoolsResource
     private AdminSchoolsBean adminSchoolsBean;
 
     //Logger
-    private static final Logger logger =
-            Logger.getLogger("sss.rest.AdminSchoolsREST");
+    private static final Logger logger = 
+            Logger.getLogger(AdminSchoolsResource.class.getName());
+    
 
     //the reader for JSON messages
     ObjectMapper mapper = new ObjectMapper();
@@ -107,20 +108,10 @@ public class AdminSchoolsResource
     {
         try
         {
-//            //@TODO ensure correct JSON keys
-//            JsonNode node = mapper.readTree(content);
-//            String name = node.get("name").asText();
-//            int numSemesters = node.get("numSemesters").asInt();
-//            int numPeriods = node.get("numPeriods").asInt();
-//            int numScheduleDays = node.get("numScheduleDays").asInt();
-//            int startLunch = node.get("startingLunchPeriod").asInt();
-//            int endLunch = node.get("endingLunchPeriod").asInt();
-
             adminSchoolsBean.addSchool(school.name, school.numSemesters, school.numPeriods,
                     school.numScheduleDays, school.startingLunchPeriod, school.endingLunchPeriod);
-
+            logger.log(Level.INFO, "OK response");
             return Response.ok(school).build();
-            //@TODO error handling
         } catch (EntityExistsException eeex)
         {
             logger.log(Level.WARNING, "BAD REQUEST response");
