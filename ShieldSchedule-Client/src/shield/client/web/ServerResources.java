@@ -58,4 +58,7 @@ public final class ServerResources
     
     public static final String DELETE_STUDENT_URL = 
             SERVER_BASE_URL + "/webresources/admin/students/delete";
+    
+    public static final String AUTHENTICATION_URL = 
+            SERVER_BASE_URL + "/webresources/authentication";
 }

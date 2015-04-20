@@ -5,6 +5,7 @@ package shield.server.rest;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.ws.rs.core.Context;
@@ -28,6 +29,7 @@ import shield.shared.dto.LoginCredentials;
  * @author Jeffrey Kabot
  */
 @Path("authentication")
+@RequestScoped
 public class AuthenticationResource
 {
 

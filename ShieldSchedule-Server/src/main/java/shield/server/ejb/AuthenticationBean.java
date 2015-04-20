@@ -72,7 +72,7 @@ public class AuthenticationBean
             {
                 //set up the query
                 TypedQuery<Administrator> query =
-                        em.createNamedQuery("Administrator.findByUserame", Administrator.class);
+                        em.createNamedQuery("Administrator.findByUsername", Administrator.class);
                 query.setParameter("username", username);
                 
                 //find the admin with that username

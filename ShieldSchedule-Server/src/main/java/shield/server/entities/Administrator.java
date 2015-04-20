@@ -16,9 +16,11 @@ import javax.persistence.Table;
 
 /**
  * The class representing Administrator users in our database
+ *
  * @author Phillip Elliot
  */
-@NamedQueries({
+@NamedQueries(
+{
     @NamedQuery(name = "Administrator.findByUsername",
             query = "SELECT a FROM Administrator a WHERE a.username = :username"),
 })
@@ -27,19 +29,30 @@ public class Administrator extends GenericUser implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-    
+
     //Username is not changeable
     //Administrators are created and edited via manual database query
     @Id
     private String username;
 
     //requirement for JPA
-    protected Administrator(){}
-    
-    
+    protected Administrator()
+    {
+    }
+
     public String getUsername()
     {
         return username;
+    }
+
+    public String getId()
+    {
+        return username;
+    }
+
+    public void setId(String id)
+    {
+        this.username = id;
     }
 
     @Override
@@ -54,11 +67,13 @@ public class Administrator extends GenericUser implements Serializable
     public boolean equals(Object object)
     {
         // TODO: Warning - this method won't work in the case the username fields are not set
-        if (!(object instanceof Administrator)) {
+        if (!(object instanceof Administrator))
+        {
             return false;
         }
         Administrator other = (Administrator) object;
-        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
+        if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username)))
+        {
             return false;
         }
         return true;
