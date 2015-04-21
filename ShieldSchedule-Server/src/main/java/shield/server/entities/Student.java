@@ -30,6 +30,8 @@ import shield.server.exceptions.AccountPendingException;
                     query = "SELECT s FROM Student s WHERE NOT s.accountState = shield.server.entities.StudentAccountState.PENDING"),
             @NamedQuery(name = "Student.findByEmail",
                     query = "SELECT s FROM Student s WHERE s.email = :email"),
+            @NamedQuery(name = "Student.findByNameAndSchool",
+                    query = "SELECT s FROM Student s WHERE s.name = :name AND s.school.schoolName = :school")
         })
 @Entity
 public class Student extends GenericUser implements Serializable
@@ -50,6 +52,9 @@ public class Student extends GenericUser implements Serializable
 
     @ManyToMany
     List<Student> friendsList = new ArrayList<>();
+    
+//    @ManyToMany
+//    List<FriendRequest> friendRequests = new ArrayList<>();
 
     @OneToOne
     private AssignedSchedule myAssignedSchedule;
@@ -176,9 +181,9 @@ public class Student extends GenericUser implements Serializable
     }
 
     //@TODO all these methods
-    public void addFriend(Long id)
+    public void addFriend(Student s)
     {
-
+        friendsList.add(s);
     }
 
     public void deleteFriend(Long id)
@@ -186,10 +191,10 @@ public class Student extends GenericUser implements Serializable
 
     }
 
-    public void addFriendRequest(Long id)
-    {
-
-    }
+//    public void addFriendRequest(FriendRequest fr)
+//    {
+//        friendRequests.add(fr);
+//    }
 
     public Course viewAllCourses(Long id,
             int year,

@@ -99,11 +99,8 @@ public class AdminSchoolsBean
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
-//<<<<<<< Updated upstrea
-//=======
         try {
-//<<<<<<< Updated upstream
-//>>>>>>> Stashed changes
+
             //search the school and remove it from database
             School school = query.getSingleResult();
             em.getTransaction().begin();
@@ -125,15 +122,6 @@ public class AdminSchoolsBean
             //Close the entity manager
             em.close();
             em = null;
-////=======
-//            conn = DriverManager.getConnection("jdbc:mysql://mysql2.cs.stonybrook.edu:3306/eguby", "eguby", "108555202");
-//
-//            stmt = conn.createStatement();
-//            String sql = "DELETE FROM school WHERE schoolname = \'" + name + "\'";
-//            stmt.executeUpdate(sql);
-//        } catch (SQLException ex) {
-//            logger.log(Level.SEVERE, null, ex);
-////>>>>>>> Stashed changes
         }
     }
 
