@@ -180,7 +180,12 @@ public class Student extends GenericUser implements Serializable
         return school;
     }
 
-    //@TODO all these methods
+    
+    public List<Student> getFriendsList()
+    {
+        return friendsList;
+    }
+    
     public void addFriend(Student s)
     {
         friendsList.add(s);
@@ -190,11 +195,6 @@ public class Student extends GenericUser implements Serializable
     {
 
     }
-
-//    public void addFriendRequest(FriendRequest fr)
-//    {
-//        friendRequests.add(fr);
-//    }
 
     public Course viewAllCourses(Long id,
             int year,
