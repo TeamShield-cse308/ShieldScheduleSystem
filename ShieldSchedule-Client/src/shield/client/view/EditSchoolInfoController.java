@@ -64,6 +64,7 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
         school.numSemesters = Integer.parseInt(semesters.getText());
         school.numScheduleDays = Integer.parseInt(scheduleDays.getText());
         school.numPeriods = Integer.parseInt(periods.getText());
+        school.name = name.getText();
         //send it to the server
         Response rsp = editSchool.request(school);
 

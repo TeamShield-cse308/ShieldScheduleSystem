@@ -76,11 +76,11 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         {
             schoolNames.add(sch.name);
         }
-
+        myController.setSchools(schools);
         //populate combobox
         schoolsBox.getItems().clear();
         schoolsBox.getItems().addAll(schoolNames);
-        myController.setSchools(schoolsList);
+        
     }
 
     @FXML
