@@ -36,7 +36,7 @@
          </font>
       </Label>
       <TextField fx:id="periods" layoutX="119.0" layoutY="179.0" />
-      <Label layoutX="17.0" layoutY="41.0" text="Leave entry blank if its not being changed">
+      <Label layoutX="17.0" layoutY="41.0" text="Leave entry as-is to retain its value">
          <font>
             <Font size="14.0" />
          </font>
