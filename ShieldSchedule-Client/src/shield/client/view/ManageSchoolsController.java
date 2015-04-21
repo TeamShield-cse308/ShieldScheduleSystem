@@ -68,17 +68,19 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         {
         };
         //read schools from http response
-        schoolsList = rsp.readEntity(gtlc);
+        List<SimpleSchool> schools = rsp.readEntity(gtlc);
+
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
-        for (SimpleSchool sch : schoolsList)
+        for (SimpleSchool sch : schools)
         {
             schoolNames.add(sch.name);
         }
-        myController.setSchools(schoolsList);
+
         //populate combobox
         schoolsBox.getItems().clear();
         schoolsBox.getItems().addAll(schoolNames);
+        myController.setSchools(schoolsList);
     }
 
     @FXML

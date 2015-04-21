@@ -32,6 +32,9 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
             new ServerAccessPoint(ServerResources.GET_SCHOOL_URL);
     
     ScreensController myController;
+    
+    private final ServerAccessPoint editSchool =
+            new ServerAccessPoint(ServerResources.EDIT_SCHOOL_URL);
     @FXML
     private TextField name;
     @FXML
@@ -54,6 +57,31 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
 
     @FXML
     private void handleSaveSchool(ActionEvent event) {
+        //get the school to delete
+        SimpleSchool school = new SimpleSchool();
+        school.endingLunchPeriod = Integer.parseInt(endingLunch.getText());
+        school.startingLunchPeriod = Integer.parseInt(startingLunch.getText());
+        school.numSemesters = Integer.parseInt(semesters.getText());
+        school.numScheduleDays = Integer.parseInt(scheduleDays.getText());
+        school.numPeriods = Integer.parseInt(periods.getText());
+        //send it to the server
+        Response rsp = editSchool.request(school);
+
+        //check response status code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO handle error code
+            int code = rsp.getStatus();
+            if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //invalid school name
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happenedF
+            }
+        }
+
+        myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
         myController.setScreen(CSE308GUI.ManageSchoolsID);
     }
 
@@ -71,6 +99,7 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
         String school = myController.getSchool();
         List<SimpleSchool> schools = myController.getSchools();
         SimpleSchool sch = null;
+        name.setEditable(false);
         for(SimpleSchool s : schools){
             if(s.name.equals(school)){
                 sch = s;

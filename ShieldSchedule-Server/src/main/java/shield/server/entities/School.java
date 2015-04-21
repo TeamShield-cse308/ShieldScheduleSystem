@@ -24,7 +24,7 @@ import java.util.Vector;
     @NamedQuery(name = "School.findAll", 
             query = "SELECT s FROM School s"),
     @NamedQuery(name = "School.findByName", 
-            query = "SELECT s FROM School s WHERE s.schoolName = :name"),
+            query = "SELECT s FROM School s WHERE s.name = :name"),
 //    @TODO resolve compilation error here
 //    @NamedQuery(name = "School.findAllCourses",
 //            query = "SELECT c FROM School s WHERE")
@@ -36,7 +36,7 @@ public class School implements Serializable
 
     //annotations below________________
     @Id
-    private String schoolName;
+    private String name;
     private int semesters;
     private int scheduleDays;
     private int periods;
@@ -56,7 +56,7 @@ public class School implements Serializable
     public School(String initName, int initSemesters, int initScheduleDays, 
             int initPeriods, int initStartLunchPeriod, int initEndLunchPeriod)
     {
-        schoolName = initName;
+        name = initName;
         
         //@TODO enforce constraints
         semesters = initSemesters;
@@ -76,11 +76,11 @@ public class School implements Serializable
      */
     public String getSchoolName()
     {
-        return schoolName;
+        return name;
     }
     public void setSchoolName(String name)
     {
-        this.schoolName = name;
+        this.name = name;
     }
     public int getSemesters()
     {
@@ -159,19 +159,19 @@ public class School implements Serializable
     
     public String getId()
     {
-        return schoolName;
+        return name;
     }
 
     public void setId(String id)
     {
-        this.schoolName = id;
+        this.name = id;
     }
 
     @Override
     public int hashCode()
     {
         int hash = 0;
-        hash += (schoolName != null ? schoolName.hashCode() : 0);
+        hash += (name != null ? name.hashCode() : 0);
         return hash;
     }
 
@@ -183,7 +183,7 @@ public class School implements Serializable
             return false;
         }
         School other = (School) object;
-        if ((this.schoolName == null && other.schoolName != null) || (this.schoolName != null && !this.schoolName.equals(other.schoolName))) {
+        if ((this.name == null && other.name != null) || (this.name != null && !this.schoolName.equals(other.schoolName))) {
             return false;
         }
         return true;
@@ -192,6 +192,6 @@ public class School implements Serializable
     @Override
     public String toString()
     {
-        return "cse308.School[ schoolName=" + schoolName + " ]";
+        return "cse308.School[ schoolName=" + name + " ]";
     }
 }

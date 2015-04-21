@@ -130,8 +130,8 @@ public class AdminSchoolsResource
 
     /**
      * Resource for editing a particular school
-     *
-     * @param content
+     * @param school
+     * @return response to client
      */
     @POST
     @Path("/edit")
