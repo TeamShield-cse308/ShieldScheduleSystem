@@ -31,7 +31,7 @@ import shield.server.exceptions.AccountPendingException;
             @NamedQuery(name = "Student.findByEmail",
                     query = "SELECT s FROM Student s WHERE s.email = :email"),
             @NamedQuery(name = "Student.findByNameAndSchool",
-                    query = "SELECT s FROM Student s WHERE s.name = :name AND s.school.schoolName = :school")
+                    query = "SELECT s FROM Student s WHERE s.name = :name AND s.school.name = :school")
         })
 @Entity
 public class Student extends GenericUser implements Serializable
