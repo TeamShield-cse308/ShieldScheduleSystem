@@ -17,7 +17,7 @@ import shield.client.main.CSE308GUI;
 import shield.client.view.session.AdminSession;
 import shield.client.view.session.Session;
 import shield.client.view.session.StudentSession;
-import shield.shared.dto.AbstractAccount;
+import shield.shared.dto.SimpleAdmin;
 import shield.shared.dto.SimpleSchool;
 import shield.shared.dto.SimpleStudent;
 
@@ -111,12 +111,15 @@ public class ScreensController extends StackPane
     {
         return session;
     }
-    public void createSession(AbstractAccount account)
+
+    public void createStudentSession(SimpleStudent acct)
     {
-        if (account instanceof SimpleStudent)
-            session = new StudentSession((SimpleStudent)account);
-        else
-            session = new AdminSession(); //@TODO pass admin parameters
+        session = new StudentSession(acct);
+    }
+    
+    public void createAdminSession(SimpleAdmin acct)
+    {
+        session = new AdminSession();
     }
 
     public String getSchool()
