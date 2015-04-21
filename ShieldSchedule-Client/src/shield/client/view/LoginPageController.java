@@ -82,6 +82,7 @@ public class LoginPageController implements Initializable, ControlledScreen
             } else
             {
                 SimpleStudent student = rsp.readEntity(SimpleStudent.class);
+                myController.createSession(student);
                 myController.setScreen(CSE308GUI.StudentViewID);
             }
         }

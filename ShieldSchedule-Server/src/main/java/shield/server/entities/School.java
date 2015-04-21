@@ -25,8 +25,6 @@ import java.util.Vector;
             query = "SELECT s FROM School s"),
     @NamedQuery(name = "School.findByName", 
             query = "SELECT s FROM School s WHERE s.schoolName = :name"),
-    @NamedQuery(name = "School.findSchoolIDByName", 
-            query = "SELECT s.id FROM School s WHERE s.schoolName = :name"),
 //    @TODO resolve compilation error here
 //    @NamedQuery(name = "School.findAllCourses",
 //            query = "SELECT c FROM School s WHERE")
@@ -35,11 +33,9 @@ public class School implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     //annotations below________________
+    @Id
     private String schoolName;
     private int semesters;
     private int scheduleDays;
@@ -115,9 +111,6 @@ public class School implements Serializable
     {
         return startingLunch;
     }
-    public long getID(){
-        return id;
-    }
     public void setStartingLunch(int period)
     {
         this.startingLunch = period;
@@ -164,33 +157,33 @@ public class School implements Serializable
     
     
     
-    public Long getId()
+    public String getId()
     {
-        return id;
+        return schoolName;
     }
 
-    public void setId(Long id)
+    public void setId(String id)
     {
-        this.id = id;
+        this.schoolName = id;
     }
 
     @Override
     public int hashCode()
     {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (schoolName != null ? schoolName.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object)
     {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        // TODO: Warning - this method won't work in the case the schoolName fields are not set
         if (!(object instanceof School)) {
             return false;
         }
         School other = (School) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.schoolName == null && other.schoolName != null) || (this.schoolName != null && !this.schoolName.equals(other.schoolName))) {
             return false;
         }
         return true;
@@ -199,6 +192,6 @@ public class School implements Serializable
     @Override
     public String toString()
     {
-        return "cse308.School[ id=" + id + " ]";
+        return "cse308.School[ schoolName=" + schoolName + " ]";
     }
 }

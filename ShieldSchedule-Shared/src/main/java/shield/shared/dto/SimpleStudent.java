@@ -9,10 +9,8 @@ package shield.shared.dto;
  * A class providing the network-transferable object representation of a student
  * @author Evan Guby
  */
-public class SimpleStudent 
+public class SimpleStudent extends AbstractAccount 
 {
-    public String name;
     public String email;
-    public String password;
     public String school;
 }
