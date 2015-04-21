@@ -27,13 +27,12 @@ import shield.shared.dto.SimpleSchool;
  * @author Evan Guby
  */
 public class EditSchoolInfoController implements Initializable, ControlledScreen {
-
-    private ServerAccessPoint getSchool =
-            new ServerAccessPoint(ServerResources.GET_SCHOOL_URL);
     
+    //The instance manager for the client
     ScreensController myController;
     
-    private final ServerAccessPoint editSchool =
+    //The access point for editing schools.
+    private final ServerAccessPoint EDIT_SCHOOL =
             new ServerAccessPoint(ServerResources.EDIT_SCHOOL_URL);
     @FXML
     private TextField name;
@@ -66,7 +65,7 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
         school.numPeriods = Integer.parseInt(periods.getText());
         school.name = name.getText();
         //send it to the server
-        Response rsp = editSchool.request(school);
+        Response rsp = EDIT_SCHOOL.request(school);
 
         //check response status code
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())

@@ -19,8 +19,8 @@ import shield.server.util.DatabaseConnection;
 import shield.shared.dto.SimpleSchool;
 
 /**
- * A javabean that provides functionality to add, delete, and edit schools To be
- * used on the server by administrators logged into the client
+ * A javabean that provides functionality to add, delete, and edit schools. To
+ * be used on the server by administrators logged into the client
  *
  * @author Jeffrey Kabot
  */
@@ -37,7 +37,7 @@ public class AdminSchoolsBean
     private EntityManager em;
 
     /**
-     * Add a new school to the database
+     * Add a new school to the database.
      *
      * @param initName the name of the school to add
      * @param initSemesters the number of semesters the school has per school
@@ -46,6 +46,7 @@ public class AdminSchoolsBean
      * @param initPeriods the number of schedule blocks in the school day
      * @param initStartLunchPeriod the starting lunch period
      * @param initEndLunchPeriod the ending lunchperiod
+     * @throws EntityExistsException if a school with that name already exists.
      */
     public void addSchool(String initName,
             int initSemesters,
@@ -73,11 +74,6 @@ public class AdminSchoolsBean
             //a school with that id already exists in database
             logger.log(Level.WARNING, "Collision on school ID within database");
             throw eeex;
-        } catch (Exception ex)
-        {
-            //something terrible happened
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //close the entity manager
@@ -87,9 +83,10 @@ public class AdminSchoolsBean
     }
 
     /**
-     * Remove a school that is in the database
+     * Remove a school in the database.
      *
-     * @param name the named of the school to remove
+     * @param name the name of the school to remove
+     * @throws NoResultException when there is no school with that name.
      */
     public void deleteSchool(String name) throws NoResultException
     {
@@ -99,8 +96,8 @@ public class AdminSchoolsBean
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
-        try {
-
+        try
+        {
             //search the school and remove it from database
             School school = query.getSingleResult();
             em.getTransaction().begin();
@@ -112,11 +109,6 @@ public class AdminSchoolsBean
             //school not found
             logger.log(Level.WARNING, "No such school with name {0} found in database", name);
             throw noex;
-        } catch (Exception ex)
-        {
-            //something terrible happened
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //Close the entity manager
@@ -163,13 +155,9 @@ public class AdminSchoolsBean
 
         } catch (NoResultException nrex)
         {
+            //school not found
             logger.log(Level.WARNING, "No school with name {0} found in database", name);
             throw nrex;
-        } catch (Exception ex)
-        {
-            //something terrible happened
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //close the entity manager
@@ -195,10 +183,6 @@ public class AdminSchoolsBean
         {
             schools = query.getResultList();
             logger.log(Level.INFO, "Retrieving all schools in DB", schools);
-        } catch (Exception ex)
-        {
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //Close the entity manager
@@ -208,18 +192,30 @@ public class AdminSchoolsBean
         return schools;
     }
 
-    public SimpleSchool getSchool(String name) {
+    /**
+     * Return a single school.
+     *
+     * @param name
+     * @return
+     * @deprecated
+     */
+    @Deprecated
+    public SimpleSchool getSchool(String name)
+    {
         School sch = null;
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
                 em.createNamedQuery("School.findSchoolByName", School.class);
         query.setParameter("name", name);
-        try {
+        try
+        {
             sch = query.getSingleResult();
             logger.log(Level.INFO, "Retrieving school from DB", sch);
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             //@TODO
-        } finally {
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;

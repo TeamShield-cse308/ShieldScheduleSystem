@@ -13,6 +13,8 @@ import shield.server.entities.Student;
 import shield.server.util.DatabaseConnection;
 
 /**
+ * Provides functionality for retrieving a list of friends for a particular
+ * student, and deleting particular friends.
  *
  * @author Jeffrey Kabot
  */
@@ -28,6 +30,12 @@ public class StudentFriendsBean
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Retrieves the list of friends for a particular student.
+     *
+     * @param email the email of the student whose friends to retrieve.
+     * @return the list of friends.
+     */
     public List<Student> getAllFriends(String email)
     {
         em = DatabaseConnection.getEntityManager();

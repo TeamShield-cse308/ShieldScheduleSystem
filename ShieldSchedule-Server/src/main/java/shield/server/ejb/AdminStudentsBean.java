@@ -20,6 +20,8 @@ import shield.server.exceptions.AccountApprovedException;
 import shield.server.util.DatabaseConnection;
 
 /**
+ * Provides functionality to add, approve, and delete students. Exposes a list
+ * of approved and pending student accounts.
  *
  * @author Jeffrey Kabot, Phillip Elliot
  */
@@ -36,9 +38,9 @@ public class AdminStudentsBean
     private EntityManager em;
 
     /**
-     * Retrieves a list of all Student Accounts in the database.
+     * Retrieves a list of approved students in the database.
      *
-     * @return The list of student accounts.
+     * @return The list of approved student accounts.
      */
     public List<Student> getApprovedStudents()
     {
@@ -53,10 +55,6 @@ public class AdminStudentsBean
         {
             students = query.getResultList();
             logger.log(Level.INFO, "Retrieving all approved students in DB", students);
-        } catch (Exception ex)
-        {
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //Close the entity manager
@@ -85,10 +83,6 @@ public class AdminStudentsBean
         {
             pendingStudents = query.getResultList();
             logger.log(Level.INFO, "Retrieving all pending student account requests");
-        } catch (Exception ex)
-        {
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //Close the Entity Manager
@@ -106,6 +100,9 @@ public class AdminStudentsBean
      * @param initEmail The email associated with the account.
      * @param initPassword The account password.
      * @param initSchool The school the student attends.
+     * @throws NoResultException when there is school with the name supplied.
+     * @throws EntityExistsException when a student with that email already
+     * exists.
      */
     public void addStudent(String initName,
             String initEmail,
@@ -135,11 +132,6 @@ public class AdminStudentsBean
         {
             logger.log(Level.WARNING, "Student with email {0} already exists", initEmail);
             throw eeex;
-        } catch (Exception ex)
-        {
-            //something terrible happened
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //close the Entity Manager
@@ -156,6 +148,7 @@ public class AdminStudentsBean
      * @param approved true if the student is approved, false if deleted
      * @throws AccountApprovedException when an account has already been
      * approved
+     * @throws NoResultException when no student by that email exists.
      */
     public void approveStudent(String email,
             boolean approved) throws AccountApprovedException, NoResultException
@@ -175,23 +168,18 @@ public class AdminStudentsBean
             {
                 student.approve();
                 logger.log(Level.INFO, "Student account {0} approved", student);
-                //@TODO send message to student?
+                //@TODO send email message to student?
             } else
             {
                 em.remove(student);
                 logger.log(Level.INFO, "Student account {0} deleted", student);
-                //@TODO send message to student?
+                //@TODO send email message to student?
             }
             em.getTransaction().commit();
         } catch (NoResultException nrex)
         {
             logger.log(Level.WARNING, "No such account with email {0} found in database", email);
             throw nrex;
-        } catch (Exception ex)
-        {
-            //something terrible happened
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //close the Entity Manager

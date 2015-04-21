@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shield.server.rest;
 
 import javax.ws.rs.core.Context;
@@ -17,7 +12,6 @@ import javax.inject.Inject;
 import shield.server.ejb.AdminStudentsBean;
 import javax.ws.rs.POST;
 import javax.enterprise.context.RequestScoped;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +23,7 @@ import shield.server.exceptions.AccountApprovedException;
 import shield.shared.dto.SimpleStudent;
 
 /**
- * REST Web Service
+ * Exposes the functionality of the AdminStudentsBean to the client.
  *
  * @author Jeffrey Kabot
  */
@@ -38,6 +32,7 @@ import shield.shared.dto.SimpleStudent;
 public class AdminStudentsResource
 {
 
+    //Logger
     private static final Logger logger = Logger.getLogger(AdminStudentsResource.class.getName());
 
     @Context
@@ -45,9 +40,6 @@ public class AdminStudentsResource
 
     @Inject
     private AdminStudentsBean adminStudentsBean;
-
-    //The parser for incoming JSON messages
-    ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Creates a new instance of AdminStudentsREST
@@ -57,17 +49,19 @@ public class AdminStudentsResource
     }
 
     /**
-     * Retrieves representation of an instance of sss.ejb.AdminStudentsREST
+     * Responds to GET requests at the /approved extension of this resource.
+     * Retrieves the list of approved Students
      *
-     * @return an instance of java.lang.String
+     * @return the list of approved students.
      */
     @GET
     @Path("/approved")
     @Produces("application/json")
-    public Response getStudents()
+    public Response getApprovedStudents()
     {
         List<Student> students = adminStudentsBean.getApprovedStudents();
 
+        //convert the list of Student entities to a stripped down version readable by the client
         List<SimpleStudent> simpleStudents = new ArrayList<>();
         SimpleStudent s;
         for (Student student : students)
@@ -78,6 +72,7 @@ public class AdminStudentsResource
 
             simpleStudents.add(s);
         }
+        //a wrapper for the list of students
         GenericEntity<List<SimpleStudent>> wrapper =
                 new GenericEntity<List<SimpleStudent>>(simpleStudents)
                 {
@@ -85,6 +80,12 @@ public class AdminStudentsResource
         return Response.ok(wrapper).build();
     }
 
+    /**
+     * Responds to GET requests at the /pending extension of this resource.
+     * Retrieves the list of pending students.
+     *
+     * @return the list of pending students.
+     */
     @GET
     @Path("/pending")
     @Produces("application/json")
@@ -92,6 +93,7 @@ public class AdminStudentsResource
     {
         List<Student> pendingStudents = adminStudentsBean.getPendingStudents();
 
+        //convert the student entities to a stripped down version readable by the client
         List<SimpleStudent> simpleStudents = new ArrayList<>();
         SimpleStudent s;
         for (Student student : pendingStudents)
@@ -103,6 +105,7 @@ public class AdminStudentsResource
 
             simpleStudents.add(s);
         }
+        //a wrapper for the list of students
         GenericEntity<List<SimpleStudent>> wrapper =
                 new GenericEntity<List<SimpleStudent>>(simpleStudents)
                 {
@@ -111,10 +114,11 @@ public class AdminStudentsResource
     }
 
     /**
-     * POST method for adding a student
+     * Responds to POST requests at the /add extension of this resource. Adds a
+     * student to the database.
      *
-     * @param content representation for the resource // * @return an HTTP
-     * response with content of the updated or created resource.
+     * @param student struct with student info passed by client.
+     * @return
      */
     @POST
     @Path("/add")
@@ -132,16 +136,19 @@ public class AdminStudentsResource
             return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (NoResultException nrex)
         {
+            //@TODO disambiguate errors
             logger.log(Level.WARNING, "BAD REQUEST");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
     /**
-     * POST method for approving a student
+     * Responds to POST requests at /approve extension. Approves a pending
+     * student account.
      *
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
+     * @param student the struct of info about the student to approve, passed by
+     * client
+     * @return
      */
     @POST
     @Path("/approve")
@@ -169,10 +176,10 @@ public class AdminStudentsResource
     }
 
     /**
-     * POST method for deleting a student
+     * Delete a student.
      *
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
+     * @param student the client-supplied info about the student to delete.
+     * @return
      */
     @POST
     @Path("/delete")

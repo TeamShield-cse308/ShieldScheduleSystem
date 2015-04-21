@@ -1,6 +1,3 @@
-/*
-
- */
 package shield.server.rest;
 
 import java.util.logging.Level;
@@ -28,7 +25,8 @@ import shield.shared.dto.LoginCredentials;
 import shield.shared.dto.SimpleAdmin;
 
 /**
- * REST Web Service
+ * Exposes functionality of authenticationBean. Gateway to log-in requests on
+ * server.
  *
  * @author Jeffrey Kabot
  */
@@ -68,10 +66,10 @@ public class AuthenticationResource
     }
 
     /**
-     * PUT method for updating or creating an instance of AuthenticationResource
+     * POST method for validating user credentials
      *
      * @param login The bundle of login information sent from the client
-     * @return an HTTP response with content of the updated or created resource.
+     * @return an HTTP response with the user's account info or an error code.
      */
     @POST
     @Consumes("application/json")

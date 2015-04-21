@@ -20,7 +20,7 @@ import shield.server.exceptions.WrongPasswordException;
 import shield.server.util.DatabaseConnection;
 
 /**
- * Enterprise Bean for validating user log in credentials
+ * Provides functionality for validating user log-in credentials
  *
  * @author Jeffrey Kabot
  */
@@ -36,6 +36,17 @@ public class AuthenticationBean
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Checks validity of the supplied log-in credentails.
+     * 
+     * @param username The username for the account
+     * @param password The password for the account
+     * @return The account matching the supplied credentials.
+     * @throws AccountActiveException When the Student account is already logged in somewhere.
+     * @throws AccountPendingException When the Student account is not yet approved.
+     * @throws WrongPasswordException When the supplied password does not match the one on file.
+     * @throws NoResultException When there is no account with the supplied username.
+     */
     public GenericUser authenticate(String username,
             String password)
             throws AccountActiveException,
@@ -45,7 +56,6 @@ public class AuthenticationBean
     {
         //Create the entity manager
         em = DatabaseConnection.getEntityManager();
-
         logger.log(Level.INFO, "User attempts log in with name {0}", username);
 
         try
@@ -62,7 +72,7 @@ public class AuthenticationBean
 
                 if (student.getPassword().equals(password))
                 {
-                    //student.activate();
+                    student.activate();
                     logger.log(Level.INFO, "Student {0} logged in", username);
                     return student;
                 } else
@@ -95,11 +105,6 @@ public class AuthenticationBean
             //no matching account
             logger.log(Level.WARNING, "No such account with username {0} found in database", username);
             throw nrex;
-        } catch (Exception ex)
-        {
-            //something terrible happened
-            logger.log(Level.SEVERE, null, ex);
-            throw ex;
         } finally
         {
             //close the entity manager

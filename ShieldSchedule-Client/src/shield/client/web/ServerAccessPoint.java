@@ -1,6 +1,3 @@
-/*
-
- */
 package shield.client.web;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
@@ -20,14 +17,11 @@ import javax.ws.rs.core.Response;
 public class ServerAccessPoint<T>
 {
 
-    //The client instance shared by all access points.
+    //The http client instance shared by all access points.
     private static Client client = null;
 
     //The URL this access point is bound to.
     private WebTarget target;
-
-    //The type of requests this access point sends
-    //private RequestType requestType;
 
     /**
      * Creates a new access point to a resource on the shield schedule server.
@@ -69,7 +63,7 @@ public class ServerAccessPoint<T>
     }
 
     /**
-     * Closes the client .
+     * Closes the http client.
      */
     public static void close()
     {

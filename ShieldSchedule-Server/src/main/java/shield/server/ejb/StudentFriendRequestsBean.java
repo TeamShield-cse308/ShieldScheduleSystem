@@ -17,6 +17,8 @@ import shield.server.entities.Student;
 import shield.server.util.DatabaseConnection;
 
 /**
+ * Provides functionality for retrieving, creating, approving, and denying
+ * friend requests.
  *
  * @author Jeffrey Kabot
  */
@@ -35,9 +37,8 @@ public class StudentFriendRequestsBean
     /**
      * Get the incoming friend requests for a particular student.
      *
-     * @param recipientEmail
-     * @return
-     * @throws NoResultException
+     * @param recipientEmail the email of the student with incoming friend requests.
+     * @return the list of friend requests.
      */
     public List<FriendRequest> getFriendRequests(String recipientEmail)
     {
@@ -57,6 +58,7 @@ public class StudentFriendRequestsBean
             logger.log(Level.INFO, "Retrieving friend requests for student {0}", recipientEmail);
         } finally
         {
+            //close the entity manager
             em.close();
             em = null;
         }
@@ -68,13 +70,13 @@ public class StudentFriendRequestsBean
      * Accept a received friend request, adding the students involved to each
      * other's friends lists.
      *
-     * @param senderEmail
-     * @param recipientEmail
+     * @param senderEmail the student who sent the friend request.
+     * @param recipientEmail the student who received the friend request.
      */
     public void acceptFriendRequest(String senderEmail,
             String recipientEmail)
     {
-        //set up the entity manager and the queries
+        //set up the entity manager and the query
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<FriendRequest> query =
@@ -84,22 +86,26 @@ public class StudentFriendRequestsBean
 
         try
         {
+            //get the sender and recipient
             FriendRequest fr = query.getSingleResult();
             Student sender = fr.getSender();
             Student recipient = fr.getRecipient();
-            
+
+            //add each student to each other's friend's lists
+            //and delete the friend request
             em.getTransaction().begin();
             sender.addFriend(recipient);
             recipient.addFriend(sender);
             em.remove(fr);
             em.getTransaction().commit();
-            
+
             logger.log(Level.INFO, "Friend Request {0} accepted", fr);
         } catch (Exception ex)
         {
             //@TODO error handling
         } finally
         {
+            //close the entity manager
             em.close();
             em = null;
         }
@@ -110,9 +116,9 @@ public class StudentFriendRequestsBean
      * Create a new friend request associating the student sending it and the
      * student receiving it.
      *
-     * @param senderEmail
-     * @param recipientName
-     * @throws NoResultException
+     * @param senderEmail The student sending the friend request
+     * @param recipientName the student receiving the friend request
+     * @throws NoResultException When there is no student with the supplied name.
      */
     public void createFriendRequest(String senderEmail,
             String recipientName) throws NoResultException
@@ -131,8 +137,11 @@ public class StudentFriendRequestsBean
         School school;
         try
         {
+            //get the sender and the sender's school
             sender = senderQuery.getSingleResult();
             school = sender.getSchool();
+            
+            //check the sender's school for the supplied student name
             recipientQuery.setParameter("school", school.getSchoolName());
             List<Student> recipients = recipientQuery.getResultList();
 
@@ -141,15 +150,15 @@ public class StudentFriendRequestsBean
             {
                 recipient = recipients.get(0);
                 FriendRequest fr = new FriendRequest(sender, recipient);
-                
+
                 em.getTransaction().begin();
                 em.persist(fr);
                 em.getTransaction().commit();
-                
+
                 logger.log(Level.INFO, "New friend request created {0}", fr);
             } else
             {
-                //@TODO return to client
+                //@TODO when there is more than one matching student
             }
         } catch (NoResultException nrex)
         {

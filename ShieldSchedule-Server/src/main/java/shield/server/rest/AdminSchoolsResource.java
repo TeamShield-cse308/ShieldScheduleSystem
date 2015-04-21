@@ -15,11 +15,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-//import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import shield.server.ejb.AdminSchoolsBean;
 import shield.server.entities.School;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import javax.persistence.EntityExistsException;
@@ -33,9 +31,6 @@ import shield.shared.dto.SimpleSchool;
  * REST Web Service Exposes the functionality of the AdminSchoolsBean to the
  * client program
  *
- * Some code adapted from
- * http://www.studytrails.com/java/json/java-jackson-json-tree-parsing.jsp
- *
  * @author Jeffrey Kabot
  */
 @Path("admin/schools") //the url at which this web service's resources are accessed
@@ -43,7 +38,6 @@ import shield.shared.dto.SimpleSchool;
 public class AdminSchoolsResource
 {
 
-    //test
     @Context
     private UriInfo context;
 
@@ -52,12 +46,8 @@ public class AdminSchoolsResource
     private AdminSchoolsBean adminSchoolsBean;
 
     //Logger
-    private static final Logger logger = 
+    private static final Logger logger =
             Logger.getLogger(AdminSchoolsResource.class.getName());
-    
-
-    //the reader for JSON messages
-    ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Creates a new instance of AdminSchoolsREST
@@ -67,39 +57,45 @@ public class AdminSchoolsResource
     }
 
     /**
-     * Retrieves representation of an instance of sss.rest.AdminSchoolsREST This
-     * default GET retrieves all the schools in the system's database
+     * Responds to GET requests at this resources base path. Retrieves all the
+     * schools in the system's database
      *
-     * @return an instance of java.lang.String
+     * @return an HTTP response containing the list of all schools or an error
+     * code.
      */
     @GET
     @Produces("application/json")
     public Response getAllSchools()
     {
         List<School> allSchools = adminSchoolsBean.getAllSchools();
+        
+        //convert the School entities to a stripped down version readable by the client
         List<SimpleSchool> simpleSchools = new ArrayList<>();
         SimpleSchool s;
         for (School school : allSchools)
         {
             s = new SimpleSchool();
             s.name = school.getSchoolName();
-            s.numPeriods =school.getPeriods();
+            s.numPeriods = school.getPeriods();
             s.numSemesters = school.getSemesters();
             s.startingLunchPeriod = school.getStartingLunch();
             s.endingLunchPeriod = school.getEndingLunch();
             s.numScheduleDays = school.getScheduleDays();
             simpleSchools.add(s);
         }
-        GenericEntity<List<SimpleSchool>> wrapper = 
-                new GenericEntity<List<SimpleSchool>>(simpleSchools) {};
+        GenericEntity<List<SimpleSchool>> wrapper =
+                new GenericEntity<List<SimpleSchool>>(simpleSchools)
+                {
+                };
         return Response.ok(wrapper).build();
     }
 
     /**
-     * POST method for creating a school
+     * Responds to POST requests at the /add extension of this resource. Adds a
+     * school with the supplied information to the database.
      *
-     * @param school
-     * @return response to client
+     * @param school the struct received from the client.
+     * @return HTTP response to client
      */
     @POST
     @Path("/add")
@@ -108,6 +104,7 @@ public class AdminSchoolsResource
     {
         try
         {
+            //add the school
             adminSchoolsBean.addSchool(school.name, school.numSemesters, school.numPeriods,
                     school.numScheduleDays, school.startingLunchPeriod, school.endingLunchPeriod);
             logger.log(Level.INFO, "OK response");
@@ -129,9 +126,11 @@ public class AdminSchoolsResource
     }
 
     /**
-     * Resource for editing a particular school
-     * @param school
-     * @return response to client
+     * Responds to POST requests at the /edit extension of this resource. Edits
+     * a school in the database with the supplied information.
+     *
+     * @param school struct with the new school information
+     * @return HTTP response to client
      */
     @POST
     @Path("/edit")
@@ -140,6 +139,7 @@ public class AdminSchoolsResource
     {
         try
         {
+            //edit the school
             adminSchoolsBean.editSchool(school.name, school.numSemesters, school.numPeriods,
                     school.numScheduleDays, school.startingLunchPeriod, school.endingLunchPeriod);
             return Response.ok(school).build();
@@ -155,7 +155,8 @@ public class AdminSchoolsResource
     }
 
     /**
-     * Resource for removing a school
+     * Responds to POST requests at the /delete extension of this resource.
+     * Deletes a school with the supplied information to the database.
      *
      * @param content
      */
@@ -166,6 +167,7 @@ public class AdminSchoolsResource
     {
         try
         {
+            //delete the school
             adminSchoolsBean.deleteSchool(school.name);
             return Response.ok(school).build();
         } catch (NoResultException nrex)
@@ -178,7 +180,7 @@ public class AdminSchoolsResource
             return Response.serverError().build();
         }
     }
-    
+
     /**
      * Retrieves representation of an instance of sss.rest.AdminSchoolsREST This
      * default GET retrieves a single school in the system's database
@@ -188,6 +190,7 @@ public class AdminSchoolsResource
     @GET
     @Path("/getSchool")
     @Produces("application/json")
+    @Deprecated
     public SimpleSchool getSchool(String content)
     {
         String name = content;
