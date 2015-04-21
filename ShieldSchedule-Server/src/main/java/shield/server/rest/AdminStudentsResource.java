@@ -99,6 +99,7 @@ public class AdminStudentsResource
             s = new SimpleStudent();
             s.name = student.getName();
             s.email = student.getEmail();
+            
 
             simpleStudents.add(s);
         }

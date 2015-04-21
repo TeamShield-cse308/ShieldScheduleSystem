@@ -18,6 +18,8 @@ import shield.client.web.ServerResources;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.AnchorPane;
@@ -102,25 +104,25 @@ public class StudentRegistrationController implements Initializable, ControlledS
             //Check to see if it email for password not correct
             if (email.getText().indexOf('@') == -1)
             {
-                // Alert alert = new Alert(AlertType.INFORMATION);
-                //alert.setTitle("Input Error");
-                //alert.setHeaderText("Invalid Email");
-                //alert.setContentText("Please enter a valid email");
-                // alert.show();
+                 Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Input Error");
+                alert.setHeaderText("Invalid Email");
+                alert.setContentText("Please enter a valid email");
+                 alert.show();
             } else if (!(email.getText().equals(confirmedEmail.getText())))
             {
-                // Alert alert = new Alert(AlertType.INFORMATION);
-                // alert.setTitle("Input Error");
-                // alert.setHeaderText("Check Emails");
-                // alert.setContentText("Entered email addressed do not match.");
-                // alert.show();
+                 Alert alert = new Alert(AlertType.INFORMATION);
+                 alert.setTitle("Input Error");
+                 alert.setHeaderText("Check Emails");
+                 alert.setContentText("Entered email addressed do not match.");
+                 alert.show();
             } else if (!(password.getText().equals(confirmedPassword.getText())))
             {
-                // Alert alert = new Alert(AlertType.INFORMATION);
-                // alert.setTitle("Input Error");
-                // alert.setHeaderText("Check Passwords");
-                // alert.setContentText("Entered passwords do not match.");
-                //alert.show();
+                 Alert alert = new Alert(AlertType.INFORMATION);
+                 alert.setTitle("Input Error");
+                 alert.setHeaderText("Check Passwords");
+                 alert.setContentText("Entered passwords do not match.");
+                alert.show();
             }
         }
     }

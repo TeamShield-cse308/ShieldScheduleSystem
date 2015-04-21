@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.Response;
@@ -62,22 +63,38 @@ public class LoginPageController implements Initializable, ControlledScreen
         if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
             int code = rsp.getStatus();
-            if (code == Response.Status.UNAUTHORIZED.getStatusCode())
+            if (code == Response.Status.UNAUTHORIZED.getStatusCode()) //wrong password
             {
-                //wrong password
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Login Error");
+                alert.setHeaderText("Incorrect Password");
+                alert.setContentText("Username exists but incorrect password.");
+                alert.show();
 
-            } else if (code == Response.Status.FORBIDDEN.getStatusCode())
+            } else if (code == Response.Status.FORBIDDEN.getStatusCode()) //account not yet approved
             {
-                //account not yet approved
-            } else if (code == Response.Status.CONFLICT.getStatusCode())
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Login Error");
+                alert.setHeaderText("Account Not Approved");
+                alert.setContentText("Your account has not been approved by an admin.");
+                alert.show();
+            } else if (code == Response.Status.CONFLICT.getStatusCode()) //account is already active in another session
             {
-                //account is already active in another session
-            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Login Error");
+                alert.setHeaderText("Already Logged In");
+                alert.setContentText("This account is already logged in on a different client.");
+                alert.show();
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode()) //no such username
             {
-                //no such username
-            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Login Error");
+                alert.setHeaderText("Incorrect Username");
+                alert.setContentText("Username does not exist");
+                alert.show();
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) //something terrible happened
             {
-                //something terrible happened
+               
             }
             return;
         }
