@@ -183,7 +183,7 @@ public class School implements Serializable
             return false;
         }
         School other = (School) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.schoolName.equals(other.schoolName))) {
+        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.schoolName))) {
             return false;
         }
         return true;
