@@ -24,7 +24,7 @@ import shield.shared.dto.SimpleStudent;
 /**
  * FXML Controller class
  *
- * @author Evan Guby
+ * @author Evan Guby, Jeffrey Kabot
  */
 public class LoginPageController implements Initializable, ControlledScreen
 {

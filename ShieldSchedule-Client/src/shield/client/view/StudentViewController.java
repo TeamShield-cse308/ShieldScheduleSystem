@@ -11,6 +11,9 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResources;
 
 /**
  * FXML Controller class
@@ -21,12 +24,31 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     ScreensController myController;
     
+    @FXML
+    private ListView<?> friendsListView = new ListView<>();
+    
+    @FXML
+    private ListView<?> friendRequestsListView = new ListView<>();
+    
+    private final ServerAccessPoint GET_FRIEND_LIST = 
+            new ServerAccessPoint(ServerResources.GET_FRIENDS_URL);
+    
+    private final ServerAccessPoint GET_FRIEND_REQUESTS = 
+            new ServerAccessPoint(ServerResources.GET_FRIEND_REQUESTS_URL);
+    
+    private final ServerAccessPoint ADD_FRIEND_REQUEST = 
+            new ServerAccessPoint(ServerResources.ADD_FRIEND_REQUEST_URL);
+    
+    private final ServerAccessPoint APPROVE_FRIEND_REQUEST = 
+            new ServerAccessPoint(ServerResources.APPROVE_FRIEND_REQUEST_URL);
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        populatePage();
     }    
 
     @FXML
@@ -58,5 +80,16 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @Override
     public void populatePage() {
+        populateFriendsListView();
+        populateFriendRequestsListView();
+    }
+    
+    private void populateFriendsListView()
+    {
+        
+    }
+    private void populateFriendRequestsListView()
+    {
+        
     }
 }

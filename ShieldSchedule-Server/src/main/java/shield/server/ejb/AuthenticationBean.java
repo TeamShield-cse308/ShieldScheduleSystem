@@ -5,6 +5,7 @@ package shield.server.ejb;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -20,6 +21,7 @@ import shield.server.util.DatabaseConnection;
 
 /**
  * Enterprise Bean for validating user log in credentials
+ *
  * @author Jeffrey Kabot
  */
 @Stateless
@@ -54,7 +56,7 @@ public class AuthenticationBean
                 TypedQuery<Student> query =
                         em.createNamedQuery("Student.findByEmail", Student.class);
                 query.setParameter("email", username);
-                
+
                 //find the right account with that email
                 Student student = query.getSingleResult();
 
@@ -74,7 +76,7 @@ public class AuthenticationBean
                 TypedQuery<Administrator> query =
                         em.createNamedQuery("Administrator.findByUsername", Administrator.class);
                 query.setParameter("username", username);
-                
+
                 //find the admin with that username
                 Administrator admin = query.getSingleResult();
 

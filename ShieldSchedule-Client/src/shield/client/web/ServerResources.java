@@ -67,4 +67,16 @@ public final class ServerResources
     
     public static final String AUTHENTICATION_URL = 
             SERVER_BASE_URL + "/webresources/authentication";
+    
+    public static final String GET_FRIEND_REQUESTS_URL = 
+            SERVER_BASE_URL + "/webresources/students/friendrequests";
+    
+    public static final String ADD_FRIEND_REQUEST_URL = 
+            SERVER_BASE_URL + "/webresources/students/friendrequests/add";
+    
+    public static final String APPROVE_FRIEND_REQUEST_URL = 
+            SERVER_BASE_URL + "/webresources/students/friendrequests/accept";
+    
+    public static final String GET_FRIENDS_URL = 
+            SERVER_BASE_URL + "/webresources/students/friends";
 }

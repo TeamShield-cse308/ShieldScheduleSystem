@@ -83,7 +83,7 @@ public class StudentFriendRequestsResource
      * @return an HTTP response with content of the updated or created resource.
      */
     @POST
-    @Path("/create")
+    @Path("/add")
     @Consumes("application/json")
     public Response addFriendRequest(SimpleFriendRequest sfr)
     {
@@ -97,6 +97,9 @@ public class StudentFriendRequestsResource
         }
     }
     
+    @POST
+    @Path("/accept")
+    @Consumes("application/json")
     public Response acceptFriendRequest(SimpleFriendRequest sfr)
     {
         try

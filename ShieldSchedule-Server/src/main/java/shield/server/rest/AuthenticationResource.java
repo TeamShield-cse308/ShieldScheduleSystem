@@ -116,7 +116,7 @@ public class AuthenticationResource
             return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (Exception ex)
         {
-            logger.log(Level.SEVERE, null, ex);
+            //logger.log(Level.SEVERE, null, ex);
             return Response.serverError().build();
         }
     }
