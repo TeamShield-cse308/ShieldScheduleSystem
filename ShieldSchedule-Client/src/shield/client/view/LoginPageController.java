@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResources;
 import shield.shared.dto.LoginCredentials;
+import shield.shared.dto.SimpleAdmin;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -51,7 +52,11 @@ public class LoginPageController implements Initializable, ControlledScreen
     {
         if (email.getCharacters().toString().equals("admin"))
         {
+            //@TODO placeholder until admins log in with credentials
+            SimpleAdmin adminAcct = new SimpleAdmin();
+            myController.createSession(adminAcct);
             myController.setScreen(CSE308GUI.AdminViewID);
+
         } else
         {
             LoginCredentials login = new LoginCredentials();
@@ -64,7 +69,7 @@ public class LoginPageController implements Initializable, ControlledScreen
                 if (code == Response.Status.UNAUTHORIZED.getStatusCode())
                 {
                     //wrong password
-                    
+
                 } else if (code == Response.Status.FORBIDDEN.getStatusCode())
                 {
                     //account not yet approved
@@ -81,8 +86,8 @@ public class LoginPageController implements Initializable, ControlledScreen
                 return;
             } else
             {
-                SimpleStudent student = rsp.readEntity(SimpleStudent.class);
-                myController.createSession(student);
+                SimpleStudent studentAcct = rsp.readEntity(SimpleStudent.class);
+                myController.createSession(studentAcct);
                 myController.setScreen(CSE308GUI.StudentViewID);
             }
         }
