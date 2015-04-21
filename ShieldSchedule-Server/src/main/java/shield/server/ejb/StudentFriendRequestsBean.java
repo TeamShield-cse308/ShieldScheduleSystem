@@ -55,10 +55,6 @@ public class StudentFriendRequestsBean
             //get the list of friend requests
             friendRequests = query.getResultList();
             logger.log(Level.INFO, "Retrieving friend requests for student {0}", recipientEmail);
-        } catch (NoResultException nrex)
-        {
-            logger.log(Level.WARNING, "No friend requests for recipient {0}", recipientEmail);
-            //throw nrex;
         } finally
         {
             em.close();
@@ -82,7 +78,7 @@ public class StudentFriendRequestsBean
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<FriendRequest> query =
-                em.createNamedQuery("FriendRequest.findBySenderAndRecpient", FriendRequest.class);
+                em.createNamedQuery("FriendRequest.findBySenderAndRecipient", FriendRequest.class);
         query.setParameter("sender", senderEmail);
         query.setParameter("recipient", recipientEmail);
 

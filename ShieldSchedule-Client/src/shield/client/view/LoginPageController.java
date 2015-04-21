@@ -50,47 +50,57 @@ public class LoginPageController implements Initializable, ControlledScreen
 
     public void handleLogin(ActionEvent event)
     {
-        if (email.getCharacters().toString().equals("admin"))
+        //create a login credentials structure
+        LoginCredentials login = new LoginCredentials();
+        login.username = email.getText();
+        login.password = password.getText();
+        
+        //transmit the login credentials to the server
+        Response rsp = AUTHENTICATE.request(login);
+        
+        //if response codei indicates error then inform the client and return
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
         {
-            //@TODO placeholder until admins log in with credentials
-            SimpleAdmin adminAcct = new SimpleAdmin();
-            myController.createSession(adminAcct);
-            myController.setScreen(CSE308GUI.AdminViewID);
-
-        } else
-        {
-            LoginCredentials login = new LoginCredentials();
-            login.username = email.getText();
-            login.password = password.getText();
-            Response rsp = AUTHENTICATE.request(login);
-            if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+            int code = rsp.getStatus();
+            if (code == Response.Status.UNAUTHORIZED.getStatusCode())
             {
-                int code = rsp.getStatus();
-                if (code == Response.Status.UNAUTHORIZED.getStatusCode())
-                {
-                    //wrong password
+                //wrong password
 
-                } else if (code == Response.Status.FORBIDDEN.getStatusCode())
-                {
-                    //account not yet approved
-                } else if (code == Response.Status.CONFLICT.getStatusCode())
-                {
-                    //account is already active in another session
-                } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
-                {
-                    //no such username
-                } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-                {
-                    //something terrible happened
-                }
-                return;
-            } else
+            } else if (code == Response.Status.FORBIDDEN.getStatusCode())
+            {
+                //account not yet approved
+            } else if (code == Response.Status.CONFLICT.getStatusCode())
+            {
+                //account is already active in another session
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //no such username
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
+            return;
+        }
+        //successful response
+        else
+        {
+            //students authenticate with an email
+            if (login.username.indexOf('@') != -1)
             {
                 SimpleStudent studentAcct = rsp.readEntity(SimpleStudent.class);
-                myController.createSession(studentAcct);
+                myController.createStudentSession(studentAcct);
                 myController.setScreen(CSE308GUI.StudentViewID);
+            } 
+            //administrators have no @ symbols in their username
+            else
+            {
+                SimpleAdmin adminAcct = rsp.readEntity(SimpleAdmin.class);
+                myController.createAdminSession(adminAcct);
+                myController.setScreen(CSE308GUI.AdminViewID);
             }
+
         }
+
     }
 
     public void handleNewUser(ActionEvent event)

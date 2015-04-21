@@ -16,7 +16,7 @@ import javax.persistence.NamedQuery;
  * @author Jeffrey Kabot
  */
 @NamedQueries({
-    @NamedQuery(name = "FriendRequest.findByRecpient",
+    @NamedQuery(name = "FriendRequest.findByRecipient",
             query = "SELECT fr FROM FriendRequest fr WHERE fr.recipient.email = :recipient"),  
     @NamedQuery(name = "FriendRequset.findBySenderAndRecipient",
             query = "SELECT fr FROM FriendRequest fr WHERE fr.sender.email = :sender AND fr.recipient.email = :recipient"),

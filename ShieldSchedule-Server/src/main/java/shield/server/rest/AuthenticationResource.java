@@ -17,11 +17,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import shield.server.ejb.AuthenticationBean;
+import shield.server.entities.Administrator;
 import shield.server.entities.GenericUser;
+import shield.server.entities.Student;
 import shield.server.exceptions.AccountActiveException;
 import shield.server.exceptions.AccountPendingException;
 import shield.server.exceptions.WrongPasswordException;
+import shield.shared.dto.SimpleStudent;
 import shield.shared.dto.LoginCredentials;
+import shield.shared.dto.SimpleAdmin;
 
 /**
  * REST Web Service
@@ -77,9 +81,23 @@ public class AuthenticationResource
         try
         {
             user = authenticationBean.authenticate(login.username, login.password);
-            //@TODO convert user to json format
             logger.log(Level.INFO, "Authentication success, OK response");
-            return Response.ok(user).build();
+            if (user instanceof Student)
+            {
+                SimpleStudent acct = new SimpleStudent();
+                acct.email = ((Student) user).getEmail();
+                acct.school = ((Student) user).getSchool().getSchoolName();
+                acct.name = user.getName();
+                acct.password = user.getPassword();
+                return Response.ok(acct).build();
+            } else
+            {
+                SimpleAdmin acct = new SimpleAdmin();
+                acct.username = ((Administrator) user).getUsername();
+                acct.name = user.getName();
+                acct.password = user.getPassword();
+                return Response.ok(acct).build();
+            }
         } catch (WrongPasswordException wpex)
         {
             logger.log(Level.WARNING, "UNAUTHORIZED resposne");

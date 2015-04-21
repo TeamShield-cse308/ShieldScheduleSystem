@@ -60,7 +60,7 @@ public class AuthenticationBean
 
                 if (student.getPassword().equals(password))
                 {
-                    student.activate();
+                    //student.activate();
                     logger.log(Level.INFO, "Student {0} logged in", username);
                     return student;
                 } else
