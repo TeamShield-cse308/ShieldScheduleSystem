@@ -117,7 +117,7 @@ public class StudentFriendsBean
      */
     public void addFriend(String senderEmail,
             String recipientName) throws NoResultException
-    {
+    {   
         //set up the entity manager and the queries
         em = DatabaseConnection.getEntityManager();
 
@@ -171,7 +171,7 @@ public class StudentFriendsBean
     }
 
     /**
-     * Accept or deny a received friend request.
+     * Approve or delete a friendship.
      *
      * @param senderEmail the student who sent the friend request.
      * @param recipientEmail the student who received the friend request.
@@ -184,7 +184,7 @@ public class StudentFriendsBean
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<Friendship> query
-                = em.createNamedQuery("Friendship.findBySenderAndRecipient",
+                = em.createNamedQuery("Friendship.BySenderAndRecipient",
                         Friendship.class);
         query.setParameter("sender", senderEmail);
         query.setParameter("recipient", recipientEmail);
@@ -194,22 +194,16 @@ public class StudentFriendsBean
             //get the friendship
             Friendship f = query.getSingleResult();
 
-            //approve or deny it
+            //approve or delete it
             em.getTransaction().begin();
             if (approved)
             {
-                //accepting a friendship request automatically creates a new friendship in the opposite direction
-                //this ensures symmetry on the friendship graph
-                //for approved friendships, both students are the senders and recipieents
                 f.approve();
-                Friendship f_inverse = new Friendship(f.getRecipient(),
-                        f.getSender());
-                f_inverse.approve();
                 logger.log(Level.INFO, "Friendship request {0} accepted", f);
             } else
             {
                 em.remove(f);
-                logger.log(Level.INFO, "Friendship request {0} deleted", f);
+                logger.log(Level.INFO, "Friendship {0} deleted", f);
             }
             em.getTransaction().commit();
         } catch (Exception ex)

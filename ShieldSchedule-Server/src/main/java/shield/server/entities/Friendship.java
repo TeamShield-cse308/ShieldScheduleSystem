@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shield.server.entities;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -30,20 +27,20 @@ import org.eclipse.persistence.annotations.Index;
  */
 @Entity
 @NamedQueries(
-{
-    @NamedQuery(
-            name = "Friendship.getFriends",
-            query = "SELECT f.sender FROM Friendship f WHERE f.approved = true AND f.recipient.email = :email"
-    ),
-    @NamedQuery(
-            name = "Friendship.getFriendRequests",
-            query = "SELECT f FROM Friendship f WHERE f.approved = false AND f.recipient.email = :email"
-    ),
-    @NamedQuery(
-            name = "Friendship.findBySenderAndRecipient",
-            query = "SELECT f FROM Friendship f WHERE f.approved = false AND f.sender.email = :sender AND f.recipient.email = :recipient"
-    ),
-})
+        {
+            @NamedQuery(
+                    name = "Friendship.getFriends",
+                    query = "SELECT f.sender FROM Friendship f WHERE f.approved = true AND f.recipient.email = :email"
+            ),
+            @NamedQuery(
+                    name = "Friendship.getFriendRequests",
+                    query = "SELECT f FROM Friendship f WHERE f.approved = false AND f.visible = true AND f.recipient.email = :email"
+            ),
+            @NamedQuery(
+                    name = "Friendship.findBySenderAndRecipient",
+                    query = "SELECT f FROM Friendship f WHERE f.sender.email = :sender AND f.recipient.email = :recipient"
+            ),
+        })
 @Table(uniqueConstraints
         = @UniqueConstraint(columnNames =
                 {
@@ -57,30 +54,63 @@ public class Friendship implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //friendX is always the sender
-    //the students involved are referenced within the friendship object
+    //Student who sent the Friendship request
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SENDER_ID")
     private Student sender;
 
-    //friendY is always the recipient
+    //Student receiving the Friendship request
+    @Index
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RECIPIENT_ID")
     private Student recipient;
 
-    //friend requests are not yet approved
+    //If the Friendship is approved.  New Friendships start out not approved.
     @Index
     private boolean approved;
+
+    //Reference to a Friendship whose sender->recipient direction is inverted
+    //Friendships are created in pairs to maintain symmetry.
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Friendship inverse;
+
+    //Slave Friendships (created secondary to the initial Friendship object) are
+    //invisible to certain queries.
+    private boolean visible;
 
     protected Friendship()
     {
     }
 
+    /**
+     * Creates a new Friendship associating two students. Friendships start off
+     * not approved.
+     *
+     * @param sndr The Student sending the Friendship request.
+     * @param rcpnt The Student receiving the Friendship Request.
+     */
     public Friendship(Student sndr, Student rcpnt)
     {
         sender = sndr;
         recipient = rcpnt;
         approved = false;
+        visible = true;
+        inverse = new Friendship(this); //create the slave Friendship
+    }
+
+    //Creating a Friendship automatically creates a new Slave Friendship in the
+    //opposite direction.  This ensures symmetry within the friendship graph.
+    //Consequently, for queries that are agnostic to who sent the Friendship request,
+    //both students are the sender and the recipient.
+    //For queries that care, slave friendships are invisible and won't interfere.
+    //The inverse friendship is approved when its partner friendship is approved.
+    private Friendship(Friendship f)
+    {
+        sender = f.sender;
+        recipient = f.recipient;
+        approved = false;
+        visible = false;
+        inverse = f;
     }
 
     public Student getSender()
@@ -92,14 +122,14 @@ public class Friendship implements Serializable
     {
         return recipient;
     }
-
-    //@TODO throw exception if already approved?
+    
     /**
-     * Approve a friend request you've received.
+     * Approve a friend request.
      */
     public void approve()
     {
         approved = true;
+        inverse.approved = true;
     }
 
     public Long getId()

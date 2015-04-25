@@ -144,6 +144,11 @@ public class StudentFriendsResource
         }
     }
 
+    /**
+     * POST method for approving or denying friend requests.
+     * @param sf The Friendship message sent by the client.
+     * @return 
+     */
     @POST
     @Path("/approve")
     @Consumes("application/json")
@@ -153,6 +158,27 @@ public class StudentFriendsResource
         {
             studentFriendsBean.approveFriend(sf.senderEmail,
                     sf.recipientEmail, sf.approved);
+            return Response.ok(sf).build();
+        } catch (Exception ex)
+        {
+            return Response.serverError().build();
+        }
+    }
+    
+    /**
+     * POST method for deleting friends.
+     * @param sf The Friendship message sent by the client.
+     * @return 
+     */
+    @POST
+    @Path("/approve")
+    @Consumes("application/json")
+    public Response deleteFriend(SimpleFriendship sf)
+    {
+        try
+        {
+            studentFriendsBean.approveFriend(sf.senderEmail,
+                    sf.recipientEmail, false);
             return Response.ok(sf).build();
         } catch (Exception ex)
         {
