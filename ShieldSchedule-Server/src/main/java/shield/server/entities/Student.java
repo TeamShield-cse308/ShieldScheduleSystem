@@ -50,12 +50,6 @@ public class Student extends GenericUser implements Serializable
 
     private StudentAccountState accountState;
 
-    @ManyToMany
-    List<Student> friendsList = new ArrayList<>();
-    
-//    @ManyToMany
-//    List<FriendRequest> friendRequests = new ArrayList<>();
-
     @OneToOne
     private AssignedSchedule myAssignedSchedule;
 
@@ -108,7 +102,8 @@ public class Student extends GenericUser implements Serializable
             return false;
         }
         Student other = (Student) object;
-        if ((this.email == null && other.email != null) || (this.email != null && !this.email.equals(other.email)))
+        if ((this.email == null && other.email != null) || (this.email != null && !this.email.equals(
+                other.email)))
         {
             return false;
         }
@@ -132,7 +127,8 @@ public class Student extends GenericUser implements Serializable
         if (accountState == StudentAccountState.PENDING)
         {
             accountState = StudentAccountState.INACTIVE;
-        } else
+        }
+        else
         {
             throw new AccountApprovedException(email + " is already approved.");
         }
@@ -149,11 +145,14 @@ public class Student extends GenericUser implements Serializable
     {
         if (accountState == StudentAccountState.INACTIVE)
         {
-            accountState = StudentAccountState.ACTIVE;
-        } else if (accountState == StudentAccountState.ACTIVE)
+            //@TODO uncomment when deactivate is hooked to client
+            //accountState = StudentAccountState.ACTIVE;
+        }
+        else if (accountState == StudentAccountState.ACTIVE)
         {
             throw new AccountActiveException(email + " is already active.");
-        } else
+        }
+        else
         {
             throw new AccountPendingException(email + " is not yet approved.");
         }
@@ -178,17 +177,6 @@ public class Student extends GenericUser implements Serializable
     public School getSchool()
     {
         return school;
-    }
-
-    
-    public List<Student> getFriendsList()
-    {
-        return friendsList;
-    }
-    
-    public void addFriend(Student s)
-    {
-        friendsList.add(s);
     }
 
     public void deleteFriend(Long id)
