@@ -51,10 +51,7 @@ public class Student extends GenericUser implements Serializable
     private StudentAccountState accountState;
 
     @OneToOne
-    private AssignedSchedule myAssignedSchedule;
-
-    @OneToOne
-    private DesiredSchedule myGeneratedSchedule;
+    private Schedule assignedSchedule;
 
     //required by JPA
     protected Student()
@@ -179,11 +176,6 @@ public class Student extends GenericUser implements Serializable
         return school;
     }
 
-    public void deleteFriend(Long id)
-    {
-
-    }
-
     public Course viewAllCourses(Long id,
             int year,
             String semester)
@@ -197,14 +189,9 @@ public class Student extends GenericUser implements Serializable
 
     }
 
-    public AssignedSchedule viewAssignedSchedule()
+    public Schedule getSchedule()
     {
-        return myAssignedSchedule;
-    }
-
-    public DesiredSchedule viewDesiredSchedule()
-    {
-        return myGeneratedSchedule;
+        return assignedSchedule;
     }
 
 }

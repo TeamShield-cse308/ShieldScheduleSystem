@@ -10,25 +10,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 
 /**
- * Class to persist Sections of classes in the database
- * @author Phillip Elliot
+ * Entity class representing a Schedule that a Student has entered.
+ * 
+ * A schedule is a set of sections, satisfying the two constraints that each course 
+ * and each schedule block are unique.
+ * @author Jeffrey Kabot
  */
 @Entity
-
-@NamedQueries({
-    @NamedQuery(name = "Section.findAllSectionsOfACourse", 
-            query = "SELECT s FROM Section s WHERE s.courseID = :CourseID"),
-})
-
-
-public class Section implements Serializable
+public class Schedule implements Serializable
 {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,18 +30,6 @@ public class Section implements Serializable
     {
         return id;
     }
-
-    @OneToOne
-    private ScheduleBlock scheduleBlockID;
-
-    @OneToOne
-    private Course course;
-
-    private int room;
-
-    private String Instructor;
-
-    private int classSize;
 
     public void setId(Long id)
     {
@@ -68,11 +48,13 @@ public class Section implements Serializable
     public boolean equals(Object object)
     {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Section)) {
+        if (!(object instanceof Schedule))
+        {
             return false;
         }
-        Section other = (Section) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        Schedule other = (Schedule) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        {
             return false;
         }
         return true;
@@ -81,7 +63,7 @@ public class Section implements Serializable
     @Override
     public String toString()
     {
-        return "cse308.Section[ id=" + id + " ]";
+        return "shield.server.entities.Schedule[ id=" + id + " ]";
     }
-
+    
 }
