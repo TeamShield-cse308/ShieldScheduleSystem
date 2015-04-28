@@ -18,7 +18,7 @@ public class StudentSession implements Session
         studentAccount = acct;
     }
     
-    private SimpleStudent getStudentAccount()
+    public SimpleStudent getStudentAccount()
     {
         return studentAccount;
     }

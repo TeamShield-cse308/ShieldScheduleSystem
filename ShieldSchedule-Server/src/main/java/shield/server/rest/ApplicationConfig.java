@@ -35,6 +35,7 @@ public class ApplicationConfig extends Application
         resources.add(shield.server.rest.AdminSchoolsResource.class);
         resources.add(shield.server.rest.AdminStudentsResource.class);
         resources.add(shield.server.rest.AuthenticationResource.class);
+        resources.add(shield.server.rest.CoursesResource.class);
         resources.add(shield.server.rest.StudentFriendsResource.class);
     }
     

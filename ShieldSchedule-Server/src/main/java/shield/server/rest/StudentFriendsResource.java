@@ -171,7 +171,7 @@ public class StudentFriendsResource
      * @return 
      */
     @POST
-    @Path("/approve")
+    @Path("/delete")
     @Consumes("application/json")
     public Response deleteFriend(SimpleFriendship sf)
     {

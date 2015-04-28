@@ -33,6 +33,15 @@ public class Course implements Serializable
     private String name;
 
     private int semester;
+    
+    public Course(){
+
+    }
+    
+    public Course(String name, int semester){
+        this.name = name;
+        this.semester = semester;
+    }
 
     public Long getId()
     {

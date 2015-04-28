@@ -181,21 +181,5 @@ public class AdminSchoolsResource
         }
     }
 
-    /**
-     * Retrieves representation of an instance of sss.rest.AdminSchoolsREST This
-     * default GET retrieves a single school in the system's database
-     *
-     * @return an instance of java.lang.String
-     */
-    @GET
-    @Path("/getSchool")
-    @Produces("application/json")
-    @Deprecated
-    public SimpleSchool getSchool(String content)
-    {
-        String name = content;
-        SimpleSchool sch = adminSchoolsBean.getSchool(name);
-        return sch;
-    }
 
 }

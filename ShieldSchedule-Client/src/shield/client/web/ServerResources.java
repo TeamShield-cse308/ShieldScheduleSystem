@@ -86,4 +86,7 @@ public final class ServerResources
      */
     public static final String GET_FRIENDS_URL = 
             SERVER_BASE_URL + "students/friends";
+    
+    public static final String ADD_COURSE_URL = 
+            SERVER_BASE_URL + "courses/add";
 }

@@ -7,12 +7,18 @@ package shield.client.view;
 
 import shield.client.main.CSE308GUI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-
+import javax.ws.rs.core.Response;
+import shield.client.view.session.Session;
+import shield.client.view.session.StudentSession;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResources;
+import shield.shared.dto.SimpleCourse;
 /**
  * FXML Controller class
  *
@@ -21,12 +27,15 @@ import javafx.scene.control.TextField;
 public class AddCourseController implements Initializable, ControlledScreen {
     @FXML
     private TextField name;
-    @FXML
-    private TextField id;
+//    @FXML
+//    private TextField id;
     @FXML
     private TextField semesters;
     
     ScreensController myController;
+    
+    private final ServerAccessPoint newCourse =
+            new ServerAccessPoint(ServerResources.ADD_COURSE_URL);
 
     /**
      * Initializes the controller class.
@@ -37,7 +46,23 @@ public class AddCourseController implements Initializable, ControlledScreen {
     }    
 
     @FXML
-    private void handleSaveSchool(ActionEvent event) {
+    private void handleSaveCourse(ActionEvent event) {
+        String courseName = name.getText();
+        //String courseID = id.getText();
+        String semester = semesters.getText();
+        String sem[] = semester.split(",");
+        int courseNum = sem.length;
+        ArrayList <SimpleCourse> courses = new ArrayList<SimpleCourse>();
+        for(int i = 0; i<courseNum; i++){
+            SimpleCourse c = new SimpleCourse();
+            c.name = courseName;
+            c.semester = Integer.parseInt(sem[i]);
+            Session s = myController.getSession();
+            StudentSession ss = (StudentSession)s;
+            c.school = ss.getStudentAccount().school;
+            Response rsp = newCourse.request(c);
+        }
+        
         myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
@@ -53,6 +78,7 @@ public class AddCourseController implements Initializable, ControlledScreen {
 
     @Override
     public void populatePage() {
+        
     }
     
 }
