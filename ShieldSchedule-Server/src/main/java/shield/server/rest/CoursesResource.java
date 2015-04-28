@@ -14,18 +14,16 @@ import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import shield.server.ejb.CoursesBean;
 import shield.server.entities.Course;
-import shield.server.entities.Student;
 import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleStudent;
 
 /**
  *
@@ -58,17 +56,8 @@ public class CoursesResource {
     {
          try
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-            coursesBean.addCourse(course.name,course.school,course.semester);
-            //adminSchoolsBean.addCourse()
-            logger.log(Level.INFO, "OK Response Course added");
-=======
-=======
->>>>>>> origin/master
             coursesBean.addCourse(course.identifier, course.name,course.school);
             logger.log(Level.INFO, "OK Response");
->>>>>>> origin/master
             return Response.ok(course).build();
         } catch (RollbackException rex)
         {
