@@ -30,6 +30,7 @@ public class Course implements Serializable
     private Long id;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private String name;
 
     private int semester;
@@ -59,6 +60,16 @@ public class Course implements Serializable
 
     private String name;
 
+=======
+    //@TODO course has reference to school rather than school has list of courses?
+    //not sure which is more efficient
+    
+    @Column(unique = true)
+    private String identifier;
+
+    private String name;
+
+>>>>>>> origin/master
     protected Course()
     {
     }

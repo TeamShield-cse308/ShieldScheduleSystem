@@ -41,6 +41,9 @@ public class LoginPageController implements Initializable, ControlledScreen {
 =======
     private final ServerAccessPoint AUTHENTICATE =
             new ServerAccessPoint(ServerResource.AUTHENTICATION_URL);
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
 >>>>>>> origin/master
 
     /**

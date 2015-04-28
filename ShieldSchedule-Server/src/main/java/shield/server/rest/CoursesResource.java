@@ -59,10 +59,13 @@ public class CoursesResource {
          try
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             coursesBean.addCourse(course.name,course.school,course.semester);
             //adminSchoolsBean.addCourse()
             logger.log(Level.INFO, "OK Response Course added");
 =======
+=======
+>>>>>>> origin/master
             coursesBean.addCourse(course.identifier, course.name,course.school);
             logger.log(Level.INFO, "OK Response");
 >>>>>>> origin/master
