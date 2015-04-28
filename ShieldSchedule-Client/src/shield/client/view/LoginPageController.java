@@ -35,16 +35,8 @@ public class LoginPageController implements Initializable, ControlledScreen {
     @FXML
     private PasswordField password;
 
-<<<<<<< HEAD
-    private final ServerAccessPoint AUTHENTICATE
-            = new ServerAccessPoint(ServerResources.AUTHENTICATION_URL);
-=======
     private final ServerAccessPoint AUTHENTICATE =
             new ServerAccessPoint(ServerResource.AUTHENTICATION_URL);
-<<<<<<< HEAD
->>>>>>> origin/master
-=======
->>>>>>> origin/master
 
     /**
      * Initializes the controller class.

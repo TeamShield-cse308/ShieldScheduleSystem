@@ -13,14 +13,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import shield.client.view.session.Session;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleCourse;
 import shield.shared.dto.SimpleStudent;
 
@@ -35,7 +34,7 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
     private ComboBox<String> courseBox;
 
     private final ServerAccessPoint getSchoolCourses
-            = new ServerAccessPoint(ServerResources.GET_SCHOOL_COURSES_URL);
+            = new ServerAccessPoint(ServerResource.GET_SCHOOL_COURSES_URL);
 
     ScreensController myController;
 

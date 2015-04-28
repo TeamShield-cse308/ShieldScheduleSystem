@@ -44,10 +44,6 @@ public class AddCourseController implements Initializable, ControlledScreen {
     
     private final ServerAccessPoint newCourse =
             new ServerAccessPoint(ServerResource.ADD_COURSE_URL);
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 
     /**
      * Initializes the controller class.
