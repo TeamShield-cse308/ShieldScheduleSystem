@@ -26,9 +26,9 @@ public class ServerAccessPoint<T>
     /**
      * Creates a new access point to a resource on the shield schedule server.
      *
-     * @param url The url of the web resource.
+     * @param sr The ServerResource object enclosing the url of the web resource.
      */
-    public ServerAccessPoint(String url)
+    public ServerAccessPoint(ServerResource sr)
     {
         //Create the client if it's not yet been built.
         //Link it to the Jackson message body reader/writer
@@ -36,7 +36,7 @@ public class ServerAccessPoint<T>
             client = ClientBuilder.newClient();
             client.register(JacksonJsonProvider.class);
         }
-        target = client.target(url);
+        target = client.target(sr.getUrl());
     }
 
     /**

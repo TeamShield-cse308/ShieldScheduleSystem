@@ -24,7 +24,7 @@ import java.util.Vector;
     @NamedQuery(name = "School.findAll", 
             query = "SELECT s FROM School s"),
     @NamedQuery(name = "School.findByName", 
-            query = "SELECT s FROM School s WHERE s.name = :name"),
+            query = "SELECT s FROM School s WHERE s.name = :name")
 //    @TODO resolve compilation error here
 //    @NamedQuery(name = "School.findAllCourses",
 //            query = "SELECT c FROM School s WHERE")

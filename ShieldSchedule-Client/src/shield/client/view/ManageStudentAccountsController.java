@@ -18,7 +18,7 @@ import javafx.scene.control.ListView;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -35,16 +35,16 @@ public class ManageStudentAccountsController implements Initializable, Controlle
     private ListView<?> requested = new ListView<>();
 
     private final ServerAccessPoint getApprovedStudents =
-            new ServerAccessPoint(ServerResources.GET_APPROVED_STUDENTS_URL);
+            new ServerAccessPoint(ServerResource.GET_APPROVED_STUDENTS_URL);
 
     private final ServerAccessPoint getPendingStudents =
-            new ServerAccessPoint(ServerResources.GET_PENDING_STUDENTS_URL);
+            new ServerAccessPoint(ServerResource.GET_PENDING_STUDENTS_URL);
 
     private final ServerAccessPoint approveStudent =
-            new ServerAccessPoint(ServerResources.APPROVE_STUDENT_URL);
+            new ServerAccessPoint(ServerResource.APPROVE_STUDENT_URL);
 
     private final ServerAccessPoint deleteStudent =
-            new ServerAccessPoint(ServerResources.DELETE_STUDENT_URL);
+            new ServerAccessPoint(ServerResource.DELETE_STUDENT_URL);
 
     private List<SimpleStudent> approvedStudents = null;
     private List<SimpleStudent> pendingStudents = null;

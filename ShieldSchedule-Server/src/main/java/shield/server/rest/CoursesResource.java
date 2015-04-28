@@ -5,22 +5,27 @@
  */
 package shield.server.rest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import shield.server.ejb.AdminSchoolsBean;
 import shield.server.ejb.CoursesBean;
+import shield.server.entities.Course;
+import shield.server.entities.Student;
 import shield.shared.dto.SimpleCourse;
-import shield.shared.dto.SimpleStudent;
 
 /**
  *
@@ -39,9 +44,6 @@ public class CoursesResource {
     @Inject
     private CoursesBean coursesBean;
     
-//    @Inject
-//    private AdminSchoolsBean adminSchoolsBean;
-    
     /**
      * Creates a new instance of CoursesREST
      */
@@ -56,11 +58,16 @@ public class CoursesResource {
     {
          try
         {
+<<<<<<< HEAD
             coursesBean.addCourse(course.name,course.school,course.semester);
             //adminSchoolsBean.addCourse()
+            logger.log(Level.INFO, "OK Response Course added");
+=======
+            coursesBean.addCourse(course.identifier, course.name,course.school);
             logger.log(Level.INFO, "OK Response");
+>>>>>>> origin/master
             return Response.ok(course).build();
-        } catch (EntityExistsException eeex)
+        } catch (RollbackException rex)
         {
             logger.log(Level.WARNING, "BAD REQUEST");
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -70,6 +77,32 @@ public class CoursesResource {
             logger.log(Level.WARNING, "BAD REQUEST");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+    }
+    
+    @POST
+    @Path("/getSchoolCourses")
+    @Consumes("application/json")
+    public Response getSchoolCourses(SimpleStudent stu)
+    {
+        List<Course> courseList = coursesBean.getSchoolCourses(stu.school);
+        
+        List<SimpleCourse> simpleCourses = new ArrayList<>();
+        SimpleCourse c;
+        for (Course course : courseList)
+        {
+            c = new SimpleCourse();
+            c.name = course.getName();
+            c.id = course.getId();
+            c.semester = course.getSemester();
+            simpleCourses.add(c);
+        }
+        //a wrapper for the list of students
+        GenericEntity<List<SimpleCourse>> wrapper =
+                new GenericEntity<List<SimpleCourse>>(simpleCourses)
+                {
+                };
+        logger.log(Level.INFO, "Sending list of courses");
+        return Response.ok(wrapper).build();
     }
 
 }

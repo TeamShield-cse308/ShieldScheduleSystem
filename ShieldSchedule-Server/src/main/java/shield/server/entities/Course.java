@@ -10,17 +10,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.Column;
 
 /**
- * Class representing school courses in the database
+ * Class representing a Course offered by a particular school.
+ * Each course has a unique identifier and a name.
+ * A course is available in some number of sections.
+ *
  * @author Phillip Elliot
  */
 @Entity
-
-
-
 
 public class Course implements Serializable
 {
@@ -30,17 +29,60 @@ public class Course implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+<<<<<<< HEAD
     private String name;
 
     private int semester;
-    
-    public Course(){
 
+    public String getName() {
+        return name;
     }
-    
-    public Course(String name, int semester){
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
         this.semester = semester;
+    }
+=======
+    //@TODO course has reference to school rather than school has list of courses?
+    //not sure which is more efficient
+>>>>>>> origin/master
+    
+    @Column(unique = true)
+    private String identifier;
+
+    private String name;
+
+    protected Course()
+    {
+    }
+
+    
+    /**
+     * Create a new course.
+     * @param identifier The unique identifier for the Course, e.g. PHY101
+     * @param name The name of the Course, e.g. Intro to Physics
+     */
+    public Course(String identifier, String name)
+    {
+        this.identifier = identifier;
+        this.name = name;
+    }
+
+    public String getIdentifier()
+    {
+        return identifier;
+    }
+
+    public String getName()
+    {
+        return name;
     }
 
     public Long getId()
@@ -65,11 +107,14 @@ public class Course implements Serializable
     public boolean equals(Object object)
     {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Course)) {
+        if (!(object instanceof Course))
+        {
             return false;
         }
         Course other = (Course) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(
+                other.id)))
+        {
             return false;
         }
         return true;

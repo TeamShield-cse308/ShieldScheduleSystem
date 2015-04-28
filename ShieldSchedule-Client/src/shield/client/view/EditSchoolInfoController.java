@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleSchool;
 
 /**
@@ -33,7 +33,7 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
     
     //The access point for editing schools.
     private final ServerAccessPoint EDIT_SCHOOL =
-            new ServerAccessPoint(ServerResources.EDIT_SCHOOL_URL);
+            new ServerAccessPoint(ServerResource.EDIT_SCHOOL_URL);
     @FXML
     private TextField name;
     @FXML

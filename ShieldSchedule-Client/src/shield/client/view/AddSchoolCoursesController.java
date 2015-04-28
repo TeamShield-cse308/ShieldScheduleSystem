@@ -7,12 +7,22 @@ package shield.client.view;
 
 import shield.client.main.CSE308GUI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+import shield.client.view.session.Session;
+import shield.client.view.session.StudentSession;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResources;
+import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleStudent;
 
 /**
  * FXML Controller class
@@ -20,8 +30,13 @@ import javafx.scene.control.ComboBox;
  * @author Evan Guby
  */
 public class AddSchoolCoursesController implements Initializable, ControlledScreen {
+
     @FXML
-    private ComboBox<String> course;
+    private ComboBox<String> courseBox;
+
+    private final ServerAccessPoint getSchoolCourses
+            = new ServerAccessPoint(ServerResources.GET_SCHOOL_COURSES_URL);
+
     ScreensController myController;
 
     /**
@@ -30,7 +45,7 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void handleSelectCourse(ActionEvent event) {
@@ -41,7 +56,7 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
     private void handleAddCourse(ActionEvent event) {
         myController.setScreen(CSE308GUI.AddCourseID);
     }
-    
+
     @FXML
     private void handleBack(ActionEvent event) {
         myController.setScreen(CSE308GUI.StudentViewID);
@@ -54,6 +69,31 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
 
     @Override
     public void populatePage() {
+        Session s = myController.getSession();
+        StudentSession ss = (StudentSession) s;
+        //String schoolName = ss.getStudentAccount().school;
+        SimpleStudent stu = ss.getStudentAccount();
+        //request list of courses
+        Response rsp = getSchoolCourses.request(stu);
+
+        //check the response status code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
+            //@TODO error handling   
+        }
+        GenericType<List<SimpleCourse>> gtlc = new GenericType<List<SimpleCourse>>() {
+        };
+        //read courses from http response
+        List<SimpleCourse> courses = rsp.readEntity(gtlc);
+
+        //extract course names from schools
+        ArrayList<String> courseNames = new ArrayList<>();
+        for (SimpleCourse course : courses) {
+            courseNames.add(course.name + ", Sem: " + course.semester);
+        }
+
+        //populate combobox
+        courseBox.getItems().clear();
+        courseBox.getItems().addAll(courseNames);
     }
-    
+
 }

@@ -8,17 +8,22 @@ package shield.client.view;
 import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import shield.client.view.session.Session;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleSchool;
+import shield.shared.dto.SimpleStudent;
 /**
  * FXML Controller class
  *
@@ -32,17 +37,21 @@ public class AddCourseController implements Initializable, ControlledScreen {
     @FXML
     private TextField semesters;
     
+    @FXML
+    private ComboBox<String> courseBox;
+    
     ScreensController myController;
     
     private final ServerAccessPoint newCourse =
-            new ServerAccessPoint(ServerResources.ADD_COURSE_URL);
+            new ServerAccessPoint(ServerResource.ADD_COURSE_URL);
+
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        //populatePage();
     }    
 
     @FXML

@@ -16,7 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.LoginCredentials;
 import shield.shared.dto.SimpleAdmin;
 import shield.shared.dto.SimpleStudent;
@@ -26,8 +26,7 @@ import shield.shared.dto.SimpleStudent;
  *
  * @author Evan Guby, Jeffrey Kabot
  */
-public class LoginPageController implements Initializable, ControlledScreen
-{
+public class LoginPageController implements Initializable, ControlledScreen {
 
     ScreensController myController;
     @FXML
@@ -36,32 +35,34 @@ public class LoginPageController implements Initializable, ControlledScreen
     @FXML
     private PasswordField password;
 
+<<<<<<< HEAD
+    private final ServerAccessPoint AUTHENTICATE
+            = new ServerAccessPoint(ServerResources.AUTHENTICATION_URL);
+=======
     private final ServerAccessPoint AUTHENTICATE =
-            new ServerAccessPoint(ServerResources.AUTHENTICATION_URL);
+            new ServerAccessPoint(ServerResource.AUTHENTICATION_URL);
+>>>>>>> origin/master
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url,
-            ResourceBundle rb)
-    {
+            ResourceBundle rb) {
         // @TODO
     }
 
-    public void handleLogin(ActionEvent event)
-    {
+    public void handleLogin(ActionEvent event) {
         //create a login credentials structure
         LoginCredentials login = new LoginCredentials();
         login.username = email.getText();
         login.password = password.getText();
-        
+
         //transmit the login credentials to the server
         Response rsp = AUTHENTICATE.request(login);
-        
+
         //if response codei indicates error then inform the client and return
-        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
-        {
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
             int code = rsp.getStatus();
             if (code == Response.Status.UNAUTHORIZED.getStatusCode()) //wrong password
             {
@@ -94,25 +95,30 @@ public class LoginPageController implements Initializable, ControlledScreen
                 alert.show();
             } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) //something terrible happened
             {
-               
+
             }
             return;
-        }
-        //successful response
-        else
-        {
+        } //successful response
+        else {
             //students authenticate with an email
-            if (login.username.indexOf('@') != -1)
-            {
+            if (login.username.indexOf('@') != -1) {
                 SimpleStudent studentAcct = rsp.readEntity(SimpleStudent.class);
                 myController.createStudentSession(studentAcct);
+                myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
+                myController.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
+                myController.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
+                myController.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
+                myController.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
+                myController.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
+                myController.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
                 myController.setScreen(CSE308GUI.StudentViewID);
-            } 
-            //administrators have no @ symbols in their username
-            else
-            {
+            } //administrators have no @ symbols in their username
+            else {
                 SimpleAdmin adminAcct = rsp.readEntity(SimpleAdmin.class);
                 myController.createAdminSession(adminAcct);
+                myController.loadScreen(CSE308GUI.AdminViewID, CSE308GUI.AdminView);
+                myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
+                myController.loadScreen(CSE308GUI.NewSchoolID, CSE308GUI.NewSchool);
                 myController.setScreen(CSE308GUI.AdminViewID);
             }
 
@@ -120,25 +126,21 @@ public class LoginPageController implements Initializable, ControlledScreen
 
     }
 
-    public void handleNewUser(ActionEvent event)
-    {
+    public void handleNewUser(ActionEvent event) {
         myController.setScreen(CSE308GUI.StudentRegistrationID);
     }
 
-    public void handleForgotPassword(ActionEvent event)
-    {
+    public void handleForgotPassword(ActionEvent event) {
         myController.setScreen(CSE308GUI.ForgotPasswordID);
     }
 
     @Override
-    public void setScreenParent(ScreensController screenPage)
-    {
+    public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
     }
 
     @Override
-    public void populatePage()
-    {
+    public void populatePage() {
     }
 
 }

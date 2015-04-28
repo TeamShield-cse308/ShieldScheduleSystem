@@ -59,17 +59,17 @@ public class CSE308GUI extends Application {
         mainContainer.loadScreen(CSE308GUI.LoginPageID, CSE308GUI.LoginPage);
         mainContainer.loadScreen(CSE308GUI.StudentRegistrationID, CSE308GUI.StudentRegistration);
         mainContainer.loadScreen(CSE308GUI.ForgotPasswordID, CSE308GUI.ForgotPassword);
-        mainContainer.loadScreen(CSE308GUI.AdminViewID, CSE308GUI.AdminView);
-        mainContainer.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
-        mainContainer.loadScreen(CSE308GUI.NewSchoolID, CSE308GUI.NewSchool);
+//        mainContainer.loadScreen(CSE308GUI.AdminViewID, CSE308GUI.AdminView);
+//        mainContainer.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
+//        mainContainer.loadScreen(CSE308GUI.NewSchoolID, CSE308GUI.NewSchool);
         //mainContainer.loadScreen(CSE308GUI.EditSchoolInfoID, CSE308GUI.EditSchoolInfo);
-        mainContainer.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
-        mainContainer.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
-        mainContainer.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
-        mainContainer.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
-        mainContainer.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
-        mainContainer.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
-        mainContainer.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
+//        mainContainer.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
+//        mainContainer.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
+//        mainContainer.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
+//        mainContainer.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
+//        mainContainer.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
+//        mainContainer.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
+//        mainContainer.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
 
                 
         mainContainer.setScreen(CSE308GUI.LoginPageID);

@@ -89,4 +89,7 @@ public final class ServerResources
     
     public static final String ADD_COURSE_URL = 
             SERVER_BASE_URL + "courses/add";
+    
+    public static final String GET_SCHOOL_COURSES_URL = 
+            SERVER_BASE_URL + "courses/getSchoolCourses";
 }
