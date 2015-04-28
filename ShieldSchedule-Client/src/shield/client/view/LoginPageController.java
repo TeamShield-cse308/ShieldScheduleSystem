@@ -16,7 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.LoginCredentials;
 import shield.shared.dto.SimpleAdmin;
 import shield.shared.dto.SimpleStudent;
@@ -37,7 +37,7 @@ public class LoginPageController implements Initializable, ControlledScreen
     private PasswordField password;
 
     private final ServerAccessPoint AUTHENTICATE =
-            new ServerAccessPoint(ServerResources.AUTHENTICATION_URL);
+            new ServerAccessPoint(ServerResource.AUTHENTICATION_URL);
 
     /**
      * Initializes the controller class.

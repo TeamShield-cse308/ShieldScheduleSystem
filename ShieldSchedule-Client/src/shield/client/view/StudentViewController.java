@@ -13,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 
 /**
  * FXML Controller class
@@ -31,16 +31,16 @@ public class StudentViewController implements Initializable, ControlledScreen {
     private ListView<?> friendRequestsListView = new ListView<>();
     
     private final ServerAccessPoint GET_FRIEND_LIST = 
-            new ServerAccessPoint(ServerResources.GET_FRIENDS_URL);
+            new ServerAccessPoint(ServerResource.GET_FRIENDS_URL);
     
     private final ServerAccessPoint GET_FRIEND_REQUESTS = 
-            new ServerAccessPoint(ServerResources.GET_FRIEND_REQUESTS_URL);
+            new ServerAccessPoint(ServerResource.GET_FRIEND_REQUESTS_URL);
     
-    private final ServerAccessPoint ADD_FRIEND_REQUEST = 
-            new ServerAccessPoint(ServerResources.ADD_FRIEND_REQUEST_URL);
+    private final ServerAccessPoint ADD_FRIEND = 
+            new ServerAccessPoint(ServerResource.ADD_FRIEND_URL);
     
     private final ServerAccessPoint APPROVE_FRIEND_REQUEST = 
-            new ServerAccessPoint(ServerResources.APPROVE_FRIEND_REQUEST_URL);
+            new ServerAccessPoint(ServerResource.APPROVE_FRIEND_URL);
     
     
     /**

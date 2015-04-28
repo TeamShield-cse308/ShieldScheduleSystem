@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import shield.client.view.session.Session;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleCourse;
 /**
  * FXML Controller class
@@ -35,7 +35,7 @@ public class AddCourseController implements Initializable, ControlledScreen {
     ScreensController myController;
     
     private final ServerAccessPoint newCourse =
-            new ServerAccessPoint(ServerResources.ADD_COURSE_URL);
+            new ServerAccessPoint(ServerResource.ADD_COURSE_URL);
 
     /**
      * Initializes the controller class.

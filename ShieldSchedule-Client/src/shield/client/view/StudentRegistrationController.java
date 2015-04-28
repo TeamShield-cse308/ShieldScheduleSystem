@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import shield.shared.dto.SimpleStudent;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +53,9 @@ public class StudentRegistrationController implements Initializable, ControlledS
     private ComboBox<String> schoolsBox;
 
     private final ServerAccessPoint newStudent =
-            new ServerAccessPoint(ServerResources.ADD_STUDENT_URL);
+            new ServerAccessPoint(ServerResource.ADD_STUDENT_URL);
     private final ServerAccessPoint getSchools =
-            new ServerAccessPoint(ServerResources.GET_ALL_SCHOOLS_URL);
+            new ServerAccessPoint(ServerResource.GET_ALL_SCHOOLS_URL);
 
     ScreensController myController;
 

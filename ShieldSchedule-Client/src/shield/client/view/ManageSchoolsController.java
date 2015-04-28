@@ -17,7 +17,7 @@ import javafx.scene.control.ComboBox;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleSchool;
 
 /**
@@ -35,9 +35,9 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     ScreensController myController;
 
     private final ServerAccessPoint getSchools =
-            new ServerAccessPoint(ServerResources.GET_ALL_SCHOOLS_URL);
+            new ServerAccessPoint(ServerResource.GET_ALL_SCHOOLS_URL);
     private final ServerAccessPoint deleteSchool =
-            new ServerAccessPoint(ServerResources.DELETE_SCHOOL_URL);
+            new ServerAccessPoint(ServerResource.DELETE_SCHOOL_URL);
 
     private List<SimpleSchool> schoolsList = null;
 

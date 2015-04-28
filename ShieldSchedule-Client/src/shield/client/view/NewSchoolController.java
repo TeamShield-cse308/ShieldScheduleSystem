@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 import shield.client.web.ServerAccessPoint;
 
 import shield.shared.dto.SimpleSchool;
-import shield.client.web.ServerResources;
+import shield.client.web.ServerResource;
 
 /**
  * FXML Controller class 
@@ -40,7 +40,7 @@ public class NewSchoolController implements Initializable, ControlledScreen
     private TextField endingLunch;
     
     private ServerAccessPoint addSchool = 
-            new ServerAccessPoint(ServerResources.ADD_SCHOOL_URL);
+            new ServerAccessPoint(ServerResource.ADD_SCHOOL_URL);
 
     ScreensController myController;
 
