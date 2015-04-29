@@ -100,13 +100,13 @@ public class LoginPageController implements Initializable, ControlledScreen {
                 SimpleStudent studentAcct = rsp.readEntity(SimpleStudent.class);
                 myController.createStudentSession(studentAcct);
                 myController.setSessionEmail(studentAcct.email);
-                myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
-                myController.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
-                myController.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
-                myController.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
+                //myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
+                //myController.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
+               // myController.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
+               // myController.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
                 
                 myController.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
-                myController.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
+                //myController.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
                 myController.setScreen(CSE308GUI.StudentViewID);
             } //administrators have no @ symbols in their username
             else {

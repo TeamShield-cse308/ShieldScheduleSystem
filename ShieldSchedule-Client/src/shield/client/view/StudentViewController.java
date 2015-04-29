@@ -56,6 +56,7 @@ public class StudentViewController implements Initializable, ControlledScreen {
             new ServerAccessPoint(ServerResource.APPROVE_FRIEND_URL);
     
     private List<SimpleFriendship> pendingRequests = null;
+    private List<SimpleStudent> friends = null;
     
     
     /**
@@ -107,6 +108,7 @@ public class StudentViewController implements Initializable, ControlledScreen {
         }
         
         populateFriendRequestsListView();
+        populateFriendsListView();
         
     }
 
@@ -130,16 +132,41 @@ public class StudentViewController implements Initializable, ControlledScreen {
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
         populateFriendRequestsListView();
+        populateFriendsListView();
     }
 
     @Override
     public void populatePage() {
-        populateFriendsListView();
+        
         
     }
     
     private void populateFriendsListView()
     {
+        StudentSession ses = (StudentSession) myController.getSession();
+        SimpleStudent stu = ses.getStudentAccount();
+        
+       // String loggedInAs = myController.getSessionEmail();
+        
+        Response rsp = GET_FRIEND_LIST.request(stu);
+        
+        GenericType<List<SimpleStudent>> gtlc = new GenericType<List<SimpleStudent>>()
+        {
+        };
+        
+        friends = rsp.readEntity(gtlc);
+        
+        ArrayList<String> friendNames = new ArrayList();
+        
+        for(SimpleStudent ss : friends)
+        {
+            friendNames.add(ss.email);
+        }
+        
+        Collection names = friendNames;
+        
+        friendsListView.getItems().clear();
+        friendsListView.getItems().addAll(names);
         
     }
     private void populateFriendRequestsListView()

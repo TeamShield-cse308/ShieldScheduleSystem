@@ -184,7 +184,7 @@ public class StudentFriendsBean
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<Friendship> query
-                = em.createNamedQuery("Friendship.BySenderAndRecipient",
+                = em.createNamedQuery("Friendship.findBySenderAndRecipient",
                         Friendship.class);
         query.setParameter("sender", senderEmail);
         query.setParameter("recipient", recipientEmail);

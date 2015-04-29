@@ -93,7 +93,7 @@ public final class ServerResource
      * The location of the web resource exposing lists of friends.
      */
     public static final ServerResource GET_FRIENDS_URL = new ServerResource(
-            SERVER_BASE_URL + "students/friends");
+            SERVER_BASE_URL + "student/friends");
 
     /**
      * The location of the web resource accepting requests for deleting friends.
