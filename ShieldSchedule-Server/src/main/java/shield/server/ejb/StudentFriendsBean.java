@@ -86,7 +86,7 @@ public class StudentFriendsBean
         TypedQuery<Friendship> query
                 = em.createNamedQuery("Friendship.getFriendRequests",
                         Friendship.class);
-        query.setParameter("recipient", recipientEmail);
+        query.setParameter("email", recipientEmail);
 
         logger.log(Level.INFO, "Retrieving friend requests for student {0}",
                 recipientEmail);

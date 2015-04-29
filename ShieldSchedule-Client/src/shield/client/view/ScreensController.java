@@ -33,12 +33,13 @@ public class ScreensController extends StackPane
     private List<SimpleSchool> schools;
 
     private Session session;
+    private String sessionOwnerEmail;
 
     public ScreensController()
     {
         super();
     }
-
+    
     public void addScreen(String name,
             Node screen)
     {
@@ -131,6 +132,16 @@ public class ScreensController extends StackPane
     {
         this.school = school;
     }
+    
+    public String getSessionEmail()
+    {
+        return sessionOwnerEmail;
+    }
+    
+    public void setSessionEmail(String email)
+    {
+        sessionOwnerEmail = email;
+    }
 
     public List<SimpleSchool> getSchools()
     {
@@ -159,4 +170,5 @@ public class ScreensController extends StackPane
             return;
         }
     }
+    
 }

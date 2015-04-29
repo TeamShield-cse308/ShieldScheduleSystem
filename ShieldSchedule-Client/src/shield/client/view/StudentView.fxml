@@ -18,13 +18,13 @@
       <Button layoutX="499.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
       <Button layoutX="574.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleAcceptSelected" text="Accept Selected" />
       <Button layoutX="650.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
-      <ListView fx:id="friendRequestsListView" layoutX="383.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
+      <ListView fx:id="friendsListView" layoutX="383.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
       <Label layoutX="383.0" layoutY="17.0" text="Friends">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ListView fx:id="friendsListView" layoutX="554.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
+      <ListView fx:id="friendRequestsListView" layoutX="554.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
       <Label layoutX="554.0" layoutY="17.0" text="Friend Requests">
          <font>
             <Font size="14.0" />

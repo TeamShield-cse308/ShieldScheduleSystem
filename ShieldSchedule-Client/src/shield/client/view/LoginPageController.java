@@ -99,11 +99,12 @@ public class LoginPageController implements Initializable, ControlledScreen {
             if (login.username.indexOf('@') != -1) {
                 SimpleStudent studentAcct = rsp.readEntity(SimpleStudent.class);
                 myController.createStudentSession(studentAcct);
+                myController.setSessionEmail(studentAcct.email);
                 myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
                 myController.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
                 myController.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
                 myController.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
-                myController.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
+                
                 myController.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
                 myController.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
                 myController.setScreen(CSE308GUI.StudentViewID);
@@ -114,7 +115,9 @@ public class LoginPageController implements Initializable, ControlledScreen {
                 myController.loadScreen(CSE308GUI.AdminViewID, CSE308GUI.AdminView);
                 myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
                 myController.loadScreen(CSE308GUI.NewSchoolID, CSE308GUI.NewSchool);
+                myController.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
                 myController.setScreen(CSE308GUI.AdminViewID);
+                
             }
 
         }

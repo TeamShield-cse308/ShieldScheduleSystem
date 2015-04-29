@@ -75,7 +75,7 @@ public final class ServerResource
      * requests.
      */
     public static final ServerResource GET_FRIEND_REQUESTS_URL = new ServerResource(
-            SERVER_BASE_URL + "students/friends/requests");
+            SERVER_BASE_URL + "student/friends/requests");
     /**
      * The location of the web resource accepting requests for the creation of
      * new friend requests.

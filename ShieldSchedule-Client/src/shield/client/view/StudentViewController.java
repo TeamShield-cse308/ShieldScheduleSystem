@@ -7,16 +7,23 @@ package shield.client.view;
 
 import shield.client.main.CSE308GUI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleFriendship;
+import shield.shared.dto.SimpleStudent;
 
 /**
  * FXML Controller class
@@ -47,6 +54,8 @@ public class StudentViewController implements Initializable, ControlledScreen {
     
     private final ServerAccessPoint APPROVE_FRIEND_REQUEST = 
             new ServerAccessPoint(ServerResource.APPROVE_FRIEND_URL);
+    
+    private List<SimpleFriendship> pendingRequests = null;
     
     
     /**
@@ -94,12 +103,13 @@ public class StudentViewController implements Initializable, ControlledScreen {
     @Override
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
+        populateFriendRequestsListView();
     }
 
     @Override
     public void populatePage() {
         populateFriendsListView();
-        populateFriendRequestsListView();
+        
     }
     
     private void populateFriendsListView()
@@ -108,6 +118,30 @@ public class StudentViewController implements Initializable, ControlledScreen {
     }
     private void populateFriendRequestsListView()
     {
+        StudentSession ses = (StudentSession) myController.getSession();
+        SimpleStudent stu = ses.getStudentAccount();
+        
+       // String loggedInAs = myController.getSessionEmail();
+        
+        Response rsp = GET_FRIEND_REQUESTS.request(stu);
+        
+        GenericType<List<SimpleFriendship>> gtlc = new GenericType<List<SimpleFriendship>>()
+        {
+        };
+        
+        pendingRequests = rsp.readEntity(gtlc);
+        
+        ArrayList<String> requestNames = new ArrayList();
+        
+        for(SimpleFriendship sf : pendingRequests)
+        {
+            requestNames.add(sf.senderEmail);
+        }
+        
+        Collection names = requestNames;
+        
+        friendRequestsListView.getItems().clear();
+        friendRequestsListView.getItems().addAll(names);
         
     }
 }
