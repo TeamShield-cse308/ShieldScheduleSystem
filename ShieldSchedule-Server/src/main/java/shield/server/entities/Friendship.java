@@ -101,8 +101,8 @@ public class Friendship implements Serializable {
     //For queries that care, slave friendships are invisible and won't interfere.
     //The inverse friendship is approved when its partner friendship is approved.
     private Friendship(Friendship f) {
-        sender = f.sender;
-        recipient = f.recipient;
+        sender = f.recipient;
+        recipient = f.sender;
         approved = false;
         visible = false;
         inverse = f;

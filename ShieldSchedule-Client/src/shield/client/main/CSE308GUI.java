@@ -67,7 +67,7 @@ public class CSE308GUI extends Application {
 //        mainContainer.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
 //        mainContainer.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
 //        mainContainer.loadScreen(CSE308GUI.EditSectionID, CSE308GUI.EditSection);
-//        mainContainer.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
+        mainContainer.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
 //        mainContainer.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
 //        mainContainer.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
 

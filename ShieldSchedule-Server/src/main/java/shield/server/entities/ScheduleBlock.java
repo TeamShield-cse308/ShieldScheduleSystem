@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -55,7 +56,7 @@ public class ScheduleBlock implements Serializable
     
     //We need a reference to the owning school here to enforce unique constraint
     @ManyToOne
-    @Column(name = "SCHOOL_ID")
+    @JoinColumn(name = "SCHOOL_ID")
     private School school;
 
     @Column(name = "PERIOD_SLOT")

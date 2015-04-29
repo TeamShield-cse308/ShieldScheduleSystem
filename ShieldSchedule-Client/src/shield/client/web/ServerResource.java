@@ -81,7 +81,7 @@ public final class ServerResource
      * new friend requests.
      */
     public static final ServerResource ADD_FRIEND_URL = new ServerResource(
-            SERVER_BASE_URL + "students/friends/add");
+            SERVER_BASE_URL + "student/friends/add");
     /**
      * The location of the web resource accepting requests for approving friend
      * invites.

@@ -12,8 +12,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
+import shield.shared.dto.SimpleFriendship;
 
 /**
  * FXML Controller class
@@ -29,6 +32,9 @@ public class StudentViewController implements Initializable, ControlledScreen {
     
     @FXML
     private ListView<?> friendRequestsListView = new ListView<>();
+    
+    @FXML
+    private TextField add;
     
     private final ServerAccessPoint GET_FRIEND_LIST = 
             new ServerAccessPoint(ServerResource.GET_FRIENDS_URL);
@@ -71,6 +77,18 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleAdd(ActionEvent event) {
+        //get sender and receiver emails
+        String recip = add.getText();
+        StudentSession ses = (StudentSession) myController.getSession();
+        String send = ses.getStudentAccount().email;
+        
+        SimpleFriendship fs = new SimpleFriendship();
+        
+        fs.recipientName = recip;
+        fs.senderEmail = send;
+        
+        
+        ADD_FRIEND.request(fs);
     }
     
     @Override
