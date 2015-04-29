@@ -39,6 +39,9 @@ public class Schedule implements Serializable
 
     private int semester;
 
+    protected Schedule() {}
+    
+    
     public Schedule(School sch,
             int sem)
     {
