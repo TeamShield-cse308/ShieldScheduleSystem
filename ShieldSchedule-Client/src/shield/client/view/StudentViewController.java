@@ -82,6 +82,32 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleAcceptSelected(ActionEvent event) {
+        int idx = friendRequestsListView.getSelectionModel().getSelectedIndex();
+        
+        SimpleFriendship sf = pendingRequests.get(idx);
+        sf.approved = true;
+        
+        
+        Response rsp =  APPROVE_FRIEND_REQUEST.request(sf);
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.CONFLICT.getStatusCode())
+            {
+                //account approved already
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //account not exist
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
+           
+        }
+        
+        populateFriendRequestsListView();
+        
     }
 
     @FXML

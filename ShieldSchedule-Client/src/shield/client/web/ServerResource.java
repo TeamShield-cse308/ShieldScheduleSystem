@@ -87,7 +87,7 @@ public final class ServerResource
      * invites.
      */
     public static final ServerResource APPROVE_FRIEND_URL = new ServerResource(
-            SERVER_BASE_URL + "students/friends/approve");
+            SERVER_BASE_URL + "student/friends/approve");
 
     /**
      * The location of the web resource exposing lists of friends.
