@@ -8,6 +8,7 @@ package shield.server.entities;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,12 +23,13 @@ import javax.persistence.UniqueConstraint;
 
 /**
  * Class representing valid schedule blocks for schools in the database.
+ *
  * Each schedule block is unique up to the combination of its school, the period
  * during which it takes place, and which days of the schedule it uses.
- * 
- * Within the schedule block the days is privately encoded as a string.
- * For example a schedule block using days 1, 2 and 4 will privately encode this 
- * as "124".
+ *
+ * Within the schedule block the days is privately encoded as a string. For
+ * example a schedule block using days 1, 2 and 4 will privately encode this as
+ * "124".
  *
  * @author Jeffrey Kabot
  */
@@ -53,7 +55,6 @@ public class ScheduleBlock implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    
     //We need a reference to the owning school here to enforce unique constraint
     @ManyToOne
     @JoinColumn(name = "SCHOOL_ID")
@@ -70,9 +71,10 @@ public class ScheduleBlock implements Serializable
     {
     }
 
-    //@TODO check boundaries on scheduleDays?
     /**
-     * Creates a new schedule block for a school. Each schedule block is unique
+     * Creates a new schedule block for a school. 
+     * 
+     * Each schedule block is unique
      * up to the combination of its school, period and which days it uses.
      *
      * @param initSchool The school owning this schedule block
@@ -80,38 +82,17 @@ public class ScheduleBlock implements Serializable
      * @param scheduleDays A sorted set of integers representing the combination
      * of days used by this schedule block
      */
-    public ScheduleBlock(School initSchool, int initPeriod,
+    public ScheduleBlock(School initSchool,
+            int initPeriod,
             SortedSet<Integer> scheduleDays)
     {
         school = initSchool;
         period = initPeriod;
-        
+
         if (scheduleDays.first() < 1 || scheduleDays.last() > school.getScheduleDays())
-            throw new IllegalArgumentException("Schedule days must be within the valid range specified by the school");
-        for (int day: scheduleDays)
         {
-            days += day;
+            throw new IllegalArgumentException("Schedule days must be within the valid range specified by the school");
         }
-    }
-    
-    //@TODO check boundaries on scheduleDays?
-    //@TODO check unique days?
-    /**
-     * Creates a new schedule block for a school. Each schedule block is unique
-     * up to the combination of its school, period and which days it uses.
-     *
-     * @param initSchool The school owning this schedule block
-     * @param initPeriod The period during which the block takes place
-     * @param scheduleDays The schedule days used by this schedule block
-     */
-    @Deprecated
-    public ScheduleBlock(School initSchool, int initPeriod,
-            int... scheduleDays)
-    {
-        school = initSchool;
-        period = initPeriod;
-        days = "";
-        Arrays.sort(scheduleDays);
         for (int day : scheduleDays)
         {
             days += day;
@@ -121,17 +102,22 @@ public class ScheduleBlock implements Serializable
     //@TODO check boundaries on scheduleDays?
     //@TODO check unique days?
     /**
-     * Creates a new schedule block for a school. Each schedule block is unique
-     * up to the combination of its school, period and which days it uses.
+     * Creates a new schedule block for a school.
+     *
+     * Each schedule block is unique up to the combination of its school, period
+     * and which days it uses.
      *
      * @param initSchool The school owning this schedule block
      * @param initPeriod The period during which the block takes place
      * @param scheduleDays A string representing the combination of days used by
      * this schedule block
      * @throws IllegalArgumentException when the scheduleDays string is invalid
+     * @deprecated Use {@link #ScheduleBlock(shield.server.entities.School, int, java.util.SortedSet)
+     * }
      */
     @Deprecated
-    public ScheduleBlock(School initSchool, int initPeriod,
+    public ScheduleBlock(School initSchool,
+            int initPeriod,
             String scheduleDays) throws IllegalArgumentException
     {
         school = initSchool;
@@ -144,7 +130,7 @@ public class ScheduleBlock implements Serializable
             days = scheduleDays;
         }
     }
-    
+
     public School getSchool()
     {
         return school;
@@ -171,16 +157,16 @@ public class ScheduleBlock implements Serializable
     }
 
     /**
-     * Retrieve the set of schedule days as an array of day numbers.
+     * Retrieve the set of schedule days as a SortedSet of day numbers.
      *
      * @return
      */
-    public int[] getDays()
+    public SortedSet<Integer> getDays()
     {
-        int[] scheduleDays = new int[days.length()];
-        for (int i = 0; i < scheduleDays.length; i++)
+        SortedSet<Integer> scheduleDays = new TreeSet<>();
+        for (int i = 0; i < days.length(); i++)
         {
-            scheduleDays[i] = Integer.parseInt("" + days.charAt(i));
+            scheduleDays.add(Integer.parseInt("" + days.charAt(i)));
         }
         return scheduleDays;
     }

@@ -6,12 +6,12 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.SortedSet;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.OneToOne;
 
 /**
@@ -20,12 +20,6 @@ import javax.persistence.OneToOne;
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
-
-@NamedQueries(
-        {
-
-        })
-
 @SuppressWarnings("ValidPrimaryTableName")
 public class Section implements Serializable
 {
@@ -41,7 +35,7 @@ public class Section implements Serializable
     @ManyToOne
     private Course course;
 
-    private int[] semesters;
+    private SortedSet<Integer> semesters;
 
     private String teacherName;
 
@@ -51,21 +45,27 @@ public class Section implements Serializable
 
     /**
      * Create a new section of a course.
-     * 
+     *
      * @param initCourse the course that this section is an instance of
      * @param teacher the instructor of this section
      * @param sb the block during which this section occurs
      * @param initSemesters the set of semesters this section exists for
+     * @throws IllegalArgumentException when the set of semesters provided is
+     * not valid for the school
      */
-    public Section(Course initCourse,
-            String teacher, ScheduleBlock sb,
-            int... initSemesters)
+    Section(Course initCourse,
+            String teacher,
+            ScheduleBlock sb,
+            SortedSet<Integer> initSemesters) throws IllegalArgumentException
     {
         course = initCourse;
         teacherName = teacher;
+        if (initSemesters.first() < 1 || initSemesters.last() > sb.getSchool().getSemesters())
+        {
+            throw new IllegalArgumentException("The set of semesters for this section must be in the valid range defined by the school");
+        }
         semesters = initSemesters;
         scheduleBlock = sb;
-        course.addSection(this);
     }
 
     public Course getCourse()
@@ -73,7 +73,7 @@ public class Section implements Serializable
         return course;
     }
 
-    public int[] getSemesters()
+    public SortedSet<Integer> getSemesters()
     {
         return semesters;
     }
@@ -82,7 +82,7 @@ public class Section implements Serializable
     {
         return teacherName;
     }
-    
+
     public ScheduleBlock getScheduleBlock()
     {
         return scheduleBlock;

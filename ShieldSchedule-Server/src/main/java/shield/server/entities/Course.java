@@ -8,6 +8,7 @@ package shield.server.entities;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,42 +18,40 @@ import javax.persistence.Column;
 import javax.persistence.OneToMany;
 
 /**
- * Class representing a Course offered by a particular school.
- * Each course has a unique identifier and a name.
- * A course is available in some number of sections.
+ * Class representing a Course offered by a particular school. Each course has a
+ * unique identifier and a name. A course is available in some number of
+ * sections.
  *
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
-
 public class Course implements Serializable
 {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Column(unique = true)
     private String identifier;
 
     private String name;
-    
-    @OneToMany(mappedBy="course")
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Section> sections;
 
     protected Course()
     {
     }
 
-    
     /**
      * Create a new course.
-     * 
+     *
      * @param identifier The unique identifier for the Course, e.g. PHY101
      * @param name The name of the Course, e.g. Intro to Physics
      */
-    public Course(String identifier, String name)
+    public Course(String identifier,
+            String name)
     {
         this.identifier = identifier;
         this.name = name;
@@ -68,21 +67,25 @@ public class Course implements Serializable
     {
         return name;
     }
-    
+
     public Set<Section> getSections()
     {
         return sections;
     }
-    
+
     /**
-     * Adds a new section to this course.
-     * Automatically called when creating a new section.
-     * 
-     * @param s the section added.
-     * @return 
+     * Create a new section and add it to this course.
+     *
+     * @param teacher The instructor for the course.
+     * @param sb The schedule block during which the section occurs.
+     * @param initSemesters The set of semesters the section exists for.
+     * @return True if the section could be added. False if otherwise.
      */
-    boolean addSection(Section s)
+    public boolean addSection(String teacher,
+            ScheduleBlock sb,
+            SortedSet<Integer> initSemesters)
     {
+        Section s = new Section(this, teacher, sb, initSemesters);
         return sections.add(s);
     }
 
