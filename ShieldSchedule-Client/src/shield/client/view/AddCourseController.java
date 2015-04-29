@@ -24,26 +24,28 @@ import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleCourse;
 import shield.shared.dto.SimpleSchool;
 import shield.shared.dto.SimpleStudent;
+
 /**
  * FXML Controller class
  *
  * @author Evan Guby
  */
 public class AddCourseController implements Initializable, ControlledScreen {
+
     @FXML
     private TextField name;
 //    @FXML
 //    private TextField id;
     @FXML
-    private TextField semesters;
-    
+    private TextField identifier;
+
     @FXML
     private ComboBox<String> courseBox;
-    
+
     ScreensController myController;
-    
-    private final ServerAccessPoint newCourse =
-            new ServerAccessPoint(ServerResource.ADD_COURSE_URL);
+
+    private final ServerAccessPoint newCourse
+            = new ServerAccessPoint(ServerResource.ADD_COURSE_URL);
 
     /**
      * Initializes the controller class.
@@ -51,26 +53,21 @@ public class AddCourseController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //populatePage();
-    }    
+    }
 
     @FXML
     private void handleSaveCourse(ActionEvent event) {
         String courseName = name.getText();
-        //String courseID = id.getText();
-        String semester = semesters.getText();
-        String sem[] = semester.split(",");
-        int courseNum = sem.length;
-        ArrayList <SimpleCourse> courses = new ArrayList<SimpleCourse>();
-        for(int i = 0; i<courseNum; i++){
-            SimpleCourse c = new SimpleCourse();
-            c.name = courseName;
-            c.semester = Integer.parseInt(sem[i]);
-            Session s = myController.getSession();
-            StudentSession ss = (StudentSession)s;
-            c.school = ss.getStudentAccount().school;
-            Response rsp = newCourse.request(c);
-        }
-        
+        String courseIdentifier = identifier.getText();
+        ArrayList<SimpleCourse> courses = new ArrayList<SimpleCourse>();
+        SimpleCourse c = new SimpleCourse();
+        c.name = courseName;
+        c.identifier = courseIdentifier;
+        Session s = myController.getSession();
+        StudentSession ss = (StudentSession) s;
+        c.school = ss.getStudentAccount().school;
+        Response rsp = newCourse.request(c);
+
         myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
@@ -86,7 +83,7 @@ public class AddCourseController implements Initializable, ControlledScreen {
 
     @Override
     public void populatePage() {
-        
+
     }
-    
+
 }

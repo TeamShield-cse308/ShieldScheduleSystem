@@ -17,15 +17,14 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="name" layoutX="111.0" layoutY="47.0" />
-      <Label layoutX="16.0" layoutY="82.0" text="Semesters:">
+      <TextField fx:id="name" layoutX="125.0" layoutY="45.0" />
+      <Label layoutX="16.0" layoutY="82.0" text="Course Identifier:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <Button layoutX="664.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
-      <TextField fx:id="semesters" layoutX="111.0" layoutY="80.0" />
+      <TextField fx:id="identifier" layoutX="125.0" layoutY="78.0" />
       <Button layoutX="16.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleSaveCourse" prefHeight="26.0" prefWidth="104.0" text="Save Course" />
-      <Label layoutX="283.0" layoutY="83.0" text="Seperate each semester with a comma" />
    </children>
 </AnchorPane>

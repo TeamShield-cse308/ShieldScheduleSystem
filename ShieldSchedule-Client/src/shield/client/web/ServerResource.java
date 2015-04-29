@@ -107,6 +107,12 @@ public final class ServerResource
      */
     public static final ServerResource ADD_COURSE_URL = new ServerResource(
             SERVER_BASE_URL + "courses/add");
+    
+    /**
+     * The location of the web resource to get a Schools courselist
+     */
+    public static final ServerResource GET_SCHOOL_COURSES_URL = new ServerResource(
+            SERVER_BASE_URL + "courses/getSchoolCourses");
 
     private String resourceUrl;
 

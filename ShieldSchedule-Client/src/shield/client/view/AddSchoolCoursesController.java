@@ -87,7 +87,7 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
         //extract course names from schools
         ArrayList<String> courseNames = new ArrayList<>();
         for (SimpleCourse course : courses) {
-            courseNames.add(course.name + ", Sem: " + course.semester);
+            courseNames.add(course.name + ", " + course.identifier);
         }
 
         //populate combobox

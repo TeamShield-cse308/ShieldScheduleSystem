@@ -21,8 +21,8 @@ import javax.persistence.OneToOne;
 @Entity
 
 @NamedQueries({
-    @NamedQuery(name = "Section.findAllSectionsOfACourse", 
-            query = "SELECT s FROM Section s WHERE s.courseID = :CourseID"),
+//    @NamedQuery(name = "Section.findAllSectionsOfACourse", 
+//            query = "SELECT s FROM Section s WHERE s.courseID = :CourseID")
 })
 
 
