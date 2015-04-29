@@ -39,13 +39,15 @@ import org.eclipse.persistence.annotations.Index;
             @NamedQuery(
                     name = "Friendship.findBySenderAndRecipient",
                     query = "SELECT f FROM Friendship f WHERE f.sender.email = :sender AND f.recipient.email = :recipient"
-            ),})
-@Table(uniqueConstraints
-        = @UniqueConstraint(columnNames
-                = {
-            "SENDER_ID, RECIPIENT_ID"
+            ),
+        })
+@Table(uniqueConstraints =
+        @UniqueConstraint(columnNames =
+                {
+                    "SENDER_ID", "RECIPIENT_ID",
         }))
-public class Friendship implements Serializable {
+public class Friendship implements Serializable
+{
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -76,7 +78,8 @@ public class Friendship implements Serializable {
     //invisible to certain queries.
     private boolean visible;
 
-    protected Friendship() {
+    protected Friendship()
+    {
     }
 
     /**
@@ -86,7 +89,9 @@ public class Friendship implements Serializable {
      * @param sndr The Student sending the Friendship request.
      * @param rcpnt The Student receiving the Friendship Request.
      */
-    public Friendship(Student sndr, Student rcpnt) {
+    public Friendship(Student sndr,
+            Student rcpnt)
+    {
         sender = sndr;
         recipient = rcpnt;
         approved = false;
@@ -100,7 +105,8 @@ public class Friendship implements Serializable {
     //both students are the sender and the recipient.
     //For queries that care, slave friendships are invisible and won't interfere.
     //The inverse friendship is approved when its partner friendship is approved.
-    private Friendship(Friendship f) {
+    private Friendship(Friendship f)
+    {
         sender = f.recipient;
         recipient = f.sender;
         approved = false;
@@ -108,53 +114,63 @@ public class Friendship implements Serializable {
         inverse = f;
     }
 
-    public Student getSender() {
+    public Student getSender()
+    {
         return sender;
     }
 
-    public Student getRecipient() {
+    public Student getRecipient()
+    {
         return recipient;
     }
 
     /**
      * Approve a friend request.
      */
-    public void approve() {
+    public void approve()
+    {
         approved = true;
         inverse.approved = true;
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object)
+    {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Friendship)) {
+        if (!(object instanceof Friendship))
+        {
             return false;
         }
         Friendship other = (Friendship) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(
-                other.id))) {
+                other.id)))
+        {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "shield.server.entities.Friendship[ id=" + id + " ]";
     }
 

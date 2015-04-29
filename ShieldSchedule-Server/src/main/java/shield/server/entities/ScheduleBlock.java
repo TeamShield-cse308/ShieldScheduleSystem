@@ -44,7 +44,7 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints =
         @UniqueConstraint(columnNames =
                 {
-                    "SCHOOL_ID, PERIOD_SLOT", "DAYS",
+                    "SCHOOL_ID", "PERIOD_SLOT", "DAYS",
         })
 )
 public class ScheduleBlock implements Serializable
@@ -72,10 +72,10 @@ public class ScheduleBlock implements Serializable
     }
 
     /**
-     * Creates a new schedule block for a school. 
-     * 
-     * Each schedule block is unique
-     * up to the combination of its school, period and which days it uses.
+     * Creates a new schedule block for a school.
+     *
+     * Each schedule block is unique up to the combination of its school, period
+     * and which days it uses.
      *
      * @param initSchool The school owning this schedule block
      * @param initPeriod The period during which the block takes place

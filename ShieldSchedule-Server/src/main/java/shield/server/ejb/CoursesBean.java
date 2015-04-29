@@ -5,6 +5,7 @@
  */
 package shield.server.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,9 +27,8 @@ public class CoursesBean
 {
 
     //Logger
-
-    private static final Logger logger
-            = Logger.getLogger("sss.ejb.CoursesBean");
+    private static final Logger logger =
+             Logger.getLogger("sss.ejb.CoursesBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -36,27 +36,28 @@ public class CoursesBean
 
     /**
      * Add a new course to those offered by a school.
+     *
      * @param identifier The new course unique identifier.
      * @param courseName The new course name.
      * @param schoolName The school to which the course is added.
      */
-    public void addCourse(String identifier, String courseName,
+    public void addCourse(String identifier,
+            String courseName,
             String schoolName)
     {
         em = DatabaseConnection.getEntityManager();
-        Course c = new Course(identifier, courseName);
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query =
+                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", schoolName);
         try
         {
             School school = query.getSingleResult();
-            //add the school
+            //add the course
             em.getTransaction().begin();
-            school.addCourse(c);
-            em.persist(c);
+            //@TODO check return of addCourse to see if it worked
+            school.addCourse(identifier, courseName);
             em.getTransaction().commit();
-            logger.log(Level.INFO, "New course added to database {0}", c);
+            logger.log(Level.INFO, "New course added to database {0}", identifier);
         } catch (RollbackException rex)
         {
             //a course with that id already exists in database
@@ -70,7 +71,8 @@ public class CoursesBean
         }
     }
 
-    public List<Course> getSchoolCourses(String schoolName) {
+    public List<Course> getSchoolCourses(String schoolName)
+    {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
@@ -79,7 +81,7 @@ public class CoursesBean
         try
         {
             School school = query.getSingleResult();
-            courseList = school.getCourseList();
+            courseList = new ArrayList<>(school.getCourses());
             logger.log(Level.INFO, "Retrieving all courses from school in DB", school);
         } finally
         {

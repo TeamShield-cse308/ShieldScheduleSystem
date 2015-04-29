@@ -15,7 +15,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Class representing a Course offered by a particular school. Each course has a
@@ -25,14 +29,25 @@ import javax.persistence.OneToMany;
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
+@Table(uniqueConstraints =
+        @UniqueConstraint(columnNames =
+                {
+                    "SCHOOL_ID", "IDENTIFIER"
+        })
+)
 public class Course implements Serializable
 {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true)
+    @ManyToOne
+    @JoinColumn(name = "SCHOOL_ID")
+    private School school;
+
+    @Column(name = "IDENTIFIER")
     private String identifier;
 
     private String name;
@@ -47,17 +62,24 @@ public class Course implements Serializable
     /**
      * Create a new course.
      *
+     * @param school The school offering this course
      * @param identifier The unique identifier for the Course, e.g. PHY101
      * @param name The name of the Course, e.g. Intro to Physics
      */
-    public Course(String identifier,
+    Course(School school, String identifier,
             String name)
     {
+        this.school = school;
         this.identifier = identifier;
         this.name = name;
         this.sections = new HashSet<>();
     }
 
+    public School getSchool()
+    {
+        return school;
+    }
+    
     public String getIdentifier()
     {
         return identifier;

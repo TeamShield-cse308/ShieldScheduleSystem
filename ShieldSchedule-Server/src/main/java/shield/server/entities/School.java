@@ -6,7 +6,7 @@
 package shield.server.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -59,8 +59,8 @@ public class School implements Serializable
     @Max(12)
     private int endingLunch;
 
-    @OneToMany
-    private List<Course> courseList;
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private Set<Course> courseList;
 
     //required by JPA
     protected School()
@@ -80,14 +80,18 @@ public class School implements Serializable
         periods = initPeriods;
 
         if (initStartLunchPeriod > periods || initEndLunchPeriod > periods)
+        {
             throw new IllegalArgumentException("Can't have a lunch after the last period in the school day");
+        }
         if (initEndLunchPeriod < initStartLunchPeriod)
+        {
             throw new IllegalArgumentException("Lunch can't end before it begins.");
-        
-        startingLunch = initStartLunchPeriod;        
+        }
+
+        startingLunch = initStartLunchPeriod;
         endingLunch = initEndLunchPeriod;
 
-        courseList = new ArrayList<>();
+        courseList = new HashSet<>();
     }
 
     /*
@@ -103,6 +107,7 @@ public class School implements Serializable
         this.name = name;
     }
 
+    
     public int getSemesters()
     {
         return semesters;
@@ -113,6 +118,7 @@ public class School implements Serializable
         this.semesters = numSemesters;
     }
 
+    
     public int getScheduleDays()
     {
         return scheduleDays;
@@ -123,6 +129,7 @@ public class School implements Serializable
         this.scheduleDays = numScheduleDays;
     }
 
+    
     public int getPeriods()
     {
         return periods;
@@ -133,6 +140,7 @@ public class School implements Serializable
         this.periods = numPeriods;
     }
 
+    
     public int getStartingLunch()
     {
         return startingLunch;
@@ -143,6 +151,7 @@ public class School implements Serializable
         this.startingLunch = period;
     }
 
+    
     public int getEndingLunch()
     {
         return endingLunch;
@@ -153,16 +162,28 @@ public class School implements Serializable
         this.endingLunch = period;
     }
 
-    public List<Course> getCourseList()
+    
+    public Set<Course> getCourses()
     {
         return courseList;
     }
 
-    public void addCourse(Course c)
+    /**
+     * Add a new course to those offered by the school.
+     * @param identifier The unique identifier for the course, e.g. PHY101
+     * @param name The name of the course, e.g. Intro to Physics
+     * @return True if the course could be added to the list, false if otherwise.
+     */
+    public boolean addCourse(String identifier,
+            String name)
     {
-        courseList.add(c);
+        Course c = new Course(this, identifier, name);
+        return courseList.add(c);
     }
-
+    
+    
+    
+    //JPA methods
     public String getId()
     {
         return name;

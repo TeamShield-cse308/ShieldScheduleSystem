@@ -60,7 +60,7 @@ public class Section implements Serializable
     {
         course = initCourse;
         teacherName = teacher;
-        if (initSemesters.first() < 1 || initSemesters.last() > sb.getSchool().getSemesters())
+        if (initSemesters.first() < 1 || initSemesters.last() > initCourse.getSchool().getSemesters())
         {
             throw new IllegalArgumentException("The set of semesters for this section must be in the valid range defined by the school");
         }
