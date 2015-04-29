@@ -1,0 +1,360 @@
+                PROJECT: HIGH-SCHOOL SCHEDULE PLANNER (HISP)
+                      CSE 308: Software Engineering
+                              Scott Stoller
+                           version: 2015-04-23
+
+1. OVERVIEW
+
+This system helps high school students create course schedules that include
+desired courses with preferred instructors and overlap with their friends'
+schedules.
+
+There are several course schedule planning systems for university students,
+but few for high school students.  There are several differences.  Many
+high schools do not publish complete course schedules: they simply send
+each student his/her course schedule, based on the student's course
+preferences.  By aggregating their course schedules, students can infer the
+complete course schedule, and use it to make informed requests for schedule
+changes.  On average, there are more sections of each high school course
+than each university course, so optimizing the choice of sections is more
+important.  High school students are present during the entire school day,
+so it is irrelevant to select courses or sections that are clustered on a
+few days of the week or in consecutive timeslots.  The choice of sections
+is therefore based on other criteria, for example, the instructor or
+coordination with friends.
+
+======================================================================
+2. ASSUMPTIONS
+
+The academic year is divided into S units.  S must be in the range of 1 to
+4.  For convenience, these units are called "semesters" in this document,
+regardless of the number (even though they may be academic years,
+trimesters, or quarters).
+
+Within each semester, the class schedule repeats every D days.  D must be
+in the range of 1 to 7.  For example, a school might have a 5-day schedule
+(i.e., a different schedule on each weekday) or a 2-day schedule (i.e., two
+daily schedules that alternates).
+
+The number P of periods in each day of the schedule is the same.  P must be
+in the range of 6 to 12.  The system does not need to know the start and
+end times of the periods.
+
+The schedule is organized into "schedule blocks".  A schedule block is a
+set of timeslots in the same period.  Schedule blocks may overlap.  For
+example, in a school with a 2-day schedule, there might be a schedule block
+<period 1; days 1,2> for daily classes, and schedule blocks <period 1; day
+1> and <period 1; day 2> for classes that meet on alternate days.
+
+Each section of a course is scheduled in one schedule block in some range
+of semesters.  For example, in a school with 4 semesters/year, a section
+might be in a schedule block in semester 1, or semesters 1-2, or semesters
+1-4, etc.
+
+Each course has a unique identifier (e.g., "PHY101" or "0159") and a name.
+
+Each section of a course is identified by the range of semesters and
+schedule block in which it is scheduled.  For example, a section of PHY101
+might be offered in (and uniquely identified by) semesters = 1-2 and
+schedule block = <period 1; days 1,2>.
+
+Lunch is offered in the same range of periods (for example, periods 3
+through 5) every day.  Students may have lunch on any subset of the
+schedule days, not necessarily every day.
+
+The system ignores co-requisite requirements.  For example, Chemistry and
+Chemistry Lab might be co-requisites, but the system treats them as
+separate courses, each in its own schedule block.
+
+The system ignores study halls: it treats them as equivalent to empty
+timeslots.
+
+The system uses only information available to students.  It does not have
+access to an authoritative database of course offerings.  It creates its
+own database of course offerings by aggregating the assigned course
+schedules entered by students.
+
+======================================================================
+3. FUNCTIONALITY FOR ADMINISTRATORS
+
+3.1. ADD OR DELETE SCHOOL.  The administrator specifies the following
+information for each school and academic year: the number S of semesters in
+an academic year, the number D of days in the schedule, the number P of
+periods in each day, the range of periods in which lunch is offered, and
+the set of all legal schedule blocks.
+
+Comment: To enter the set of legal schedule blocks, a text-based interface
+might be convenient.  For example, the user could provide a single chunk of
+text describing all schedule blocks, each expressed using a syntax such as
+the one above, or some other convenient syntax you define.  This provides
+an easy way to copy and modify the set of schedule blocks from the previous
+academic year (assuming the system displays the data in the same syntax
+that it was entered): just copy, paste, and edit the text.
+
+3.2. MANAGE STUDENT ACCOUNT REQUESTS.  The system displays a list of
+pending student account requests.  The administrator can approve or delete
+a pending request, or leave it in the list of pending requests.  For
+convenience, there is an "Approve all pending requests" function.  When an
+account request is approved, the system sends a notification to the student
+by email.
+
+3.3. DELETE STUDENT ACCOUNTS.  A specified student account is deleted.
+
+Comment: Administrator accounts are created by direct modification of the
+account database.  The system does not need to provide an interface for
+this.
+
+======================================================================
+4. FUNCTIONALITY FOR STUDENTS
+
+The system keeps track of two course schedules for each student for each
+academic year: (1) an assigned course schedule, created by the school and
+entered in this system by the student, and (2) a desired course schedule,
+generated by this system and possibly edited by the student.
+
+4.1. REQUEST ACCOUNT.  The student fills out a form with fields for school,
+student name, email address, password, etc.
+
+4.2. MANAGE FRIENDS.  The student enters a first name and last name.  If an
+account with that name exists, a friend request is sent to the other user.
+If the other user accepts the request, then the two users are friends.  The
+friend relation is symmetric.  For privacy, students cannot browse the list
+of user accounts or do wildcard searches on it.  A student can unfriend a
+friend.
+
+4.3. DISPLAY FRIENDS.  The system displays the student's friends and their
+assigned and desired course schedules for a specified school and academic
+year.
+
+4.4. ENTER, VIEW, AND EDIT ASSIGNED COURSE SCHEDULE.  The student enters
+his assigned course schedule for a specified school and academic year, by
+entering, for each course that appears in his/her schedule, the range of
+semesters, the schedule block, and the instructor.  The student does not
+need to enter study halls, because the system ignores them, or lunches,
+because the system already knows when lunch is offered.  When entering a
+course, the student first enters the course identifier.  If the system has
+seen that course identifier in any student's assigned course schedule for
+the same school and academic year, then some student has already entered
+the course name, and the system displays it.  Otherwise, the system asks
+the student to confirm or enter the name of the course; specifically, if
+the system saw the course identifier for the same school in the previous
+academic year, it displays the associated course name, and the student
+needs to enter the course name only if it has changed.  Similarly, if the
+system has seen that course identifier in any student's assigned course
+schedule for the same school, academic year, range of semesters, and
+schedule block, then some student has already entered the instructor, and
+the system displays it; otherwise, the system the system asks the student
+to enter the name of the instructor.
+
+The assigned course schedule can be viewed with or without friends'
+schedules.  "With friends' schedules" means that each entry includes the
+names of friends in the class.
+
+4.5. VIEW COURSE OFFERINGS.  The system lists all courses offered by the
+specified school in the specified academic year, sorted by course
+identifier, and with full details about each section of the course,
+including the number of students who listed that section in their assigned
+course schedule.
+
+4.6. GENERATE DESIRED COURSE SCHEDULE.  The desired course schedule is
+generated from scratch (not derived from the assigned course schedule),
+based on the following criteria entered by the student: (1) list of courses
+to include in the schedule, each optionally with a set of sections to
+exclude, and optionally with a preferred instructor; (2) whether lunch is
+desired, for each day in the schedule.  Note that the system does not know
+whether a section is open (i.e., has available seats) or closed.  A student
+who knows that a section is closed can exclude it.
+
+The system stores each student's schedule generation criteria, so a student
+can later edit them and re-generate the desired course schedule.
+
+The system attempts to generate a conflict-free schedule that includes all
+of the specified courses and lunches and does not contain any excluded
+sections.  For brevity, a schedule satisfying these conditions is said to
+be "acceptable".  If this is impossible, the system generates a list of all
+minimal-size sets of changes to the list of desired courses and lunches
+that lead to an acceptable schedule, where each change is removal of one
+course or all lunches.
+
+If an acceptable schedule exists, the system generates an optimal one.  A
+schedule is optimal if (C1) it has the maximal number of courses with
+preferred instructors, and (C2) among schedules satisfing condition C1, it
+has maximal overlap with friends' schedules.  The overlap is measured by
+summing the number of friends in each section of a course in the student's
+schedule.
+
+4.7 VIEW DESIRED COURSE SCHEDULE.  The desired course schedule can be
+viewed with or without friends' schedules.
+
+4.8. EXPORT DESIRED COURSE SCHEDULE.  The desired generated course schedule
+is exported in some standard format, such as a plain text file an HTML
+file.  It can be exported with or without friends' schedules.
+
+======================================================================
+5. OTHER REQUIREMENTS
+
+5.1 AUTHENTICATION.  All access to the system, other than student account
+request, requires authentication with a password.
+
+5.2 NETWORK SECURITY.  Communication is secured using HTTPS or SSL.
+
+5.3 CONCURRENCY.  Multiple administrators and multiple students on
+different computers may use the system concurrently.  Synchronization is
+used to ensure sensible behavior.  The system may prevent the same user
+from having multiple concurrent login sessions; if it does not prevent
+this, it should ensure sensible behavior.
+
+[added 2015-02-18]
+5.4 CLIENT-SERVER ARCHITECTURE.  Clients may run concurrently on different
+hosts, and they all access the same database.
+
+======================================================================
+6. TESTING
+
+The final test report (submitted as part of hw10-code3) and the demo must
+include at least one testcase in each of the following categories.  The
+categories overlap, so a single testcase can cover multiple categories.
+The test report must explicitly specify which testcases are in each
+category.  To save time during the demo, data for these testcases should be
+entered in the system before the demo, although if multiple testcases use
+small variants of the same data (e.g., they differ in the scheduling of one
+or two sections of courses), those changes can be made during the demo.
+
+These testcase categories cover only the most complex aspect of the
+project, namely, schedule generation.  However, the final test report and
+demo must also include testcases that cover all other required aspects.
+
+NAS (No Acceptable Schedule). Testcase in which there is no acceptable
+schedule, and there are at least two minimal-size sets of changes that lead
+to an acceptable schedule.
+
+AS (Acceptable Schedules). Testcase in which there are at least the
+following three kinds of acceptable schedules, where PI is the maximal
+number of courses with preferred instructors among acceptable schedules,
+and O is the maximal overlap with friends' schedules among acceptable
+schedules with PI courses with preferred instructors: (1) an acceptable
+schedule with PI courses with preferred instructors and overlap O with
+friends' schedules, (2) an acceptable schedule whose overlap with friends'
+schedules is greater than O (the system should not return this schedule as
+the answer), (3) an acceptable schedule with PI courses with preferred
+instructors and whose overlap with friends' schedules is less than O.  Note
+that the system should generate schedule (1).  The course offerings,
+schedule generation criteria, and these three acceptable schedules, should
+be listed explicitly in the testcase description, so they can easily be
+verified.
+
+OSB (Overlapping Schedule Blocks).  Testcase in which the school's course
+offerings include sections of different courses in overlapping schedule
+blocks, and the generated schedule includes at least one section S1 of a
+course C1 in a schedule block that overlaps with the schedule block of a
+section S2 of another course C2, such that S2 is not in the generated
+schedule (it can't be, since it conflicts with S1) but some other section
+of C2 is in the generated schedule (so the existence of S2 is not
+completely irrelevant to the schedule generation process).
+
+S2. Testcase with S=2 and with multiple full-year courses and multiple
+one-semester courses in the generated schedule.
+
+S4.  Testcase with S=4 and with multiple full-year courses and multiple
+single-quarter courses in the generated schedule.
+
+D2.  Testcase with D=2 and with multiple courses offered every day and
+multiple courses offered on alternate days in the generated schedule.
+
+D5.  Testcase with D=5 and with multiple courses offered daily and multiple
+courses offered twice per week in the generated schedule.
+
+CA (Concurrent Administrators).  Testcase in which two administrators
+concurrently try to add a school with the same name, and they try to save
+the information (e.g., click Submit) as simultaneously as possible.
+
+CS (Concurrent Students).  Testcase in which two students concurrently
+enter their assigned course schedules, and they try to save the information
+(e.g., click Submit) as simultaneously as possible.  Furthermore, they
+enter conflicting information about the instructor for a section of a
+course.
+
+======================================================================
+CLARIFICATIONS
+
+[2015-02-24]
+
+Suppose a student enters information about a section as part of his/her
+assigned course schedule, that section gets incorporated in
+subsequently-generated desired course schedules, and then the student edits
+his/her assigned course schedule in a way that changes the information
+about that section (e.g., deletes the section, or indicates a different
+instructor for it)?.  What should happen?  If other students also included
+that section in their assigned course schedules, nothing should happen to
+those desired course schedules, because there is still evidence that this
+section exists.
+
+However, if that student was the only one who included that section in
+his/her desired course schedule, then there is no evidence that this
+section exists.  In this case, the ideal behavior is probably to notify the
+users whose previously-generated desired course schedules contain that
+section about this issue, and let them re-generate their desired course
+schedules when they like; until then, their previously-generated desired
+course schedules remain unchanged, and can still be viewed, with a warning
+that they are out-of-date.  You are welcome to implement this ideal
+behavior, but it is not required.
+
+A simpler and also acceptable alternative is to leave all
+previously-generated desired course schedules unchanged in all cases.
+Users concerned about the above issue (or hoping that new information will
+allow them to generate a better schedule) can periodically re-generate
+their desired course schedule, using their stored schedule generation
+criteria.
+
+[2015-03-11] "The student enters a first name and last name.  If an account
+with that name exists, a friend request is sent to the other user."  If
+there are two users with identical first and last names, asking the user to
+supply an email address to disambiguate is probably the best approach.
+Other approaches are also acceptable.
+
+[2015-03-28]
+
+ > My first question is, does the school's semesters have the same number
+ > of periods and days for every semester?
+
+For each school, the number of periods, the number of days, and the set of
+schedule blocks is constant throughout an academic year.  It could change
+between academic years.
+
+ > My second question is, since a student can have different courses in
+ > different semesters (for example, CSE308 in period 1 for semester 1 and
+ > CSE305 in period 1 for semester 2) should we display different schedules
+ > for each semester when displaying assigned/desired course schedules?
+
+Yes.  Of course, there are many ways to display this.  You should choose
+the way that you think is best.  For example, you could have a separate
+table (with columns corresponding to days, and rows corresponding to
+periods) for each semester.  As another example, you could have a single
+table, with information about multiple semesters in each cell, e.g.,
+
+         Semester 1: Biology
+         Semester 2: Chemistry
+
+[2015-04-02]
+
+Extra credit: support constraints specifying that two classes must be
+consecutive, i.e., must be scheduled in schedule blocks with consecutive
+periods.  for example, suppose AP Chemistry and AP Chemistry Lab must be
+consecutive, and AP Chemistry is offered in periods 2 and 6, and AP
+Chemistry Lab is offered in periods 1 and 5.  A student taking both classes
+could have them in periods 1 and 2, or periods 5 and 6, but not, e.g.,
+periods 1 and 6.
+
+[2015-04-23]
+
+For "view schedule with friends" and for computing overlap with friends'
+schedules during desired schedule generation, should friends' assigned
+schedules or desired schedules be used?  This is not specified in the
+requirements, so either one is acceptable.  An optimistic approach is, for
+each friend, to use the friend's desired schedule if it exists, otherwise
+use the friend's assigned schedule; friends with neither a desired schedule
+nor an assigned schedule are ignored for these purposes.  This approach is
+optimistic because it assumes the school is likely to allow students to
+adopt their desired schedules.  A pessimistic approach is to use the
+assigned schedules for all friends.  For maximum flexibility, you could
+allow the user to select between these approaches.
