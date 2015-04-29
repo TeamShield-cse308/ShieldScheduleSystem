@@ -6,18 +6,22 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import javax.persistence.OneToMany;
 
 /**
  * Class representing a Course offered by a particular school.
  * Each course has a unique identifier and a name.
  * A course is available in some number of sections.
  *
- * @author Phillip Elliot
+ * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
 
@@ -28,14 +32,14 @@ public class Course implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    //@TODO course has reference to school rather than school has list of courses?
-    //not sure which is more efficient
     
     @Column(unique = true)
     private String identifier;
 
     private String name;
+    
+    @OneToMany(mappedBy="course")
+    private Set<Section> sections;
 
     protected Course()
     {
@@ -44,6 +48,7 @@ public class Course implements Serializable
     
     /**
      * Create a new course.
+     * 
      * @param identifier The unique identifier for the Course, e.g. PHY101
      * @param name The name of the Course, e.g. Intro to Physics
      */
@@ -51,6 +56,7 @@ public class Course implements Serializable
     {
         this.identifier = identifier;
         this.name = name;
+        this.sections = new HashSet<>();
     }
 
     public String getIdentifier()
@@ -61,6 +67,23 @@ public class Course implements Serializable
     public String getName()
     {
         return name;
+    }
+    
+    public Set<Section> getSections()
+    {
+        return sections;
+    }
+    
+    /**
+     * Adds a new section to this course.
+     * Automatically called when creating a new section.
+     * 
+     * @param s the section added.
+     * @return 
+     */
+    boolean addSection(Section s)
+    {
+        return sections.add(s);
     }
 
     public Long getId()

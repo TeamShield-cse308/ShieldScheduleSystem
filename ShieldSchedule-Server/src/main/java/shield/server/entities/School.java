@@ -75,19 +75,16 @@ public class School implements Serializable
             int initEndLunchPeriod)
     {
         name = initName;
-
         semesters = initSemesters;
         scheduleDays = initScheduleDays;
         periods = initPeriods;
 
         if (initStartLunchPeriod > periods || initEndLunchPeriod > periods)
             throw new IllegalArgumentException("Can't have a lunch after the last period in the school day");
-
-        startingLunch = initStartLunchPeriod;
-
         if (initEndLunchPeriod < initStartLunchPeriod)
             throw new IllegalArgumentException("Lunch can't end before it begins.");
         
+        startingLunch = initStartLunchPeriod;        
         endingLunch = initEndLunchPeriod;
 
         courseList = new ArrayList<>();

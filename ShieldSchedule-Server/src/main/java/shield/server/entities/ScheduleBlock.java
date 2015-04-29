@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -29,6 +31,13 @@ import javax.persistence.UniqueConstraint;
  * @author Jeffrey Kabot
  */
 @Entity
+@NamedQueries(
+        {
+            @NamedQuery(
+                    name = "ScheduleBlock.findBySchool",
+                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school.name = :school")
+        }
+)
 @Table(uniqueConstraints =
         @UniqueConstraint(columnNames =
                 {
@@ -44,7 +53,7 @@ public class ScheduleBlock implements Serializable
     private Long id;
 
     
-    //We need a reference to owning school here to enforce unique constraint
+    //We need a reference to the owning school here to enforce unique constraint
     @ManyToOne
     @Column(name = "SCHOOL_ID")
     private School school;
@@ -60,30 +69,6 @@ public class ScheduleBlock implements Serializable
     {
     }
 
-    //@TODO check boundaries on scheduleDays?
-    //@TODO check unique days?
-    /**
-     * Creates a new schedule block for a school. Each schedule block is unique
-     * up to the combination of its school, period and which days it uses.
-     *
-     * @param initSchool The school owning this schedule block
-     * @param initPeriod The period during which the block takes place
-     * @param scheduleDays The schedule days used by this schedule block
-     */
-    @Deprecated
-    public ScheduleBlock(School initSchool, int initPeriod,
-            int... scheduleDays)
-    {
-        school = initSchool;
-        period = initPeriod;
-        days = "";
-        Arrays.sort(scheduleDays);
-        for (int day : scheduleDays)
-        {
-            days += day;
-        }
-    }
-    
     //@TODO check boundaries on scheduleDays?
     /**
      * Creates a new schedule block for a school. Each schedule block is unique
@@ -103,6 +88,30 @@ public class ScheduleBlock implements Serializable
         if (scheduleDays.first() < 1 || scheduleDays.last() > school.getScheduleDays())
             throw new IllegalArgumentException("Schedule days must be within the valid range specified by the school");
         for (int day: scheduleDays)
+        {
+            days += day;
+        }
+    }
+    
+    //@TODO check boundaries on scheduleDays?
+    //@TODO check unique days?
+    /**
+     * Creates a new schedule block for a school. Each schedule block is unique
+     * up to the combination of its school, period and which days it uses.
+     *
+     * @param initSchool The school owning this schedule block
+     * @param initPeriod The period during which the block takes place
+     * @param scheduleDays The schedule days used by this schedule block
+     */
+    @Deprecated
+    public ScheduleBlock(School initSchool, int initPeriod,
+            int... scheduleDays)
+    {
+        school = initSchool;
+        period = initPeriod;
+        days = "";
+        Arrays.sort(scheduleDays);
+        for (int day : scheduleDays)
         {
             days += day;
         }

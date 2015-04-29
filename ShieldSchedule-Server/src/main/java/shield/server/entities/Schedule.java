@@ -6,6 +6,8 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +17,8 @@ import javax.persistence.Id;
  * Entity class representing a Schedule that a Student has entered.
  * 
  * A schedule is a set of sections, satisfying the two constraints that each course 
- * and each schedule block are unique.
+ * is unique and that schedule blocks do not overlap.
+ * 
  * @author Jeffrey Kabot
  */
 @Entity
@@ -25,7 +28,14 @@ public class Schedule implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    private Set<Section> sections;
 
+    public Schedule()
+    {
+        sections = new HashSet<>();
+    }
+    
     public Long getId()
     {
         return id;
