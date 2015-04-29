@@ -6,71 +6,93 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.*;
-import java.util.Vector;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  * Class representing Schools in the database
+ *
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
 //database queries for retrieving all or certain schools
-@NamedQueries({
-    @NamedQuery(name = "School.findAll", 
-            query = "SELECT s FROM School s"),
-    @NamedQuery(name = "School.findByName", 
-            query = "SELECT s FROM School s WHERE s.name = :name")
-//    @TODO resolve compilation error here
-//    @NamedQuery(name = "School.findAllCourses",
-//            query = "SELECT c FROM School s WHERE")
-})
+@NamedQueries(
+        {
+            @NamedQuery(name = "School.findAll",
+                    query = "SELECT s FROM School s"),
+            @NamedQuery(name = "School.findByName",
+                    query = "SELECT s FROM School s WHERE s.name = :name")
+        })
 public class School implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
 
-    //annotations below________________
     @Id
+    @NotNull
     private String name;
+
+    @Min(1)
+    @Max(4)
     private int semesters;
+
+    @Min(1)
+    @Max(7)
     private int scheduleDays;
+
+    @Min(6)
+    @Max(12)
     private int periods;
+
+    @Min(1)
+    @Max(12)
     private int startingLunch;
+
+    @Min(1)
+    @Max(12)
     private int endingLunch;
 
     @OneToMany
     private List<Course> courseList;
 
-    @OneToMany
-    private List<Student> studentList;
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    
     //required by JPA
-    protected School(){}
+    protected School()
+    {
+    }
 
-    public School(String initName, int initSemesters, int initScheduleDays, 
-            int initPeriods, int initStartLunchPeriod, int initEndLunchPeriod)
+    public School(String initName,
+            int initSemesters,
+            int initScheduleDays,
+            int initPeriods,
+            int initStartLunchPeriod,
+            int initEndLunchPeriod)
     {
         name = initName;
-        
-        //@TODO enforce constraints
+
         semesters = initSemesters;
         scheduleDays = initScheduleDays;
         periods = initPeriods;
-        
+
+        if (initStartLunchPeriod > periods || initEndLunchPeriod > periods)
+            throw new IllegalArgumentException("Can't have a lunch after the last period in the school day");
+
         startingLunch = initStartLunchPeriod;
-        endingLunch = initEndLunchPeriod;
+
+        if (initEndLunchPeriod < initStartLunchPeriod)
+            throw new IllegalArgumentException("Lunch can't end before it begins.");
         
-        courseList = new Vector<Course>();
-        studentList = new Vector<Student>();
+        endingLunch = initEndLunchPeriod;
+
+        courseList = new ArrayList<>();
     }
 
-    
     /*
      * Getters and Setters
      */
@@ -78,85 +100,72 @@ public class School implements Serializable
     {
         return name;
     }
+
     public void setSchoolName(String name)
     {
         this.name = name;
     }
+
     public int getSemesters()
     {
         return semesters;
     }
-    //@TODO enforce constraints
+
     public void setSemesters(int numSemesters)
     {
         this.semesters = numSemesters;
     }
+
     public int getScheduleDays()
     {
         return scheduleDays;
     }
+
     public void setScheduleDays(int numScheduleDays)
     {
         this.scheduleDays = numScheduleDays;
     }
+
     public int getPeriods()
     {
         return periods;
     }
+
     public void setPeriods(int numPeriods)
     {
         this.periods = numPeriods;
     }
+
     public int getStartingLunch()
     {
         return startingLunch;
     }
+
     public void setStartingLunch(int period)
     {
         this.startingLunch = period;
     }
+
     public int getEndingLunch()
     {
         return endingLunch;
     }
+
     public void setEndingLunch(int period)
     {
         this.endingLunch = period;
     }
+
     public List<Course> getCourseList()
     {
         return courseList;
     }
 
-    public List<Student> getStudentList()
-    {
-        return studentList;
-    }
-    
-    
-
     public void addCourse(Course c)
     {
         courseList.add(c);
     }
-    
-    public void removeCourse(Course c)
-    {
-        courseList.remove(c);
-    }
-    
-    public void addStudent(Student s)
-    {
-        studentList.add(s);
-    }
-    
-    public void removeStudent(Student s)
-    {
-        studentList.remove(s);
-    }
-    
-    
-    
+
     public String getId()
     {
         return name;
@@ -179,11 +188,13 @@ public class School implements Serializable
     public boolean equals(Object object)
     {
         // TODO: Warning - this method won't work in the case the schoolName fields are not set
-        if (!(object instanceof School)) {
+        if (!(object instanceof School))
+        {
             return false;
         }
         School other = (School) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name))) {
+        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name)))
+        {
             return false;
         }
         return true;
