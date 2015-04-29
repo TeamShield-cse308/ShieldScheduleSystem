@@ -50,6 +50,7 @@ public class Student extends GenericUser implements Serializable
 
     private StudentAccountState accountState;
 
+    //@TODO a schedule for each semester in the academic year
     @OneToOne
     private Schedule assignedSchedule;
 

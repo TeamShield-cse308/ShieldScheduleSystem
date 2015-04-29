@@ -107,7 +107,6 @@ public class School implements Serializable
         this.name = name;
     }
 
-    
     public int getSemesters()
     {
         return semesters;
@@ -118,7 +117,6 @@ public class School implements Serializable
         this.semesters = numSemesters;
     }
 
-    
     public int getScheduleDays()
     {
         return scheduleDays;
@@ -129,7 +127,6 @@ public class School implements Serializable
         this.scheduleDays = numScheduleDays;
     }
 
-    
     public int getPeriods()
     {
         return periods;
@@ -140,7 +137,6 @@ public class School implements Serializable
         this.periods = numPeriods;
     }
 
-    
     public int getStartingLunch()
     {
         return startingLunch;
@@ -151,7 +147,6 @@ public class School implements Serializable
         this.startingLunch = period;
     }
 
-    
     public int getEndingLunch()
     {
         return endingLunch;
@@ -162,7 +157,6 @@ public class School implements Serializable
         this.endingLunch = period;
     }
 
-    
     public Set<Course> getCourses()
     {
         return courseList;
@@ -170,9 +164,11 @@ public class School implements Serializable
 
     /**
      * Add a new course to those offered by the school.
+     *
      * @param identifier The unique identifier for the course, e.g. PHY101
      * @param name The name of the course, e.g. Intro to Physics
-     * @return True if the course could be added to the list, false if otherwise.
+     * @return True if the course could be added to the list, false if
+     * otherwise.
      */
     public boolean addCourse(String identifier,
             String name)
@@ -180,9 +176,7 @@ public class School implements Serializable
         Course c = new Course(this, identifier, name);
         return courseList.add(c);
     }
-    
-    
-    
+
     //JPA methods
     public String getId()
     {
