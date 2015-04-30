@@ -5,30 +5,25 @@
  */
 package shield.client.view;
 
-import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import shield.client.main.CSE308GUI;
 
 /**
  * FXML Controller class
  *
- * @author Evan Guby
+ * @author evanguby
  */
 public class AddSectionController implements Initializable, ControlledScreen {
     @FXML
-    private TextField room;
-    @FXML
     private TextField teacher;
     @FXML
-    private TextField period;
-    @FXML
-    private TextField semester;
-    @FXML
-    private TextField size;
+    private ComboBox<String> scheduleBlockBox;
 
     ScreensController myController;
     
@@ -58,4 +53,5 @@ public class AddSectionController implements Initializable, ControlledScreen {
     @Override
     public void populatePage() {
     }
+    
 }
