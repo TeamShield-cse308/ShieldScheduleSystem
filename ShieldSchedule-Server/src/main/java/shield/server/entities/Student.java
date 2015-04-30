@@ -50,9 +50,9 @@ public class Student extends GenericUser implements Serializable
 
     private StudentAccountState accountState;
 
-    //@TODO a schedule for each semester in the academic year
+    //a schedule for each semester in the academic year
     @OneToOne
-    private Schedule assignedSchedule;
+    private List<Schedule> assignedSchedule;
 
     //required by JPA
     protected Student()
@@ -70,6 +70,7 @@ public class Student extends GenericUser implements Serializable
         school = initSchool;
 
         accountState = StudentAccountState.PENDING;
+        assignedSchedule = new ArrayList<>(school.getSemesters());
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -125,8 +126,7 @@ public class Student extends GenericUser implements Serializable
         if (accountState == StudentAccountState.PENDING)
         {
             accountState = StudentAccountState.INACTIVE;
-        }
-        else
+        } else
         {
             throw new AccountApprovedException(email + " is already approved.");
         }
@@ -139,18 +139,17 @@ public class Student extends GenericUser implements Serializable
      * already active
      * @throws AccountPendingException If the account has not yet been approved
      */
-    public void activate() throws AccountActiveException, AccountPendingException
+    public void activate() throws AccountActiveException,
+            AccountPendingException
     {
         if (accountState == StudentAccountState.INACTIVE)
         {
             //@TODO uncomment when deactivate is hooked to client
             //accountState = StudentAccountState.ACTIVE;
-        }
-        else if (accountState == StudentAccountState.ACTIVE)
+        } else if (accountState == StudentAccountState.ACTIVE)
         {
             throw new AccountActiveException(email + " is already active.");
-        }
-        else
+        } else
         {
             throw new AccountPendingException(email + " is not yet approved.");
         }
@@ -190,9 +189,19 @@ public class Student extends GenericUser implements Serializable
 
     }
 
-    public Schedule getSchedule()
+    public Schedule getSchedule(int semester)
     {
-        return assignedSchedule;
+        return assignedSchedule.get(semester);
+    }
+
+    public void createSchedule(int semester)
+    {
+        //if there is already a schedule for that semester, then we assume that it's being replaced
+        if (assignedSchedule.get(semester) != null)
+        {
+            assignedSchedule.remove(semester);
+        }
+        assignedSchedule.add(semester, new Schedule(this.school, semester));
     }
 
 }

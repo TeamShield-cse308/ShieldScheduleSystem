@@ -42,10 +42,11 @@ public class Schedule implements Serializable
     protected Schedule() {}
     
     
-    public Schedule(School sch,
+    Schedule(School sch,
             int sem)
     {
-        scheduleSlots = new boolean[sch.getPeriods()][sch.getScheduleDays()];
+        //need to add 1 since periods and schedule days are 1-indexed
+        scheduleSlots = new boolean[sch.getPeriods()+1][sch.getScheduleDays()+1];
         semester = sem;
         sections = new HashSet<>();
     }

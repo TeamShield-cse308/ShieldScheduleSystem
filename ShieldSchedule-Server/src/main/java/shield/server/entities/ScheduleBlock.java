@@ -6,7 +6,6 @@
 package shield.server.entities;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.Column;
