@@ -51,8 +51,11 @@ public class Student extends GenericUser implements Serializable
     private StudentAccountState accountState;
 
     //a schedule for each semester in the academic year
-    @OneToOne
+    @OneToMany
     private List<Schedule> assignedSchedule;
+    
+    @OneToOne
+    private GenerationCriteria desiredSchedule;
 
     //required by JPA
     protected Student()
@@ -71,6 +74,7 @@ public class Student extends GenericUser implements Serializable
 
         accountState = StudentAccountState.PENDING;
         assignedSchedule = new ArrayList<>(school.getSemesters());
+        desiredSchedule = new GenerationCriteria(school);
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -183,11 +187,7 @@ public class Student extends GenericUser implements Serializable
         //@TODO valid return
         return null;
     }
-
-    public void generateDesiredSchedule()
-    {
-
-    }
+    
 
     public Schedule getSchedule(int semester)
     {

@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +15,7 @@ import javax.persistence.OneToMany;
 /**
  * Entity class representing a Schedule that a Student has entered.
  *
- * A schedule is a set of sections, satisfying the two constraints that each
+ * A schedule is a list of sections, satisfying the two constraints that each
  * course is unique and that schedule blocks do not overlap.
  *
  * @author Jeffrey Kabot
@@ -33,25 +30,29 @@ public class Schedule implements Serializable
     private Long id;
 
     @OneToMany
-    private Set<Section> sections;
+    private Set<Course> courses;
+
+    @OneToMany
+    private List<Section> sections;
 
     private boolean[][] scheduleSlots;
 
     private int semester;
 
-    protected Schedule() {}
-    
-    
+    protected Schedule()
+    {
+    }
+
     Schedule(School sch,
             int sem)
     {
         //need to add 1 since periods and schedule days are 1-indexed
-        scheduleSlots = new boolean[sch.getPeriods()+1][sch.getScheduleDays()+1];
+        scheduleSlots = new boolean[sch.getPeriods() + 1][sch.getScheduleDays() + 1];
         semester = sem;
-        sections = new HashSet<>();
+        courses = new HashSet<>();
+        sections = new ArrayList<>();
     }
 
-    
     //@TODO convert boolean returns to thrown exceptions for more information?
     /**
      * Add a section of a course to this schedule.
@@ -66,6 +67,7 @@ public class Schedule implements Serializable
      */
     public boolean addSection(Section s)
     {
+        boolean success = false;
         if (!s.getSemesters().contains(semester))
         {
             return false;
@@ -90,10 +92,18 @@ public class Schedule implements Serializable
                 sandbox[p][q] = true;
             }
         }
-        
-        //Update the boolean matrix
-        scheduleSlots = sandbox;
-        return sections.add(s);
+
+        //Try adding the course and section to the schedule
+        if (success = (courses.add(s.getCourse()) && sections.add(s)))
+        {
+            scheduleSlots = sandbox;
+        }
+        return success;
+    }
+    
+    public List<Section> getSections()
+    {
+        return sections;
     }
 
     public Long getId()
@@ -123,7 +133,8 @@ public class Schedule implements Serializable
             return false;
         }
         Schedule other = (Schedule) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)))
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(
+                other.id)))
         {
             return false;
         }
