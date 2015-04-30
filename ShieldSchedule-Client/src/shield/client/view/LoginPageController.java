@@ -90,7 +90,11 @@ public class LoginPageController implements Initializable, ControlledScreen {
                 alert.show();
             } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()) //something terrible happened
             {
-
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Login Error");
+                alert.setHeaderText("Incorrect Username");
+                alert.setContentText("Username does not exist");
+                alert.show();
             }
             return;
         } //successful response

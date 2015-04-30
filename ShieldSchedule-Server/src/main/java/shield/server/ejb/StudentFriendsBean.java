@@ -141,7 +141,7 @@ public class StudentFriendsBean
             recipientQuery.setParameter("school", school.getSchoolName());
             List<Student> recipients = recipientQuery.getResultList();
 
-            //if there is just one match
+            if (recipients.isEmpty()) {throw new NoResultException();}
             if (recipients.size() == 1)
             {
                 recipient = recipients.get(0);
@@ -160,13 +160,16 @@ public class StudentFriendsBean
         {
             //@TODO error handling
             logger.log(Level.WARNING,
-                    "No student found with name {0} in School {1}", senderEmail);
+                    "No student found with name {0} in School {1}", recipientName);
+            em.close();
+            em = null;
             throw nrex;
+            
         } finally
         {
             // close the entity manager
             em.close();
-            em = null;
+            //em = null;
         }
     }
 

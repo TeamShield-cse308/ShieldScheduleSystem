@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.GenericType;
@@ -126,7 +127,40 @@ public class StudentViewController implements Initializable, ControlledScreen {
         fs.senderEmail = send;
         
         
-        ADD_FRIEND.request(fs);
+        Response rsp = ADD_FRIEND.request(fs);
+        
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.CONFLICT.getStatusCode())
+            {
+                
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("No Such Person");
+                alert.setContentText("The person you are trying to add does not exist.");
+                alert.show();
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("No Such Person");
+                alert.setContentText("The person you are trying to add does not exist.");
+                alert.show();
+            }
+           
+        }else
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!");
+            alert.setHeaderText("Request Sent");
+            alert.setContentText(recip + " has been sent a friend request!");
+            alert.show();
+        }
+        
     }
     
     @Override
