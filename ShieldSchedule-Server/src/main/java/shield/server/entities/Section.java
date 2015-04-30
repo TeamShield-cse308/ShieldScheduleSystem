@@ -36,7 +36,7 @@ public class Section implements Serializable
     private Course course;
 
     private SortedSet<Integer> semesters;
-
+    
     private String teacherName;
 
     protected Section()
