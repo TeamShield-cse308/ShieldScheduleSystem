@@ -14,16 +14,25 @@ import shield.shared.dto.SimpleStudent;
 public class StudentSession implements Session
 {
     private SimpleStudent studentAccount;
-
-    private SimpleCourse courseSelected;
     
     private ArrayList<SimpleCourse> courses;
     
     private SimpleCourse course;
     
-    public SimpleCourse getCourses() {
-        return courseSelected;
+    private String courseName;
+
+    public String getCourseName() {
+        return courseName;
     }
+
+    public void setCourseName(String courseName) {
+        for(SimpleCourse c : courses){
+            if(c.name.equals(courseName))
+                course = c;
+        }
+        this.courseName = courseName;
+    }
+    
 
     public void setCourses(ArrayList<SimpleCourse> courses) {
         this.courses = courses;
@@ -40,7 +49,7 @@ public class StudentSession implements Session
         return studentAccount;
     }
     
-        public SimpleCourse getCourse() {
+    public SimpleCourse getCourse() {
         return course;
     }
 

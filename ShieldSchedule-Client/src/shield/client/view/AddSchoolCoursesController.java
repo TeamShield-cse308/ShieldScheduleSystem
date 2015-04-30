@@ -48,11 +48,17 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
 
     @FXML
     private void handleSelectCourse(ActionEvent event) {
+        String course = courseBox.getValue().substring(0, courseBox.getValue().indexOf(","));
+        StudentSession ss = (StudentSession)myController.getSession();
+        //StudentSession ss = (StudentSession) s;
+        ss.setCourseName(course);
+        myController.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
         myController.setScreen(CSE308GUI.SelectSectionID);
     }
 
     @FXML
     private void handleAddCourse(ActionEvent event) {
+        myController.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);
         myController.setScreen(CSE308GUI.AddCourseID);
     }
 
@@ -83,13 +89,19 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
         };
         //read courses from http response
         List<SimpleCourse> courses = rsp.readEntity(gtlc);
-
+        ArrayList<SimpleCourse> coursesArray = new ArrayList<>();
+        //extract course names from schools;
         //extract course names from schools
         ArrayList<String> courseNames = new ArrayList<>();
         for (SimpleCourse course : courses) {
+            SimpleCourse c = new SimpleCourse();
+            c.identifier = course.identifier;
+            c.name = course.name;
+            c.school = course.school;
             courseNames.add(course.name + ", " + course.identifier);
+            coursesArray.add(c);
         }
-
+        ss.setCourses(coursesArray);
         //populate combobox
         courseBox.getItems().clear();
         courseBox.getItems().addAll(courseNames);

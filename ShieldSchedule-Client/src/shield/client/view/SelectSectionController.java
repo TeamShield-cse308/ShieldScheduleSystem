@@ -7,12 +7,22 @@ package shield.client.view;
 
 import shield.client.main.CSE308GUI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+import shield.client.view.session.Session;
+import shield.client.view.session.StudentSession;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResource;
+import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleSection;
 
 /**
  * FXML Controller class
@@ -21,8 +31,12 @@ import javafx.scene.control.ComboBox;
  */
 public class SelectSectionController implements Initializable, ControlledScreen {
     @FXML
-    private ComboBox<?> section;
+    private ComboBox<String> section;
     ScreensController myController;
+    
+    private final ServerAccessPoint getCourseSections =
+            new ServerAccessPoint(ServerResource.GET_COURSE_SECTIONS_URL);
+    
     /**
      * Initializes the controller class.
      */
@@ -38,6 +52,7 @@ public class SelectSectionController implements Initializable, ControlledScreen 
 
     @FXML
     private void handleNewSection(ActionEvent event) {
+        myController.loadScreen(CSE308GUI.AddSectionID, CSE308GUI.AddSection);
         myController.setScreen(CSE308GUI.AddSectionID);
     }
 
@@ -53,6 +68,30 @@ public class SelectSectionController implements Initializable, ControlledScreen 
 
     @Override
     public void populatePage() {
+        StudentSession s = (StudentSession)myController.getSession();
+        SimpleCourse course = s.getCourse();
+        
+        Response rsp = getCourseSections.request(course);
+        
+        //check the response status code
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
+            //@TODO error handling   
+        }
+        GenericType<List<SimpleSection>> gtlc = new GenericType<List<SimpleSection>>() {
+        };
+        
+        List<SimpleSection> sections = rsp.readEntity(gtlc);
+        ArrayList<SimpleSection> sectionArray = new ArrayList<>();
+        
+        ArrayList<String> sectionNames = new ArrayList<>();
+        
+        for (SimpleSection section : sections) {
+            sectionNames.add(section.teacherName); //Add schedule block info
+        }
+        //ss.setCourses(coursesArray);
+        //populate combobox
+        section.getItems().clear();
+        section.getItems().addAll(sectionNames);
     }
     
 }

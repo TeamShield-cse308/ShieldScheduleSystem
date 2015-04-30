@@ -10,5 +10,5 @@ package shield.shared.dto;
  * @author evanguby
  */
 public class SimpleSection {
-    
+    public String teacherName;
 }
