@@ -59,8 +59,8 @@ public class AdminSchoolsBean
         em = DatabaseConnection.getEntityManager();
 
         //new school entity
-        School school = new School(initName, initSemesters, initPeriods,
-                initScheduleDays, initStartLunchPeriod, initEndLunchPeriod);
+        School school = new School(initName, initSemesters, initScheduleDays,
+                initPeriods, initStartLunchPeriod, initEndLunchPeriod);
 
         try
         {
