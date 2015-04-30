@@ -35,7 +35,7 @@ public class Section implements Serializable
     @ManyToOne
     private Course course;
 
-    private String semesters;
+    private SortedSet<Integer> semesters;
 
     private String teacherName;
 
@@ -56,14 +56,14 @@ public class Section implements Serializable
     Section(Course initCourse,
             String teacher,
             ScheduleBlock sb,
-            String initSemesters) throws IllegalArgumentException
+            SortedSet<Integer> initSemesters) throws IllegalArgumentException
     {
         course = initCourse;
         teacherName = teacher;
-//        if (initSemesters.first() < 1 || initSemesters.last() > initCourse.getSchool().getSemesters())
-//        {
-//            throw new IllegalArgumentException("The set of semesters for this section must be in the valid range defined by the school");
-//        }
+        if (initSemesters.first() < 1 || initSemesters.last() > initCourse.getSchool().getSemesters())
+        {
+            throw new IllegalArgumentException("The set of semesters for this section must be in the valid range defined by the school");
+        }
         semesters = initSemesters;
         scheduleBlock = sb;
     }
@@ -73,7 +73,7 @@ public class Section implements Serializable
         return course;
     }
 
-    public String getSemesters()
+    public SortedSet<Integer> getSemesters()
     {
         return semesters;
     }
