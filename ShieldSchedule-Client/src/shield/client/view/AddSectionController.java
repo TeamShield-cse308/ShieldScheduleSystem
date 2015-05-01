@@ -75,7 +75,21 @@ public class AddSectionController implements Initializable, ControlledScreen {
         section.scheduleBlockDays = ssb.scheduleDays;
         section.scheduleBlockPeriod = ssb.period;
         section.school = ss.getStudentAccount().school;
-        
+        String semestersPicked = "";
+        if(semester1.isSelected()){
+            semestersPicked+="1";
+        }
+        if(semester2.isSelected()){
+            semestersPicked+="2";
+        }
+        if(semester3.isSelected()){
+            semestersPicked+="3";
+        }
+        if(semester4.isSelected()){
+            semestersPicked+="4";
+        }
+        section.semesters = semestersPicked;
+        section.courseIdentifier = ss.getCourseIdentifier();
         Response rsp = addSection.request(section);
         //TODO error handling
         myController.loadScreen(CSE308GUI.SelectSectionID,CSE308GUI.SelectSection);

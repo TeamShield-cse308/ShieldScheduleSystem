@@ -7,6 +7,8 @@ package shield.server.ejb;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
@@ -60,12 +62,24 @@ public class SectionBean {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<ScheduleBlock> query =
                  em.createNamedQuery("ScheduleBlock.findBySchoolPeriodDay", ScheduleBlock.class);
+        TypedQuery<Course> query2 =
+                 em.createNamedQuery("Course.findByIdentifier", Course.class);
         query.setParameter("school",section.school);
         query.setParameter("period",section.scheduleBlockPeriod);
         query.setParameter("days",section.scheduleBlockDays);
+        query2.setParameter("identifier", section.courseIdentifier);
         try{
             ScheduleBlock sb = query.getSingleResult();
-            
+            Course c = query2.getSingleResult();
+            ArrayList<Integer> al = new ArrayList<>();
+            for(int i = 0; i < section.semesters.length(); i++){
+                al.add(Integer.parseInt(section.semesters.substring(i,i+1)));
+            }
+            SortedSet<Integer> a = (SortedSet<Integer>)new TreeSet<>(al);
+            Section toAdd = new Section(c,section.teacherName,sb,a);
+            em.getTransaction().begin();
+            em.persist(toAdd);
+            em.getTransaction().commit();
         }finally
         {
             //Close the entity manager

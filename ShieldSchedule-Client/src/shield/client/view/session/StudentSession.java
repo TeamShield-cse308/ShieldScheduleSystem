@@ -28,6 +28,8 @@ public class StudentSession implements Session
     
     private SimpleSchool school;
 
+    private String courseIdentifier;
+    
     public String getCourseName() {
         return courseName;
     }
@@ -40,6 +42,15 @@ public class StudentSession implements Session
         }
         this.courseName = courseName;
     }
+
+    public String getCourseIdentifier() {
+        return courseIdentifier;
+    }
+
+    public void setCourseIdentifier(String courseIdentifier) {
+        this.courseIdentifier = courseIdentifier;
+    }
+    
     
 
     public void setCourses(ArrayList<SimpleCourse> courses) {

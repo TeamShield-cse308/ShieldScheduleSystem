@@ -3,27 +3,31 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ScreensController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageSchoolsController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentRegistrationController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageSchools.fxml</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentView.fxml</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSection.fxml</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSectionController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/web/ServerResource.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/LoginPageController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/session/StudentSession.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/session/AdminSession.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddCourseController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentViewController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSchoolCoursesController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/main/CSE308GUI.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/EditSchoolInfoController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/web/ServerAccessPoint.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentRegistration.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AdminViewController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddCourse.fxml</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SetScheduleBlocksController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SetScheduleBlocks.fxml</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/EditSectionController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ScreensController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentRegistrationController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageSchools.fxml</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageStudentAccountsController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/web/ServerResource.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/LoginPageController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/session/StudentSession.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddCourseController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentViewController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageStudentAccounts.fxml</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSchoolCoursesController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/main/CSE308GUI.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ForgotPasswordController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AdminViewController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectSectionController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/NewSchoolController.java</file>
         </group>

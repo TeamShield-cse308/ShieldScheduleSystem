@@ -52,6 +52,7 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
         StudentSession ss = (StudentSession)myController.getSession();
         //StudentSession ss = (StudentSession) s;
         ss.setCourseName(course);
+        ss.setCourseIdentifier(courseBox.getValue().substring(courseBox.getValue().indexOf(",") +2));
         myController.loadScreen(CSE308GUI.SelectSectionID, CSE308GUI.SelectSection);
         myController.setScreen(CSE308GUI.SelectSectionID);
     }
