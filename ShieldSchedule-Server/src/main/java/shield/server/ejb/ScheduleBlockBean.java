@@ -7,6 +7,7 @@ package shield.server.ejb;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -16,6 +17,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import shield.server.entities.Course;
 import shield.server.entities.ScheduleBlock;
 import shield.server.entities.School;
 import shield.server.util.DatabaseConnection;
@@ -65,4 +67,29 @@ public class ScheduleBlockBean {
         }
         
     }
+
+    public List<ScheduleBlock> getSchoolScheduleBlocks(String schoolName) {
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findByName", School.class);
+        query.setParameter("name", schoolName);
+        List<ScheduleBlock> scheduleBlockList = null;
+        try
+        {
+            School school = query.getSingleResult();
+            TypedQuery<ScheduleBlock> query2 =
+                em.createNamedQuery("ScheduleBlock.findBySchool", ScheduleBlock.class);
+            query.setParameter("school", school);
+            scheduleBlockList  = query2.getResultList();
+            logger.log(Level.INFO, "Retrieving all ScheduleBlocks from {0} in DB", schoolName);
+        } finally
+        {
+            //Close the entity manager
+            em.close();
+            em = null;
+        }
+        return scheduleBlockList;
+    }
+    
+     
 }

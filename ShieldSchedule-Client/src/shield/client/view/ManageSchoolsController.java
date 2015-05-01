@@ -16,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import shield.client.view.session.AdminSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleSchool;
@@ -76,8 +77,10 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
         {
             schoolNames.add(sch.name);
         }
-        myController.setSchools(schools);
+        //myController.setSchools(schools);
         //populate combobox
+        AdminSession as = (AdminSession)myController.getSession();
+        as.setSchools(schools);
         schoolsBox.getItems().clear();
         schoolsBox.getItems().addAll(schoolNames);
     }
@@ -99,8 +102,11 @@ public class ManageSchoolsController implements Initializable, ControlledScreen
     {
         //get the school to delete
         int idx = schoolsBox.getSelectionModel().getSelectedIndex();
-        SimpleSchool school = schoolsList.get(idx);
-
+        
+        AdminSession as = (AdminSession)myController.getSession();
+        
+        List<SimpleSchool> ss = as.getSchools();
+        SimpleSchool school = ss.get(idx);
         //send it to the server
         Response rsp = deleteSchool.request(school);
 

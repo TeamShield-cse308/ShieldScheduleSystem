@@ -123,6 +123,8 @@ public final class ServerResource
     public static final ServerResource ADD_SCHEDULE_BLOCK_URL = new ServerResource(
             SERVER_BASE_URL + "scheduleBlock/add");
 
+    public static final ServerResource GET_SCHOOL_SCHEDULE_BLOCKS = new ServerResource(
+            SERVER_BASE_URL + "scheduleBlock/getSchoolScheduleBlocks");
 
     private String resourceUrl;
 

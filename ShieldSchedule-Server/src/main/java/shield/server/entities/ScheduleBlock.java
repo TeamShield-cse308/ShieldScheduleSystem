@@ -37,7 +37,7 @@ import javax.persistence.UniqueConstraint;
         {
             @NamedQuery(
                     name = "ScheduleBlock.findBySchool",
-                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school.name = :school")
+                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school = :school")
         }
 )
 @Table(uniqueConstraints =
@@ -87,7 +87,7 @@ public class ScheduleBlock implements Serializable
     {
         school = initSchool;
         period = initPeriod;
-
+        days = "";
         if (scheduleDays.first() < 1 || scheduleDays.last() > school.getScheduleDays())
         {
             throw new IllegalArgumentException("Schedule days must be within the valid range specified by the school");

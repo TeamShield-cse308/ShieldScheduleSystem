@@ -4,7 +4,9 @@
 package shield.client.view.session;
 
 import java.util.ArrayList;
+import java.util.List;
 import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleScheduleBlock;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -20,11 +22,14 @@ public class StudentSession implements Session
     private SimpleCourse course;
     
     private String courseName;
+    
+    private List<SimpleScheduleBlock> scheduleBlocks;
 
     public String getCourseName() {
         return courseName;
     }
 
+    
     public void setCourseName(String courseName) {
         for(SimpleCourse c : courses){
             if(c.name.equals(courseName))
@@ -56,5 +61,14 @@ public class StudentSession implements Session
     public void setCourse(SimpleCourse course) {
         this.course = course;
     }
+
+    public List<SimpleScheduleBlock> getScheduleBlocks() {
+        return scheduleBlocks;
+    }
+
+    public void setScheduleBlocks(List<SimpleScheduleBlock> scheduleBlocks) {
+        this.scheduleBlocks = scheduleBlocks;
+    }
+    
     
 }

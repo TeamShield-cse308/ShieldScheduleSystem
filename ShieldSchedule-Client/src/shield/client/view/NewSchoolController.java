@@ -137,11 +137,6 @@ public class NewSchoolController implements Initializable, ControlledScreen
                     alert.setContentText("School " + initSchoolName + " sucessfully added!");
                     alert.show();
                 }
-<<<<<<< Updated upstream
-        
-                myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
-                myController.setScreen(CSE308GUI.ManageSchoolsID);
-=======
 
         AdminSession sess = (AdminSession)myController.getSession();
         sess.setSchoolAdded(school);
@@ -150,7 +145,7 @@ public class NewSchoolController implements Initializable, ControlledScreen
         myController.loadScreen(CSE308GUI.SetScheduleBlocksID, CSE308GUI.SetScheduleBlocks);
         myController.setScreen(CSE308GUI.SetScheduleBlocksID);
 
->>>>>>> Stashed changes
+
         
 
         //System.out.println("");

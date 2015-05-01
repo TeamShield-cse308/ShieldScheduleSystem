@@ -11,4 +11,6 @@ package shield.shared.dto;
  */
 public class SimpleSection {
     public String teacherName;
+    public String scheduleBlockPeriod;
+    public String scheduleBlockDays;
 }
