@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import shield.server.ejb.SectionBean;
 import shield.server.entities.Course;
+import shield.server.entities.ScheduleBlock;
 import shield.server.entities.Section;
 import shield.shared.dto.SimpleCourse;
 import shield.shared.dto.SimpleSection;
@@ -84,7 +85,10 @@ public class SectionResource {
         {
             s = new SimpleSection();
             s.teacherName = section.getTeacher();
-            s.scheduleBlockID = section.getScheduleBlock().getId();
+            ScheduleBlock sb = section.getScheduleBlock();
+            s.scheduleBlockPeriod = sb.getPeriod();
+            s.scheduleBlockDays = sb.getDaysString();
+            //s.scheduleBlockPeriod = section.g
             
             simpleSections.add(s);
         }

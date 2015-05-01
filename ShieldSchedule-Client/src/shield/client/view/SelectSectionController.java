@@ -86,7 +86,12 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         ArrayList<String> sectionNames = new ArrayList<>();
         
         for (SimpleSection section : sections) {
-            sectionNames.add(section.teacherName); //Add schedule block info
+            String sectionDays = "";
+            for(int i = 0; i<section.scheduleBlockDays.length();i++){
+                sectionDays += section.scheduleBlockDays.substring(i,i+1) + ", ";
+            }
+            sectionNames.add(section.teacherName + " Period: " + section.scheduleBlockPeriod + 
+                    " Days: " + sectionDays.substring(0,sectionDays.lastIndexOf(","))); //Add schedule block info
         }
         //ss.setCourses(coursesArray);
         //populate combobox
