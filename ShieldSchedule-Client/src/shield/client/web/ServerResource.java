@@ -119,6 +119,9 @@ public final class ServerResource
      */
     public static final ServerResource GET_COURSE_SECTIONS_URL = new ServerResource(
             SERVER_BASE_URL + "section/getCourseSections");
+    
+    public static final ServerResource ADD_SCHEDULE_BLOCK_URL = new ServerResource(
+            SERVER_BASE_URL + "scheduleBlock/add");
 
 
     private String resourceUrl;

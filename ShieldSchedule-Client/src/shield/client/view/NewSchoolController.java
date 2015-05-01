@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.Response;
+import shield.client.view.session.AdminSession;
 import shield.client.web.ServerAccessPoint;
 
 import shield.shared.dto.SimpleSchool;
@@ -136,9 +137,20 @@ public class NewSchoolController implements Initializable, ControlledScreen
                     alert.setContentText("School " + initSchoolName + " sucessfully added!");
                     alert.show();
                 }
+<<<<<<< Updated upstream
         
                 myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
                 myController.setScreen(CSE308GUI.ManageSchoolsID);
+=======
+
+        AdminSession sess = (AdminSession)myController.getSession();
+        sess.setSchoolAdded(school);
+        
+        myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
+        myController.loadScreen(CSE308GUI.SetScheduleBlocksID, CSE308GUI.SetScheduleBlocks);
+        myController.setScreen(CSE308GUI.SetScheduleBlocksID);
+
+>>>>>>> Stashed changes
         
 
         //System.out.println("");
