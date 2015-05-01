@@ -37,7 +37,10 @@ import javax.persistence.UniqueConstraint;
         {
             @NamedQuery(
                     name = "ScheduleBlock.findBySchool",
-                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school = :school")
+                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school = :school"),
+            @NamedQuery(
+                    name = "ScheduleBlock.findBySchoolPeriodDay",
+                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school = :school AND sb.days = :days AND sb.period = :period")    
         }
 )
 @Table(uniqueConstraints =

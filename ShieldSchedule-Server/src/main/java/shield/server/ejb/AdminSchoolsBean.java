@@ -205,7 +205,7 @@ public class AdminSchoolsBean
         School sch = null;
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
-                em.createNamedQuery("School.findSchoolByName", School.class);
+                em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
         try
         {

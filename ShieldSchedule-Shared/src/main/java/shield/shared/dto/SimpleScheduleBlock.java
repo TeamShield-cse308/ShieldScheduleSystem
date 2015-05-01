@@ -10,6 +10,7 @@ package shield.shared.dto;
  * @author evanguby
  */
 public class SimpleScheduleBlock {
+    public long id;
     public String schoolName;
     public int period;
     public String scheduleDays;

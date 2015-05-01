@@ -54,8 +54,8 @@ public class Student extends GenericUser implements Serializable
     @OneToMany
     private List<Schedule> assignedSchedule;
     
-    @OneToOne
-    private GenerationCriteria desiredSchedule;
+//    @OneToOne(optional=false,cascade=CascadeType.ALL, targetEntity=GenerationCriteria.class)
+//    private GenerationCriteria desiredSchedule;
 
     //required by JPA
     protected Student()
@@ -74,7 +74,7 @@ public class Student extends GenericUser implements Serializable
 
         accountState = StudentAccountState.PENDING;
         assignedSchedule = new ArrayList<>(school.getSemesters());
-        desiredSchedule = new GenerationCriteria(school);
+        //desiredSchedule = new GenerationCriteria(school);
     }
 
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

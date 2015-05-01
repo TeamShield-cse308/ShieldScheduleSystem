@@ -14,9 +14,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import shield.server.entities.Course;
+import shield.server.entities.ScheduleBlock;
 import shield.server.entities.School;
 import shield.server.entities.Section;
 import shield.server.util.DatabaseConnection;
+import shield.shared.dto.SimpleSection;
 
 /**
  *
@@ -52,4 +54,24 @@ public class SectionBean {
         }
         return sectionList;
     }
+
+    public void addSection(SimpleSection section) {
+        
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<ScheduleBlock> query =
+                 em.createNamedQuery("ScheduleBlock.findBySchoolPeriodDay", ScheduleBlock.class);
+        query.setParameter("school",section.school);
+        query.setParameter("period",section.scheduleBlockPeriod);
+        query.setParameter("days",section.scheduleBlockDays);
+        try{
+            ScheduleBlock sb = query.getSingleResult();
+            
+        }finally
+        {
+            //Close the entity manager
+            em.close();
+            em = null;
+        }
+    }
+    
 }

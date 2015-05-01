@@ -38,6 +38,10 @@ public final class ServerResource
     public static final ServerResource EDIT_SCHOOL_URL = new ServerResource(
             SERVER_BASE_URL + "admin/schools/edit");
 
+    
+    public static final ServerResource GET_SCHOOL_URL = new ServerResource(
+            SERVER_BASE_URL + "admin/schools/getSchool");
+
     /**
      * The location of the web resource exposing the list of approved students.
      */
@@ -125,6 +129,9 @@ public final class ServerResource
 
     public static final ServerResource GET_SCHOOL_SCHEDULE_BLOCKS = new ServerResource(
             SERVER_BASE_URL + "scheduleBlock/getSchoolScheduleBlocks");
+    
+    public static final ServerResource ADD_SECTION_URL = new ServerResource(
+            SERVER_BASE_URL + "section/add");
 
     private String resourceUrl;
 

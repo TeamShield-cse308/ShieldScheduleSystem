@@ -160,7 +160,7 @@ public class StudentRegistrationController implements Initializable, ControlledS
         };
         //read schools from http response
         List<SimpleSchool> schools = rsp.readEntity(gtlc);
-
+        
         //extract school names from schools
         ArrayList<String> schoolNames = new ArrayList<>();
         for (SimpleSchool sch : schools)

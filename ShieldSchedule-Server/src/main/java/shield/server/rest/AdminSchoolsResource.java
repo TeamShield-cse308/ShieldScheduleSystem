@@ -181,5 +181,28 @@ public class AdminSchoolsResource
         }
     }
 
+    @POST
+    @Path("/getSchool")
+    @Produces("application/json")
+    public Response getSchool(String school)
+    {
+        try
+        {
+            SimpleSchool ss = adminSchoolsBean.getSchool(school);
+            GenericEntity<SimpleSchool> wrapper =
+                new GenericEntity<SimpleSchool>(ss)
+                {
+                };
+        return Response.ok(wrapper).build();
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, null, ex);
+            return Response.serverError().build();
+        }
+    }
 
 }

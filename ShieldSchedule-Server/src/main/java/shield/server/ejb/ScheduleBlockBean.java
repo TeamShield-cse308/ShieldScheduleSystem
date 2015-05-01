@@ -79,7 +79,7 @@ public class ScheduleBlockBean {
             School school = query.getSingleResult();
             TypedQuery<ScheduleBlock> query2 =
                 em.createNamedQuery("ScheduleBlock.findBySchool", ScheduleBlock.class);
-            query.setParameter("school", school);
+            query2.setParameter("school", school);
             scheduleBlockList  = query2.getResultList();
             logger.log(Level.INFO, "Retrieving all ScheduleBlocks from {0} in DB", schoolName);
         } finally

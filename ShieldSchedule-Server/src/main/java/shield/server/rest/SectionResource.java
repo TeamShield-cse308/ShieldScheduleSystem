@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -48,6 +50,28 @@ public class SectionResource {
     }
     
     @POST
+    @Path("/add")
+    @Consumes("application/json")
+    public Response addSection(SimpleSection section)
+    {
+         try
+        {
+            sectionBean.addSection(section);
+            logger.log(Level.INFO, "OK Response");
+            return Response.ok(section).build();
+        } catch (RollbackException rex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NoResultException nrex)
+        {
+            //@TODO disambiguate errors
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+    
+    @POST
     @Path("/getCourseSections")
     @Consumes("application/json")
     public Response getCourseSections(SimpleCourse course)
@@ -60,6 +84,8 @@ public class SectionResource {
         {
             s = new SimpleSection();
             s.teacherName = section.getTeacher();
+            s.scheduleBlockID = section.getScheduleBlock().getId();
+            
             simpleSections.add(s);
         }
         //a wrapper for the list of students

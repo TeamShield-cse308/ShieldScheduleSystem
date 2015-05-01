@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import shield.shared.dto.SimpleCourse;
 import shield.shared.dto.SimpleScheduleBlock;
+import shield.shared.dto.SimpleSchool;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -24,6 +25,8 @@ public class StudentSession implements Session
     private String courseName;
     
     private List<SimpleScheduleBlock> scheduleBlocks;
+    
+    private SimpleSchool school;
 
     public String getCourseName() {
         return courseName;
@@ -61,6 +64,16 @@ public class StudentSession implements Session
     public void setCourse(SimpleCourse course) {
         this.course = course;
     }
+
+    public SimpleSchool getSchool() {
+        return school;
+    }
+
+    public void setSchool(SimpleSchool school) {
+        this.school = school;
+    }
+    
+    
 
     public List<SimpleScheduleBlock> getScheduleBlocks() {
         return scheduleBlocks;

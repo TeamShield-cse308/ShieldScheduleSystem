@@ -15,10 +15,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.Response;
+import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
 import shield.shared.dto.LoginCredentials;
 import shield.shared.dto.SimpleAdmin;
+import shield.shared.dto.SimpleSchool;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -38,6 +40,8 @@ public class LoginPageController implements Initializable, ControlledScreen {
     private final ServerAccessPoint AUTHENTICATE =
             new ServerAccessPoint(ServerResource.AUTHENTICATION_URL);
 
+    private final ServerAccessPoint getSchool =
+            new ServerAccessPoint(ServerResource.GET_SCHOOL_URL);
     /**
      * Initializes the controller class.
      */
@@ -55,7 +59,7 @@ public class LoginPageController implements Initializable, ControlledScreen {
 
         //transmit the login credentials to the server
         Response rsp = AUTHENTICATE.request(login);
-
+        
         //if response codei indicates error then inform the client and return
         if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
             int code = rsp.getStatus();
@@ -102,7 +106,14 @@ public class LoginPageController implements Initializable, ControlledScreen {
             //students authenticate with an email
             if (login.username.indexOf('@') != -1) {
                 SimpleStudent studentAcct = rsp.readEntity(SimpleStudent.class);
+                Response rsp2 = getSchool.request(studentAcct.school);
+                SimpleSchool school = rsp2.readEntity(SimpleSchool.class);
+                        
                 myController.createStudentSession(studentAcct);
+                
+                StudentSession ss = (StudentSession)myController.getSession();
+                
+                ss.setSchool(school);
                 myController.setSessionEmail(studentAcct.email);
                 //myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
                 //myController.loadScreen(CSE308GUI.AddCourseID, CSE308GUI.AddCourse);

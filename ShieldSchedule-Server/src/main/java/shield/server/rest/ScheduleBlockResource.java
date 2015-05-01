@@ -74,7 +74,7 @@ public class ScheduleBlockResource {
     @POST
     @Path("/getSchoolScheduleBlocks")
     @Consumes("application/json")
-    public Response getSchoolSectionBlocks(SimpleStudent stu)
+    public Response getSchoolScheduleBlocks(SimpleStudent stu)
     {
         List<ScheduleBlock> scheduleBlockList = scheduleBlockBean.getSchoolScheduleBlocks(stu.school);
         
@@ -85,6 +85,8 @@ public class ScheduleBlockResource {
             scb = new SimpleScheduleBlock();
             scb.period = scheduleBlock.getPeriod();
             scb.scheduleDays = scheduleBlock.getDaysString();
+            //scb.id = scheduleBlock.getId();
+            simpleScheduleBlocks.add(scb);
         }
         //a wrapper for the list of students
         GenericEntity<List<SimpleScheduleBlock>> wrapper =
