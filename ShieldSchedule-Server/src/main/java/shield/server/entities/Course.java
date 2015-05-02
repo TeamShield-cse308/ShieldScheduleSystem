@@ -6,7 +6,9 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import javax.persistence.CascadeType;
@@ -31,8 +33,8 @@ import javax.persistence.UniqueConstraint;
  * @author Phillip Elliot, Jeffrey Kabot
  */
 @Entity
-@Table(uniqueConstraints =
-        @UniqueConstraint(columnNames =
+@Table(uniqueConstraints
+        = @UniqueConstraint(columnNames =
                 {
                     "SCHOOL_ID", "IDENTIFIER"
         })
@@ -60,7 +62,7 @@ public class Course implements Serializable
     private String name;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private Set<Section> sections;
+    private List<Section> sections;
 
     protected Course()
     {
@@ -79,14 +81,14 @@ public class Course implements Serializable
         this.school = school;
         this.identifier = identifier;
         this.name = name;
-        this.sections = new HashSet<>();
+        this.sections = new ArrayList<>();
     }
 
     public School getSchool()
     {
         return school;
     }
-    
+
     public String getIdentifier()
     {
         return identifier;
@@ -97,9 +99,23 @@ public class Course implements Serializable
         return name;
     }
 
-    public Set<Section> getSections()
+    public List<Section> getSections()
     {
         return sections;
+    }
+
+    @Deprecated
+    public Set<Section> getSectionsByInstructor(String instructor)
+    {
+        Set<Section> instructorSections = new HashSet<>();
+        for (Section s : sections)
+        {
+            if (s.getTeacher().equals(instructor))
+            {
+                instructorSections.add(s);
+            }
+        }
+        return instructorSections;
     }
 
     /**

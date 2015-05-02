@@ -6,6 +6,7 @@
 package shield.server.ejb;
 
 import java.util.List;
+import java.util.TreeSet;
 import javax.ejb.Stateful;
 import shield.server.entities.School;
 import javax.persistence.EntityManager;
@@ -15,6 +16,8 @@ import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.persistence.EntityExistsException;
+import shield.server.entities.Course;
+import shield.server.entities.ScheduleBlock;
 import shield.server.util.DatabaseConnection;
 import shield.shared.dto.SimpleSchool;
 
@@ -29,8 +32,8 @@ public class AdminSchoolsBean
 {
 
     //Logger
-    private static final Logger logger =
-            Logger.getLogger("sss.ejb.AdminSchoolsBean");
+    private static final Logger logger
+            = Logger.getLogger("sss.ejb.AdminSchoolsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -64,9 +67,30 @@ public class AdminSchoolsBean
 
         try
         {
-            //add the school
             em.getTransaction().begin();
+            //add the school
             em.persist(school);
+
+            //create a Lunch course for each day of the week
+            for (int i = 1; i <= school.getScheduleDays(); i++)
+            {
+                Course c = school.addLunch(i);
+                TreeSet<Integer> daySet = new TreeSet<>();
+                daySet.add(i);
+
+                //Create a schedule block and a lunch section for each period
+                for (int j = school.getStartingLunch(); j <= school.getEndingLunch(); j++)
+                {
+                    ScheduleBlock sb = new ScheduleBlock(school, j, daySet, true);
+                    em.persist(sb);
+                    TreeSet<Integer> semSet = new TreeSet<>();
+                    for (int k = 1; k <= school.getSemesters(); k++)
+                    {
+                        semSet.add(k);
+                    }
+                    c.addSection("STAFF", sb, semSet);
+                }
+            }
             em.getTransaction().commit();
             logger.log(Level.INFO, "New school added to database {0}", school);
         } catch (EntityExistsException eeex)
@@ -92,8 +116,8 @@ public class AdminSchoolsBean
     {
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query =
-                em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query
+                = em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
         try
@@ -107,7 +131,8 @@ public class AdminSchoolsBean
         } catch (NoResultException noex)
         {
             //school not found
-            logger.log(Level.WARNING, "No such school with name {0} found in database", name);
+            logger.log(Level.WARNING,
+                    "No such school with name {0} found in database", name);
             throw noex;
         } finally
         {
@@ -137,8 +162,8 @@ public class AdminSchoolsBean
     {
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query =
-                em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query
+                = em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
         try
         {
@@ -156,7 +181,8 @@ public class AdminSchoolsBean
         } catch (NoResultException nrex)
         {
             //school not found
-            logger.log(Level.WARNING, "No school with name {0} found in database", name);
+            logger.log(Level.WARNING,
+                    "No school with name {0} found in database", name);
             throw nrex;
         } finally
         {
@@ -177,8 +203,8 @@ public class AdminSchoolsBean
 
         // Create the entity manager and set up the query for all schools
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query =
-                em.createNamedQuery("School.findAll", School.class);
+        TypedQuery<School> query
+                = em.createNamedQuery("School.findAll", School.class);
         try
         {
             schools = query.getResultList();
@@ -204,8 +230,8 @@ public class AdminSchoolsBean
     {
         School sch = null;
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query =
-                em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query
+                = em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
         try
         {

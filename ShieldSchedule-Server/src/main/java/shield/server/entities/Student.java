@@ -74,7 +74,6 @@ public class Student extends GenericUser implements Serializable
 
         accountState = StudentAccountState.PENDING;
         assignedSchedule = new ArrayList<>(school.getSemesters());
-        desiredSchedule = new GenerationCriteria(school);
     }
 
     /**
@@ -146,6 +145,11 @@ public class Student extends GenericUser implements Serializable
     public Schedule getSchedule(int semester)
     {
         return assignedSchedule.get(semester);
+    }
+    
+    public GenerationCriteria getGenerationCriteria()
+    {
+        return desiredSchedule;
     }
 
     /**

@@ -3,7 +3,6 @@ package shield.server.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -21,7 +20,7 @@ import javax.persistence.OneToMany;
  * @author Jeffrey Kabot
  */
 @Entity
-public class Schedule implements Serializable
+public class Schedule implements Serializable, Comparable<Schedule>
 {
 
     private static final long serialVersionUID = 1L;
@@ -39,18 +38,41 @@ public class Schedule implements Serializable
 
     private int semester;
 
+    //Score is the measure of how many friends are in each class summed over every class
+    private int score;
+
     protected Schedule()
     {
     }
 
-    Schedule(School sch,
-            int sem)
+    /**
+     * Create a fresh new schedule
+     * @param sch The school the schedule is for
+     * @param sem The semester the schedule is for
+     */
+    Schedule(School sch, int sem)
     {
+        semester = sem;
+        score = 0;
+
         //need to add 1 since periods and schedule days are 1-indexed
         scheduleSlots = new boolean[sch.getPeriods() + 1][sch.getScheduleDays() + 1];
-        semester = sem;
         courses = new HashSet<>();
         sections = new ArrayList<>();
+    }
+    
+    /**
+     * Copy constructor, creates a schedule that is a clone of the schedule passed
+     * @param s The schedule to copy
+     */
+    Schedule(Schedule s)
+    {
+        this.scheduleSlots = s.scheduleSlots.clone();
+        this.courses = (HashSet)((HashSet)s.courses).clone();
+        this.sections = (ArrayList)((ArrayList)s.sections).clone();
+        
+        this.semester = s.semester;
+        this.score = s.score;
     }
 
     //@TODO convert boolean returns to thrown exceptions for more information?
@@ -146,6 +168,34 @@ public class Schedule implements Serializable
     public List<Section> getSections()
     {
         return sections;
+    }
+
+    /**
+     * Increase the score of this schedule
+     *
+     * @param gain The amount to increase the score
+     */
+    void incrementScore(int gain)
+    {
+        score += gain;
+    }
+
+    /**
+     * Compare one schedule's score to another
+     *
+     * @param sch The schedule to compare to
+     * @return A positive number of this schedule has a higher score, a negative
+     * number if it has a lower score, zero if the scores are equal
+     */
+    @Override
+    public int compareTo(Schedule sch)
+    {
+        return this.score - sch.score;
+    }
+
+    int getScore()
+    {
+        return score;
     }
 
     public Long getId()
