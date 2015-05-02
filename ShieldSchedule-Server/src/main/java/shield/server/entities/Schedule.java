@@ -37,6 +37,8 @@ public class Schedule implements Serializable, Comparable<Schedule>
     private boolean[][] scheduleSlots;
 
     private int semester;
+    
+    private int scheduleDays;
 
     //Score is the measure of how many friends are in each class summed over every class
     private int score;
@@ -47,16 +49,17 @@ public class Schedule implements Serializable, Comparable<Schedule>
 
     /**
      * Create a fresh new schedule
-     * @param sch The school the schedule is for
+     * @param school The school the schedule is for
      * @param sem The semester the schedule is for
      */
-    Schedule(School sch, int sem)
+    Schedule(School school, int sem)
     {
         semester = sem;
+        scheduleDays = school.getScheduleDays();
         score = 0;
 
         //need to add 1 since periods and schedule days are 1-indexed
-        scheduleSlots = new boolean[sch.getPeriods() + 1][sch.getScheduleDays() + 1];
+        scheduleSlots = new boolean[school.getPeriods() + 1][school.getScheduleDays() + 1];
         courses = new HashSet<>();
         sections = new ArrayList<>();
     }
@@ -72,6 +75,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
         this.sections = (ArrayList)((ArrayList)s.sections).clone();
         
         this.semester = s.semester;
+        this.scheduleDays = s.scheduleDays;
         this.score = s.score;
     }
 
@@ -191,6 +195,11 @@ public class Schedule implements Serializable, Comparable<Schedule>
     public int compareTo(Schedule sch)
     {
         return this.score - sch.score;
+    }
+    
+    int getScheduleDays()
+    {
+        return scheduleDays;
     }
 
     int getScore()

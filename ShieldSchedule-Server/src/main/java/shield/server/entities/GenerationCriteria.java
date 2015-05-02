@@ -18,11 +18,11 @@ import javax.persistence.Transient;
 
 /**
  * An object which stores the criteria a student specifies for their desired
- * schedule. 
- * 
- * <p> Provides functionality for generating valid or near-valid schedules
- * optimally meeting those criteria and maximizing overlap with friends'
- * schedules.
+ * schedule.
+ *
+ * <p>
+ * Provides functionality for generating valid or near-valid schedules optimally
+ * meeting those criteria and maximizing overlap with friends' schedules.
  *
  * @author Jeffrey Kabot
  */
@@ -180,7 +180,10 @@ public class GenerationCriteria implements Serializable
      *
      * @param sch The schedule being worked on.
      * @param remaining The set of courses desired in the schedule.
-     * @param omissions The number of desired courses the search has omitted.
+     * @param omissions The weighted sum of criteria omissions. Lunches are
+     * worth 1 point. Courses are worth d points, where d is the number of days
+     * in the schedule-week. A schedule search path is short-circuited when more
+     * than d points of criteria are omitted.
      * @param friends The list of friends.
      * @param acceptableSchedules The list of perfect schedules (i.e., contain
      * all the desired courses)
@@ -194,8 +197,8 @@ public class GenerationCriteria implements Serializable
             List<Schedule> acceptableSchedules,
             List<Schedule> nearSchedules)
     {
-        //If we had to omit two or more courses, stop early
-        if (omissions > 1)
+        //If we omit too many criteria, stop early
+        if (omissions > sch.getScheduleDays())
         {
             return;
         }
@@ -250,9 +253,17 @@ public class GenerationCriteria implements Serializable
                     }
                 }
             }
-            if (!success) //we had to omit this course
+            if (!success) //we had to omit this course, add to the omission score
             {
-                omissions += 1;
+                //@TODO @WARNING this condition is sensitive to changes in the way lunch courses are created
+                //add method for detecting lunch courses, boolean isLunch() ??
+                if (c.getIdentifier().startsWith("LUNCH"))
+                {
+                    omissions += 1;
+                } else
+                {
+                    omissions += sch.getScheduleDays();
+                }
             }
 
         }
