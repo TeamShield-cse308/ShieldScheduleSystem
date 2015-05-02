@@ -28,8 +28,8 @@ public class StudentFriendsBean
 {
 
     //Logger
-    private static final Logger logger
-            = Logger.getLogger("sss.ejb.StudentFriendsBean");
+    private static final Logger logger =
+             Logger.getLogger("sss.ejb.StudentFriendsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -44,9 +44,9 @@ public class StudentFriendsBean
     public List<Student> getAllFriends(String email)
     {
         em = DatabaseConnection.getEntityManager();
-        
-        TypedQuery<Student> query
-                = em.createNamedQuery("Friendship.getFriends", Student.class);
+
+        TypedQuery<Student> query =
+                 em.createNamedQuery("Friendship.getFriends", Student.class);
         query.setParameter("email", email);
 
         logger.log(Level.INFO, "Retrieving list of friends for student {0}",
@@ -56,11 +56,7 @@ public class StudentFriendsBean
         try
         {
             friendsList = query.getResultList();
-        } catch (Exception ex)
-        {
-            //@TODO catch more exceptions
-            logger.log(Level.WARNING, "Terrible error occurred", ex);
-            throw ex;
+            //@TODO catch exceptions
         } finally
         {
             em.close();
@@ -83,8 +79,8 @@ public class StudentFriendsBean
         //set up the entity manager and the query
         em = DatabaseConnection.getEntityManager();
 
-        TypedQuery<Friendship> query
-                = em.createNamedQuery("Friendship.getFriendRequests",
+        TypedQuery<Friendship> query =
+                 em.createNamedQuery("Friendship.getFriendRequests",
                         Friendship.class);
         query.setParameter("email", recipientEmail);
 
@@ -117,15 +113,15 @@ public class StudentFriendsBean
      */
     public void addFriend(String senderEmail,
             String recipientName) throws NoResultException
-    {   
+    {
         //set up the entity manager and the queries
         em = DatabaseConnection.getEntityManager();
 
-        TypedQuery<Student> senderQuery
-                = em.createNamedQuery("Student.findByEmail", Student.class);
+        TypedQuery<Student> senderQuery =
+                 em.createNamedQuery("Student.findByEmail", Student.class);
         senderQuery.setParameter("email", senderEmail);
-        TypedQuery<Student> recipientQuery
-                = em.createNamedQuery("Student.findByNameAndSchool",
+        TypedQuery<Student> recipientQuery =
+                 em.createNamedQuery("Student.findByNameAndSchool",
                         Student.class);
         recipientQuery.setParameter("name", recipientName);
 
@@ -141,7 +137,10 @@ public class StudentFriendsBean
             recipientQuery.setParameter("school", school.getSchoolName());
             List<Student> recipients = recipientQuery.getResultList();
 
-            if (recipients.isEmpty()) {throw new NoResultException();}
+            if (recipients.isEmpty())
+            {
+                throw new NoResultException();
+            }
             if (recipients.size() == 1)
             {
                 recipient = recipients.get(0);
@@ -164,12 +163,12 @@ public class StudentFriendsBean
             em.close();
             em = null;
             throw nrex;
-            
+
         } finally
         {
             // close the entity manager
             em.close();
-            //em = null;
+            em = null;
         }
     }
 
@@ -181,13 +180,14 @@ public class StudentFriendsBean
      * @param approved true if the friendship is approved, false if denied
      */
     public void approveFriend(String senderEmail,
-            String recipientEmail, boolean approved)
+            String recipientEmail,
+            boolean approved)
     {
         //set up the entity manager and the query
         em = DatabaseConnection.getEntityManager();
 
-        TypedQuery<Friendship> query
-                = em.createNamedQuery("Friendship.findBySenderAndRecipient",
+        TypedQuery<Friendship> query =
+                 em.createNamedQuery("Friendship.findBySenderAndRecipient",
                         Friendship.class);
         query.setParameter("sender", senderEmail);
         query.setParameter("recipient", recipientEmail);
@@ -209,9 +209,8 @@ public class StudentFriendsBean
                 logger.log(Level.INFO, "Friendship {0} deleted", f);
             }
             em.getTransaction().commit();
-        } catch (Exception ex)
-        {
-            //@TODO error handling
+
+            //@TODO catch exceptions
         } finally
         {
             //close the entity manager

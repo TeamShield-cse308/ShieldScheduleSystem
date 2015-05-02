@@ -17,6 +17,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 /**
+ * An object which stores the criteria a student specifies for their desired
+ * schedule. 
+ * 
+ * <p> Provides functionality for generating valid or near-valid schedules
+ * optimally meeting those criteria and maximizing overlap with friends'
+ * schedules.
  *
  * @author Jeffrey Kabot
  */
@@ -31,7 +37,6 @@ public class GenerationCriteria implements Serializable
 
     //The set of desired courses.  The uniqueness of Keys in a Map prevents duplicate courses.
     //Courses point to their preferred instructor.  The target value is null if no instructor is preferred.
-    @OneToMany
     private Map<Course, String> courses;
 
     @OneToMany
@@ -120,6 +125,12 @@ public class GenerationCriteria implements Serializable
             }
         }
         return true;
+    }
+
+    public void removeCourse(Course c)
+    {
+        courses.remove(c);
+        excludedSections.removeAll(c.getSections());
     }
 
     /**
@@ -212,7 +223,7 @@ public class GenerationCriteria implements Serializable
 
             //track whether we were able to add any section of the course to the schedule
             boolean success = false;
-            
+
             //find a section of the course
             for (Section s : c.getSections())
             {
