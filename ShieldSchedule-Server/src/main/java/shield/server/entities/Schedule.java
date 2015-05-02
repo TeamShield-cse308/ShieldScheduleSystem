@@ -67,40 +67,82 @@ public class Schedule implements Serializable
      */
     public boolean addSection(Section s)
     {
-        boolean success = false;
+        //If the section isn't offered this semester then it can't be added.
         if (!s.getSemesters().contains(semester))
         {
             return false;
         }
-        //Create a locally scoped copy of the boolean matrix
-        boolean[][] sandbox = scheduleSlots.clone();
 
-        //Extract the period
-        int p = s.getScheduleBlock().getPeriod();
-        //Get the days
-        Set<Integer> days = s.getScheduleBlock().getDays();
-        //Iterate over the days
-        Iterator<Integer> iter = days.iterator();
-        while (iter.hasNext())
+        //Check if the section fits in with the schedule
+        boolean[][] sandbox = fillScheduleSlots(s, true);
+        if (sandbox == null)
         {
-            int q = iter.next();
-            if (sandbox[p][q]) //If there is already a Section using this spot
-            {
-                return false;
-            } else
-            {
-                sandbox[p][q] = true;
-            }
+            return false;
         }
 
         //Try adding the course and section to the schedule
+        //We can only add the section if the course is not already in the schedule
+        //Adding the section can't fail
+        //If successful, update matrix of filled time slots
+        boolean success;
         if (success = (courses.add(s.getCourse()) && sections.add(s)))
         {
             scheduleSlots = sandbox;
         }
         return success;
     }
-    
+
+    public boolean removeSection(Section s)
+    {
+        //Try to remove the section and its course from the schedule.
+        //Should only fail when the section isn't in the schedule.
+        boolean success = courses.remove(s.getCourse()) && sections.remove(s);
+        if (!success)
+        {
+            return false;
+        }
+
+        //Clear the schedule slots.
+        boolean[][] sandbox = fillScheduleSlots(s, false);
+        scheduleSlots = sandbox;
+        return success;
+    }
+
+    /**
+     * Helper method for filling in or clearing schedule slots when adding or
+     * removing a section from the schedule, respectively. The method returns
+     * unsuccessfully when there is a conflict in adding this section to the
+     * schedule.
+     *
+     * @param s The section being added or removed from the schedule.
+     * @param fill Whether we are filling or clearing schedule blocks.
+     * @return Returns the new matrix of schedule slots if successful, otherwise
+     * returns null
+     */
+    private boolean[][] fillScheduleSlots(Section s, boolean fill)
+    {
+        //Create a locally scoped copy of the boolean matrix
+        boolean[][] sandbox = scheduleSlots.clone();
+
+        //Extract the period slot
+        int p = s.getScheduleBlock().getPeriod();
+        //Get the Days
+        Set<Integer> days = s.getScheduleBlock().getDays();
+        //Iterate over the days
+        for (int q : days)
+        {
+            //If we are adding the section to the schedule, we need to check for conflicts
+            if (fill && sandbox[p][q])
+            {
+                return null;
+            } else
+            {
+                sandbox[q][q] = fill;
+            }
+        }
+        return sandbox;
+    }
+
     public List<Section> getSections()
     {
         return sections;
