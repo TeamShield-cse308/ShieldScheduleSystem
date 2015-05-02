@@ -51,11 +51,11 @@ public class Student extends GenericUser implements Serializable
     private StudentAccountState accountState;
 
     //a schedule for each semester in the academic year
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private List<Schedule> assignedSchedule;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private GenerationCriteria desiredSchedule;
+    
+//    @OneToOne(optional=false,cascade=CascadeType.ALL, targetEntity=GenerationCriteria.class)
+//    private GenerationCriteria desiredSchedule;
 
     //required by JPA
     protected Student()
@@ -74,7 +74,49 @@ public class Student extends GenericUser implements Serializable
 
         accountState = StudentAccountState.PENDING;
         assignedSchedule = new ArrayList<>(school.getSemesters());
-        desiredSchedule = new GenerationCriteria(school);
+        //desiredSchedule = new GenerationCriteria(school);
+    }
+
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    public String getId()
+    {
+        return email;
+    }
+
+    public void setId(String id)
+    {
+        this.email = id;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 0;
+        hash += (email != null ? email.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Student))
+        {
+            return false;
+        }
+        Student other = (Student) object;
+        if ((this.email == null && other.email != null) || (this.email != null && !this.email.equals(
+                other.email)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "cse308.Student[ id=" + email + " ]";
     }
 
     /**
@@ -138,20 +180,20 @@ public class Student extends GenericUser implements Serializable
         return school;
     }
 
-    /**
-     * Retrieve an assigned schedule entered by the student.
-     * @param semester The semester the schedule is for.
-     * @return 
-     */
+    public Course viewAllCourses(Long id,
+            int year,
+            String semester)
+    {
+        //@TODO valid return
+        return null;
+    }
+    
+
     public Schedule getSchedule(int semester)
     {
         return assignedSchedule.get(semester);
     }
 
-    /**
-     * Create a new assigned schedule for the student.
-     * @param semester The semester the schedule is for.
-     */
     public void createSchedule(int semester)
     {
         //if there is already a schedule for that semester, then we assume that it's being replaced
@@ -160,47 +202,6 @@ public class Student extends GenericUser implements Serializable
             assignedSchedule.remove(semester);
         }
         assignedSchedule.add(semester, new Schedule(this.school, semester));
-    }
-
-    public String getId()
-    {
-        return email;
-    }
-
-    public void setId(String id)
-    {
-        this.email = id;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hash = 0;
-        hash += (email != null ? email.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object)
-    {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Student))
-        {
-            return false;
-        }
-        Student other = (Student) object;
-        if ((this.email == null && other.email != null) || (this.email != null && !this.email.equals(
-                other.email)))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "cse308.Student[ id=" + email + " ]";
     }
 
 }

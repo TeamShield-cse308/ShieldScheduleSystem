@@ -1,10 +1,14 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package shield.server.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,15 +29,13 @@ public class GenerationCriteria implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //The set of desired courses.  The uniqueness of Keys in a Map prevents duplicate courses.
-    //Courses point to their preferred instructor.  The target value is null if no instructor is preferred.
     @OneToMany
-    private Map<Course, String> courses;
+    private Set<Course> courses;
 
-    //The list of excluded sections, aggregated for every course desired
     @OneToMany
     private List<Section> excludedSections;
 
+    //@TODO by default the student does not have lunch any day
     private boolean[] hasLunch;
 
     //required by JPA
@@ -43,7 +45,7 @@ public class GenerationCriteria implements Serializable
 
     GenerationCriteria(School sch)
     {
-        courses = new HashMap<>();
+        courses = new HashSet<>();
         excludedSections = new ArrayList<>();
         hasLunch = new boolean[sch.getScheduleDays()];
     }
@@ -65,28 +67,27 @@ public class GenerationCriteria implements Serializable
         hasLunch = desiredLunch;
     }
 
+    //@TODO bundle preferred instructors into course store
+    //@TODO overload for optional parameters?
     /**
      * Add a course to the desired schedule, optionally excluding
      *
      * @param c The course desired
-     * @param exclusions The sections to exclude, EMPTY if omitted
-     * @param instructor The preferred instructor, NULL if omitted
-     * @return True if the course could be added, false if otherwise
+     * @param exclusions The sections to exclude, null or empty if omitted
+     * @param instructors The preferred instructors for this course
+     * @return
      */
-    public boolean addCourse(Course c, List<Section> exclusions,
-            String instructor)
+    public boolean addCourse(Course c, List<Section> exclusions, List<String> instructors)
     {
-        //don't add if the course is already in the schedule
-        if (courses.containsKey(c))
+        if (!courses.add(c))
         {
             return false;
         }
-        //map the course to the instructor
-        //the same instructor can be preferred for different courses
-        //a map to a null instructor means there is no preferred instructor
-        courses.put(c, instructor);
+        if (exclusions == null)
+        {
+            return true;
+        }
 
-        //store the specified exclusions
         for (Section s : exclusions)
         {
             if (c.getSections().contains(s))
@@ -95,16 +96,6 @@ public class GenerationCriteria implements Serializable
             }
         }
         return true;
-    }
-
-    /**
-     * Retrieve the set of desired courses.
-     *
-     * @return The set of desired courses.
-     */
-    public Set<Course> getCourses()
-    {
-        return courses.keySet();
     }
 
     public Long getId()
