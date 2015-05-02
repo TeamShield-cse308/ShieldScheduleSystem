@@ -37,10 +37,10 @@ import javax.persistence.UniqueConstraint;
         {
             @NamedQuery(
                     name = "ScheduleBlock.findBySchool",
-                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school = :school"),
+                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school = :school AND sb.isLunch = FALSE"),
             @NamedQuery(
                     name = "ScheduleBlock.findBySchoolPeriodDay",
-                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school.name = :school AND sb.days = :days AND sb.period = :period")    
+                    query = "SELECT sb FROM ScheduleBlock sb WHERE sb.school.name = :school AND sb.days = :days AND sb.period = :period AND sb.isLunch = FALSE")    
         }
 )
 @Table(uniqueConstraints =
@@ -68,6 +68,10 @@ public class ScheduleBlock implements Serializable
     //We use a string so we can use the set of days as a unique constraint
     @Column(name = "DAYS")
     private String days;
+    
+    //indicates this block is a special lunch period schedule block
+    //if true the schedule block should be invisible to queries
+    private boolean isLunch;
 
     protected ScheduleBlock()
     {
@@ -83,13 +87,15 @@ public class ScheduleBlock implements Serializable
      * @param initPeriod The period during which the block takes place
      * @param scheduleDays A sorted set of integers representing the combination
      * of days used by this schedule block
+     * @param lunch Whether this schedule block was created as for a lunch period
      */
     public ScheduleBlock(School initSchool,
             int initPeriod,
-            SortedSet<Integer> scheduleDays)
+            SortedSet<Integer> scheduleDays, boolean lunch)
     {
         school = initSchool;
         period = initPeriod;
+        isLunch = lunch;
         days = "";
         if (scheduleDays.first() < 1 || scheduleDays.last() > school.getScheduleDays())
         {

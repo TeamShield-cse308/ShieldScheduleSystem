@@ -6,6 +6,7 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,6 +63,9 @@ public class School implements Serializable
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
     private Set<Course> courseList;
 
+    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
+    private List<Course> lunchList;
+
     //required by JPA
     protected School()
     {
@@ -81,22 +85,25 @@ public class School implements Serializable
 
         if (initStartLunchPeriod > periods || initEndLunchPeriod > periods)
         {
-            throw new IllegalArgumentException("Can't have a lunch after the last period in the school day");
+            throw new IllegalArgumentException(
+                    "Can't have a lunch after the last period in the school day");
         }
         if (initEndLunchPeriod < initStartLunchPeriod)
         {
-            throw new IllegalArgumentException("Lunch can't end before it begins.");
+            throw new IllegalArgumentException(
+                    "Lunch can't end before it begins.");
         }
 
         startingLunch = initStartLunchPeriod;
         endingLunch = initEndLunchPeriod;
 
         courseList = new HashSet<>();
+        lunchList = new ArrayList<>();
     }
-
     /*
      * Getters and Setters
      */
+
     public String getSchoolName()
     {
         return name;
@@ -161,20 +168,44 @@ public class School implements Serializable
     {
         return courseList;
     }
+    
+    public List<Course> getLunches()
+    {
+        return lunchList;
+    }
 
     /**
      * Add a new course to those offered by the school.
      *
      * @param identifier The unique identifier for the course, e.g. PHY101
      * @param name The name of the course, e.g. Intro to Physics
-     * @return True if the course could be added to the list, false if
-     * otherwise.
+     * @return The course created if it was successfully added, null if
+     * otherwise
      */
-    public boolean addCourse(String identifier,
+    public Course addCourse(String identifier,
             String name)
     {
         Course c = new Course(this, identifier, name);
-        return courseList.add(c);
+        if (courseList.add(c))
+        {
+            return c;
+        } else
+        {
+            return null;
+        }
+    }
+
+    public Course addLunch(int scheduleDay)
+    {
+        Course c = new Course(this, "LUNCH_" + scheduleDay,
+                "Lunch - Day " + scheduleDay);
+        if (lunchList.add(c))
+        {
+            return c;
+        } else
+        {
+            return null;
+        }
     }
 
     //JPA methods
@@ -205,7 +236,8 @@ public class School implements Serializable
             return false;
         }
         School other = (School) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name)))
+        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(
+                other.name)))
         {
             return false;
         }

@@ -2,7 +2,9 @@ package shield.server.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  *
@@ -30,43 +34,62 @@ public class GenerationCriteria implements Serializable
     @OneToMany
     private Map<Course, String> courses;
 
+    @OneToMany
+    private List<Course> lunches;
+
     //The list of excluded sections, aggregated for every course desired
     @OneToMany
     private List<Section> excludedSections;
 
-    private boolean[] hasLunch;
+    @OneToOne
+    private Schedule rootSchedule;
+
+    @Transient
+    private int bestScore;
 
     //required by JPA
     protected GenerationCriteria()
     {
     }
 
-    GenerationCriteria(School sch)
+    GenerationCriteria(School sch, int sem)
     {
         courses = new HashMap<>();
         excludedSections = new ArrayList<>();
-        hasLunch = new boolean[sch.getScheduleDays()];
+        lunches = sch.getLunches();
+        rootSchedule = new Schedule(sch, sem);
     }
 
     /**
      * Set whether the student wants to have a lunch, chosen for each day in the
      * schedule cycle.
      *
-     * @param desiredLunch
+     * @param desiresLunch
      */
-    public void setLunches(boolean[] desiredLunch)
+    public void setLunches(boolean[] desiresLunch)
     {
-        if (desiredLunch.length != hasLunch.length)
+        if (desiresLunch.length != lunches.size())
         {
             throw new IndexOutOfBoundsException(
                     "Desired Lunch array must match the number of Schedule Days in the school's schedule!");
         }
 
-        hasLunch = desiredLunch;
+        for (int i = 0; i < desiresLunch.length; i++)
+        {
+            //if the student wants lunch on that day, add lunch to the set of desired courses
+            if (desiresLunch[i])
+            {
+                courses.put(lunches.get(i), null);
+            } else //otherwise remove it if it was already present
+            {
+                courses.remove(lunches.get(i));
+            }
+        }
     }
 
     /**
-     * Add a course to the desired schedule, optionally excluding
+     * Add a course to the desired schedule, optionally excluding sections or
+     * selecting instructors
      *
      * @param c The course desired
      * @param exclusions The sections to exclude, EMPTY if omitted
@@ -102,9 +125,96 @@ public class GenerationCriteria implements Serializable
      *
      * @return The set of desired courses.
      */
+    @Deprecated
     public Set<Course> getCourses()
     {
         return courses.keySet();
+    }
+
+    public List<Schedule> generateSchedule(List<Student> friends)
+    {
+        List<Schedule> acceptableSchedules = new ArrayList<>();
+        List<Schedule> nearSchedules = new ArrayList<>();
+
+        bestScore = 0;
+        backtrackSchedule(rootSchedule, new HashSet<>(courses.keySet()), 0, friends,
+                acceptableSchedules, nearSchedules);
+
+        if (!acceptableSchedules.isEmpty())
+        {
+            Collections.sort(acceptableSchedules);
+            return acceptableSchedules;
+        } else
+        {
+            Collections.sort(nearSchedules);
+            return nearSchedules;
+        }
+    }
+
+    private void backtrackSchedule(Schedule sch,
+            Set<Course> remaining, int omissions, List<Student> friends,
+            List<Schedule> acceptableSchedules, List<Schedule> nearSchedules)
+    {
+        //If we couldn't add two or more courses, stop early
+        if (omissions > 1)
+        {
+            return;
+        }
+        //If there are no more courses to add, save the schedule
+        if (remaining.isEmpty())
+        {
+            if (omissions == 0)
+            {
+                bestScore = sch.getScore();
+                acceptableSchedules.add(sch);
+            } else
+            {
+                nearSchedules.add(sch);
+            }
+            return;
+        }
+        //local set of remaining courses to add
+        Set<Course> localRemaining = new HashSet<>(remaining);
+
+        //for each course desired
+        for (Course c : localRemaining)
+        {
+            //pop the course from the set
+            localRemaining.remove(c);
+            
+            boolean success = false;
+            //find a section of the course
+            for (Section s : c.getSections())
+            {
+                //only try to add it if this section has not been excluded
+                //or if its teacher is the preferred teacher (if specified)
+                if ((!excludedSections.contains(s))
+                        && (courses.get(c) == null || courses.get(c).equals(
+                                s.getTeacher())))
+                {
+                    Schedule localSch = new Schedule(sch);
+                    //try adding this section to the schedule
+                    if (success = localSch.addSection(s))
+                    {
+                        
+                        //Compute the amount of overlap with friends schedules
+                        Set<Student> intersection = new HashSet<>();
+                        intersection.addAll(s.getEnrolledStudents());
+                        intersection.retainAll(friends);
+                        localSch.incrementScore(intersection.size());
+
+                        //Recursive backtracking
+                        backtrackSchedule(localSch, localRemaining, omissions,
+                                friends, acceptableSchedules, nearSchedules);
+                    }
+                }
+            }
+            if (!success)
+            {
+                omissions+=1;
+            }
+            
+        }
     }
 
     public Long getId()
@@ -147,5 +257,4 @@ public class GenerationCriteria implements Serializable
     {
         return "shield.server.entities.GenerationCriteria[ id=" + id + " ]";
     }
-
 }

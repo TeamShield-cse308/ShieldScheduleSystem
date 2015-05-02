@@ -6,12 +6,15 @@
 package shield.server.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -38,6 +41,9 @@ public class Section implements Serializable
     private SortedSet<Integer> semesters;
     
     private String teacherName;
+    
+    @OneToMany
+    private Set<Student> enrolledStudents;
 
     protected Section()
     {
@@ -66,6 +72,7 @@ public class Section implements Serializable
         }
         semesters = initSemesters;
         scheduleBlock = sb;
+        enrolledStudents = new HashSet<>();
     }
 
     public Course getCourse()
@@ -86,6 +93,31 @@ public class Section implements Serializable
     public ScheduleBlock getScheduleBlock()
     {
         return scheduleBlock;
+    }
+    
+    public Set<Student> getEnrolledStudents()
+    {
+        return enrolledStudents;
+    }
+    
+    /**
+     * Enroll a student in the section.
+     * @param s
+     * @return 
+     */
+    boolean addStudent(Student s)
+    {
+        return enrolledStudents.add(s);
+    }
+    
+    /**
+     * Drop a student from the section.
+     * @param s
+     * @return 
+     */
+    boolean removeStudent(Student s)
+    {
+        return enrolledStudents.remove(s);
     }
 
     public Long getId()

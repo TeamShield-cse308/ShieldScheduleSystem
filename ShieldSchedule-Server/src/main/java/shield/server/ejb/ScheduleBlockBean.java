@@ -52,7 +52,7 @@ public class ScheduleBlockBean {
             }
             
             SortedSet<Integer> a = (SortedSet<Integer>)new TreeSet<>(al);
-            ScheduleBlock sb = new ScheduleBlock(s, ssb.period,  a);
+            ScheduleBlock sb = new ScheduleBlock(s, ssb.period,  a, false);
             
             em.getTransaction().begin();
             //@TODO check return of addCourse to see if it worked
