@@ -52,7 +52,8 @@ public class GenerationCriteria implements Serializable
     {
     }
 
-    GenerationCriteria(School sch, int sem)
+    GenerationCriteria(School sch,
+            int sem)
     {
         courses = new HashMap<>();
         excludedSections = new ArrayList<>();
@@ -96,7 +97,8 @@ public class GenerationCriteria implements Serializable
      * @param instructor The preferred instructor, NULL if omitted
      * @return True if the course could be added, false if otherwise
      */
-    public boolean addCourse(Course c, List<Section> exclusions,
+    public boolean addCourse(Course c,
+            List<Section> exclusions,
             String instructor)
     {
         //don't add if the course is already in the schedule
@@ -131,6 +133,17 @@ public class GenerationCriteria implements Serializable
         return courses.keySet();
     }
 
+    /**
+     * Perform a combinatorial search on the Schedule Space for a valid (i.e.,
+     * no conflicting sections) schedule optimally meeting the requirements
+     * specified in this generation criteria object and maximizing the overlap
+     * with friends' assigned schedules.
+     *
+     * @param friends The set of students to maximize overlap with.
+     * @return A list of optimal schedules, sorted by overlap with friends'
+     * schedules. All the schedules will have all the courses desired, or all
+     * will omit one course (including lunches) from those desired.
+     */
     public List<Schedule> generateSchedule(List<Student> friends)
     {
         List<Schedule> acceptableSchedules = new ArrayList<>();
@@ -151,11 +164,26 @@ public class GenerationCriteria implements Serializable
         }
     }
 
+    /**
+     * Recursive backtracking method for searching Schedule Space.
+     *
+     * @param sch The schedule being worked on.
+     * @param remaining The set of courses desired in the schedule.
+     * @param omissions The number of desired courses the search has omitted.
+     * @param friends The list of friends.
+     * @param acceptableSchedules The list of perfect schedules (i.e., contain
+     * all the desired courses)
+     * @param nearSchedules The list of nearly perfect schedules (i.e., contain
+     * all but one desired course)
+     */
     private void backtrackSchedule(Schedule sch,
-            Set<Course> remaining, int omissions, List<Student> friends,
-            List<Schedule> acceptableSchedules, List<Schedule> nearSchedules)
+            Set<Course> remaining,
+            int omissions,
+            List<Student> friends,
+            List<Schedule> acceptableSchedules,
+            List<Schedule> nearSchedules)
     {
-        //If we couldn't add two or more courses, stop early
+        //If we had to omit two or more courses, stop early
         if (omissions > 1)
         {
             return;
@@ -163,7 +191,7 @@ public class GenerationCriteria implements Serializable
         //If there are no more courses to add, save the schedule
         if (remaining.isEmpty())
         {
-            if (omissions == 0)
+            if (omissions == 0 && sch.getScore() > bestScore)
             {
                 bestScore = sch.getScore();
                 acceptableSchedules.add(sch);
@@ -179,24 +207,26 @@ public class GenerationCriteria implements Serializable
         //for each course desired
         for (Course c : localRemaining)
         {
-            //pop the course from the set
+            //pop the course from the set of courses to add
             localRemaining.remove(c);
-            
+
+            //track whether we were able to add any section of the course to the schedule
             boolean success = false;
+            
             //find a section of the course
             for (Section s : c.getSections())
             {
                 //only try to add it if this section has not been excluded
                 //or if its teacher is the preferred teacher (if specified)
-                if ((!excludedSections.contains(s))
-                        && (courses.get(c) == null || courses.get(c).equals(
+                if ((!excludedSections.contains(s)) &&
+                        (courses.get(c) == null || courses.get(c).equals(
                                 s.getTeacher())))
                 {
                     Schedule localSch = new Schedule(sch);
                     //try adding this section to the schedule
                     if (success = localSch.addSection(s))
                     {
-                        
+
                         //Compute the amount of overlap with friends schedules
                         Set<Student> intersection = new HashSet<>();
                         intersection.addAll(s.getEnrolledStudents());
@@ -209,11 +239,11 @@ public class GenerationCriteria implements Serializable
                     }
                 }
             }
-            if (!success)
+            if (!success) //we had to omit this course
             {
-                omissions+=1;
+                omissions += 1;
             }
-            
+
         }
     }
 
