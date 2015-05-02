@@ -34,9 +34,7 @@ import shield.shared.dto.SimpleStudent;
  * @author evanguby
  */
 public class AddSectionController implements Initializable, ControlledScreen {
-    @FXML
     private TextField teacher;
-    @FXML
     private ComboBox<String> scheduleBlockBox;
 
     ScreensController myController;
@@ -64,7 +62,6 @@ public class AddSectionController implements Initializable, ControlledScreen {
         // TODO
     }    
 
-    @FXML
     private void handleSaveSection(ActionEvent event) {
         String secTeacher = teacher.getText();
         int index = scheduleBlockBox.getSelectionModel().getSelectedIndex();
@@ -143,6 +140,14 @@ public class AddSectionController implements Initializable, ControlledScreen {
             cb.get(i).setVisible(true);
         }
         
+    }
+
+    @FXML
+    private void handleViewAssignedSchedule(ActionEvent event) {
+    }
+
+    @FXML
+    private void handleViewDesignedSchedule(ActionEvent event) {
     }
     
 }

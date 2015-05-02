@@ -50,6 +50,8 @@ public class CSE308GUI extends Application {
     public static String SelectSectionID = "SelectSection";
     public static String SetScheduleBlocks = "SetScheduleBlocks.fxml";
     public static String SetScheduleBlocksID = "SetScheduleBlocks";
+    public static String ViewSchedulesPage = "ViewSchedulesPage.fxml";
+    public static String ViewSchedulesPageID = "ViewSchedulesPage";
     
     private Stage primaryStage;
     private AnchorPane rootLayout;

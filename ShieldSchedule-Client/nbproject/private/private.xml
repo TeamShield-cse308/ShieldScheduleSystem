@@ -17,6 +17,7 @@
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ScreensController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentRegistrationController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageSchools.fxml</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ViewSchedulesPageController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageStudentAccountsController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/web/ServerResource.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/LoginPageController.java</file>
@@ -28,6 +29,7 @@
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/main/CSE308GUI.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ForgotPasswordController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AdminViewController.java</file>
+            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ViewSchedulesPage.fxml</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectSectionController.java</file>
             <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/NewSchoolController.java</file>
         </group>
