@@ -146,7 +146,7 @@ public class GenerationCriteria implements Serializable
 
     /**
      * Perform a combinatorial search on the Schedule Space for a valid (i.e.,
-     * no conflicting sections) schedule optimally meeting the requirements
+     * with no conflicting sections) schedule optimally meeting the requirements
      * specified in this generation criteria object and maximizing the overlap
      * with friends' assigned schedules.
      *
@@ -161,15 +161,19 @@ public class GenerationCriteria implements Serializable
         List<Schedule> nearSchedules = new ArrayList<>();
 
         bestScore = 0;
+        //perform the search
         backtrackSchedule(rootSchedule, new HashSet<>(courses.keySet()), 0, friends,
                 acceptableSchedules, nearSchedules);
-
-        if (!acceptableSchedules.isEmpty())
+        
+        if (!acceptableSchedules.isEmpty()) //the search found perfect schedules
         {
-            Collections.sort(acceptableSchedules);
-            return acceptableSchedules;
-        } else
+            //acceptableSchedules are already sorted by ascending friends overlap
+            //When we have found any perfect schedules, we only want to return the best one
+            int idx = acceptableSchedules.size() - 1;
+            return acceptableSchedules.subList(idx, idx+1);
+        } else //the search only found nearly-perfect schedules
         {
+            //Sort by maximum overlap with friends' schedules
             Collections.sort(nearSchedules);
             return nearSchedules;
         }
@@ -208,6 +212,7 @@ public class GenerationCriteria implements Serializable
             if (omissions == 0 && sch.getScore() > bestScore)
             {
                 bestScore = sch.getScore();
+                sch.setPerfect();
                 acceptableSchedules.add(sch);
             } else
             {

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * Entity class representing a Schedule that a Student has entered.
@@ -37,11 +38,17 @@ public class Schedule implements Serializable, Comparable<Schedule>
     private boolean[][] scheduleSlots;
 
     private int semester;
-    
+
     private int scheduleDays;
 
     //Score is the measure of how many friends are in each class summed over every class
-    private int score;
+    @Transient
+    private int score = 0;
+
+    //Flag indicating whether this schedule meets all generation criteria.
+    //Used only by generated schedules
+    @Transient
+    private boolean perfect = false;
 
     protected Schedule()
     {
@@ -49,31 +56,34 @@ public class Schedule implements Serializable, Comparable<Schedule>
 
     /**
      * Create a fresh new schedule
+     *
      * @param school The school the schedule is for
      * @param sem The semester the schedule is for
      */
-    Schedule(School school, int sem)
+    Schedule(School school,
+            int sem)
     {
         semester = sem;
         scheduleDays = school.getScheduleDays();
-        score = 0;
 
         //need to add 1 since periods and schedule days are 1-indexed
         scheduleSlots = new boolean[school.getPeriods() + 1][school.getScheduleDays() + 1];
         courses = new HashSet<>();
         sections = new ArrayList<>();
     }
-    
+
     /**
-     * Copy constructor, creates a schedule that is a clone of the schedule passed
+     * Copy constructor, creates a schedule that is a clone of the schedule
+     * passed
+     *
      * @param s The schedule to copy
      */
     Schedule(Schedule s)
     {
         this.scheduleSlots = s.scheduleSlots.clone();
-        this.courses = (HashSet)((HashSet)s.courses).clone();
-        this.sections = (ArrayList)((ArrayList)s.sections).clone();
-        
+        this.courses = (HashSet) ((HashSet) s.courses).clone();
+        this.sections = (ArrayList) ((ArrayList) s.sections).clone();
+
         this.semester = s.semester;
         this.scheduleDays = s.scheduleDays;
         this.score = s.score;
@@ -136,16 +146,19 @@ public class Schedule implements Serializable, Comparable<Schedule>
 
     /**
      * Helper method for filling in or clearing schedule slots when adding or
-     * removing a section from the schedule, respectively. The method returns
-     * unsuccessfully when there is a conflict in adding this section to the
-     * schedule.
+     * removing a section from the schedule, respectively.
+     *
+     * <p>
+     * The method returns unsuccessfully when there is a conflict in adding this
+     * section to the schedule.
      *
      * @param s The section being added or removed from the schedule.
      * @param fill Whether we are filling or clearing schedule blocks.
      * @return Returns the new matrix of schedule slots if successful, otherwise
      * returns null
      */
-    private boolean[][] fillScheduleSlots(Section s, boolean fill)
+    private boolean[][] fillScheduleSlots(Section s,
+            boolean fill)
     {
         //Create a locally scoped copy of the boolean matrix
         boolean[][] sandbox = scheduleSlots.clone();
@@ -185,6 +198,25 @@ public class Schedule implements Serializable, Comparable<Schedule>
     }
 
     /**
+     * Flag this schedule as perfect (i.e. meets all generation criteria)
+     */
+    void setPerfect()
+    {
+        perfect = true;
+    }
+
+    /**
+     * Queries whether this schedule is perfect. Should only be used on
+     * generated schedules.
+     *
+     * @return True if this schedule is perfect, false if otherwise.
+     */
+    public boolean isPerfect()
+    {
+        return perfect;
+    }
+
+    /**
      * Compare one schedule's score to another
      *
      * @param sch The schedule to compare to
@@ -196,7 +228,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
     {
         return this.score - sch.score;
     }
-    
+
     int getScheduleDays()
     {
         return scheduleDays;

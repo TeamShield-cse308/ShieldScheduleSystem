@@ -172,14 +172,14 @@ public class DesiredScheduleBean
         queryFriends.setParameter(
                 "email", studentEmail);
 
-        List<Schedule> acceptableSchedules = null;
+        List<Schedule> generatedSchedules = null;
 
         try
         {
             Student student = queryStudent.getSingleResult();
             List<Student> friends = queryFriends.getResultList();
             GenerationCriteria gc = student.getGenerationCriteria();
-            acceptableSchedules = gc.generateSchedule(friends);
+            generatedSchedules = gc.generateSchedule(friends);
         } catch (NoResultException nrex)
         {
             logger.log(Level.WARNING, "No such account with email {0} found in database", studentEmail);
@@ -189,6 +189,6 @@ public class DesiredScheduleBean
             em.close();
             em = null;
         }
-        return acceptableSchedules;
+        return generatedSchedules;
     }
 }
