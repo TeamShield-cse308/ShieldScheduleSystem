@@ -93,7 +93,6 @@ public class School implements Serializable
         endingLunch = initEndLunchPeriod;
 
         courseList = new ArrayList<>();
-        lunchList = new ArrayList<>();
     }
     /*
      * Getters and Setters
