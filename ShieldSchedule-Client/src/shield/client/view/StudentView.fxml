@@ -14,8 +14,8 @@
       </Label>
       <Button layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleViewSchedules" text="View Schedules" />
       <Button layoutX="14.0" layoutY="108.0" mnemonicParsing="false" onAction="#handleDesignASchedule" text="Design a Schedule" />
-      <TextField fx:id="add" layoutX="383.0" layoutY="296.0" prefHeight="25.0" prefWidth="116.0" />
-      <Button layoutX="499.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
+      <TextField fx:id="add" layoutX="382.0" layoutY="331.0" prefHeight="25.0" prefWidth="116.0" />
+      <Button layoutX="498.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
       <Button layoutX="574.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleAcceptSelected" text="Accept Selected" />
       <Button layoutX="650.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleLogout" text="Logout" />
       <ListView fx:id="friendsListView" layoutX="383.0" layoutY="42.0" prefHeight="230.0" prefWidth="156.0" />
@@ -30,11 +30,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="383.0" layoutY="274.0" text="Find Friends">
+      <Label layoutX="382.0" layoutY="309.0" text="Find Friends">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <Button layoutX="14.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleEnterAssignedSchedule" text="Enter Assigned Schedule" />
+      <Button layoutX="385.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleDeleteSelectedFriend" text="Delete Selected Friend" />
    </children>
 </AnchorPane>
