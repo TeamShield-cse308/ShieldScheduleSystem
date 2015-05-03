@@ -161,14 +161,15 @@ public class School implements Serializable
     public List<Course> getCourses()
     {
         List<Course> courses = new ArrayList<>(courseList);
+        List<Course> toReturn = new ArrayList<>(courseList);
         for (Course c : courses)
         {
             if (c.getIdentifier().contains("LUNCH_"))
             {
-                courses.remove(c);
+                toReturn.remove(c);
             }
         }
-        return courses;
+        return toReturn;
     }
 
     public List<Course> getLunches()
