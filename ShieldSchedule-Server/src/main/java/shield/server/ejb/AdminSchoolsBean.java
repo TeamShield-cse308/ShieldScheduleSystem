@@ -16,6 +16,7 @@ import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.persistence.EntityExistsException;
+import javax.persistence.RollbackException;
 import shield.server.entities.Course;
 import shield.server.entities.ScheduleBlock;
 import shield.server.util.DatabaseConnection;
@@ -49,14 +50,14 @@ public class AdminSchoolsBean
      * @param initPeriods the number of schedule blocks in the school day
      * @param initStartLunchPeriod the starting lunch period
      * @param initEndLunchPeriod the ending lunchperiod
-     * @throws EntityExistsException if a school with that name already exists.
+     * @throws RollbackException if a school with that name already exists.
      */
     public void addSchool(String initName,
             int initSemesters,
             int initPeriods,
             int initScheduleDays,
             int initStartLunchPeriod,
-            int initEndLunchPeriod) throws EntityExistsException
+            int initEndLunchPeriod) throws RollbackException
     {
         //create the entity manager
         em = DatabaseConnection.getEntityManager();
@@ -93,11 +94,11 @@ public class AdminSchoolsBean
             }
             em.getTransaction().commit();
             logger.log(Level.INFO, "New school added to database {0}", school);
-        } catch (EntityExistsException eeex)
+        } catch (RollbackException rex)
         {
             //a school with that id already exists in database
             logger.log(Level.WARNING, "Collision on school ID within database");
-            throw eeex;
+            throw rex;
         } finally
         {
             //close the entity manager

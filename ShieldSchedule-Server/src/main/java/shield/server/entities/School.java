@@ -7,9 +7,7 @@ package shield.server.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.*;
@@ -61,10 +59,7 @@ public class School implements Serializable
     private int endingLunch;
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    private Set<Course> courseList;
-
-    @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)
-    private List<Course> lunchList;
+    private List<Course> courseList;
 
     //required by JPA
     protected School()
@@ -97,7 +92,7 @@ public class School implements Serializable
         startingLunch = initStartLunchPeriod;
         endingLunch = initEndLunchPeriod;
 
-        courseList = new HashSet<>();
+        courseList = new ArrayList<>();
         lunchList = new ArrayList<>();
     }
     /*
@@ -164,14 +159,30 @@ public class School implements Serializable
         this.endingLunch = period;
     }
 
-    public Set<Course> getCourses()
+    public List<Course> getCourses()
     {
-        return courseList;
+        List<Course> courses = new ArrayList<>(courseList);
+        for (Course c : courses)
+        {
+            if (c.getIdentifier().contains("LUNCH_"))
+            {
+                courses.remove(c);
+            }
+        }
+        return courses;
     }
-    
+
     public List<Course> getLunches()
     {
-        return lunchList;
+        List<Course> lunches = new ArrayList<>(courseList);
+        for (Course c : lunches)
+        {
+            if (!c.getIdentifier().contains("LUNCH_"))
+            {
+                lunches.remove(c);
+            }
+        }
+        return lunches;
     }
 
     /**
@@ -199,7 +210,7 @@ public class School implements Serializable
     {
         Course c = new Course(this, "LUNCH_" + scheduleDay,
                 "Lunch - Day " + scheduleDay);
-        if (lunchList.add(c))
+        if (courseList.add(c))
         {
             return c;
         } else
