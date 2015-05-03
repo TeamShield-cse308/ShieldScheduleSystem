@@ -104,7 +104,9 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
             c.name = course.name;
             c.school = course.school;
             c.courseID = course.courseID;
-            courseNames.add(course.name + ", " + course.identifier);
+            if(course.year == 0 || course.year == ss.getScheduleYear()){
+                courseNames.add(course.name + ", " + course.identifier);
+            }
             coursesArray.add(c);
         }
         ss.setCourses(coursesArray);

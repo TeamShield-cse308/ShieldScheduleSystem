@@ -66,6 +66,7 @@ public class AddCourseController implements Initializable, ControlledScreen {
         Session s = myController.getSession();
         StudentSession ss = (StudentSession) s;
         c.school = ss.getStudentAccount().school;
+        c.year = ss.getScheduleYear();
         Response rsp = newCourse.request(c);
         myController.loadScreen(CSE308GUI.AddSchoolCoursesID,CSE308GUI.AddSchoolCourses);
         myController.setScreen(CSE308GUI.AddSchoolCoursesID);

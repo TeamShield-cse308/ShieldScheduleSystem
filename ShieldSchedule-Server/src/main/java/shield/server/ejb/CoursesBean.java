@@ -43,7 +43,8 @@ public class CoursesBean
      */
     public void addCourse(String identifier,
             String courseName,
-            String schoolName)
+            String schoolName,
+            int year)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
@@ -55,7 +56,7 @@ public class CoursesBean
             //add the course
             em.getTransaction().begin();
             //@TODO check return of addCourse to see if it worked
-            school.addCourse(identifier, courseName);
+            school.addCourse(identifier, courseName, year);
             em.getTransaction().commit();
             logger.log(Level.INFO, "New course added to database {0}", identifier);
         } catch (RollbackException rex)

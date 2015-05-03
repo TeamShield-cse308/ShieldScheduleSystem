@@ -41,8 +41,8 @@ import javax.persistence.UniqueConstraint;
 )
 @NamedQueries(
         {
-            @NamedQuery(name = "Course.findByIdentifier",
-                    query = "SELECT c FROM Course c WHERE c.identifier = :identifier")
+            @NamedQuery(name = "Course.findByIdentifierSchool",
+                    query = "SELECT c FROM Course c WHERE c.identifier = :identifier AND c.school.name = :school")
         })
 public class Course implements Serializable
 {
@@ -78,6 +78,16 @@ public class Course implements Serializable
      * @param name The name of the Course, e.g. Intro to Physics
      */
     Course(School school, String identifier,
+            String name, int year)
+    {
+        this.school = school;
+        this.identifier = identifier;
+        this.name = name;
+        this.year = year;
+        this.sections = new ArrayList<>();
+    }
+
+    Course(School school, String identifier,
             String name)
     {
         this.school = school;
@@ -85,7 +95,7 @@ public class Course implements Serializable
         this.name = name;
         this.sections = new ArrayList<>();
     }
-
+    
     public int getYear() {
         return year;
     }

@@ -38,6 +38,8 @@ public class StudentSession implements Session
     
     private String assignedScheduleAsString = "";
     
+    private int scheduleYear;
+    
     public String getCourseName() {
         return courseName;
     }
@@ -131,5 +133,14 @@ public class StudentSession implements Session
         assignedScheduleAsString += add + "\n";
     }
 
+    public int getScheduleYear() {
+        return scheduleYear;
+    }
+
+    public void setScheduleYear(int scheduleYear) {
+        this.scheduleYear = scheduleYear;
+    }
+    
+    
     
 }

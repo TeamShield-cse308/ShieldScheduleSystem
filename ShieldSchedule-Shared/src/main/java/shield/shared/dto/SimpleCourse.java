@@ -9,4 +9,5 @@ public class SimpleCourse {
     public String name;
     public String school;
     public long courseID;
+    public int year;
 }

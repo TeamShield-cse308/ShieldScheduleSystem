@@ -162,10 +162,9 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleEnterAssignedSchedule(ActionEvent event) {
-        StudentSession ss = (StudentSession)myController.getSession();
-        ss.newAssignedSchedule();
-        myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
-        myController.setScreen(CSE308GUI.AddSchoolCoursesID);
+        
+        myController.loadScreen(CSE308GUI.SelectScheduleYearPageID, CSE308GUI.SelectScheduleYearPage);
+        myController.setScreen(CSE308GUI.SelectScheduleYearPageID);
     }
 
     @Override

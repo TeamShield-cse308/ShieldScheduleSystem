@@ -56,7 +56,7 @@ public class CoursesResource {
     {
          try
         {
-            coursesBean.addCourse(course.identifier, course.name, course.school);
+            coursesBean.addCourse(course.identifier, course.name, course.school, course.year);
             logger.log(Level.INFO, "OK Response");
             return Response.ok(course).build();
         } catch (RollbackException rex)
@@ -86,6 +86,7 @@ public class CoursesResource {
             c.name = course.getName();
             c.identifier = course.getIdentifier();
             c.courseID = course.getId();
+            c.year = course.getYear();
             simpleCourses.add(c);
         }
         //a wrapper for the list of students
@@ -112,6 +113,7 @@ public class CoursesResource {
             c.name = course.getName();
             c.identifier = course.getIdentifier();
             c.courseID = course.getId();
+            c.year = course.getYear();
             simpleCourses.add(c);
         }
         //a wrapper for the list of students

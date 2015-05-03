@@ -200,9 +200,9 @@ public class School implements Serializable
      * otherwise
      */
     public Course addCourse(String identifier,
-            String name)
+            String name, int year)
     {
-        Course c = new Course(this, identifier, name);
+        Course c = new Course(this, identifier, name, year);
         if (courseList.add(c))
         {
             return c;

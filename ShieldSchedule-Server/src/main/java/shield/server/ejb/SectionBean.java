@@ -36,12 +36,13 @@ public class SectionBean {
     @PersistenceContext
     private EntityManager em;
     
-    public List<Section> getCourseSections(String courseIdentifier)
+    public List<Section> getCourseSections(String courseIdentifier, String school)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Course> query =
-                em.createNamedQuery("Course.findByIdentifier", Course.class);
+                em.createNamedQuery("Course.findByIdentifierSchool", Course.class);
         query.setParameter("identifier", courseIdentifier);
+        query.setParameter("school", school);
         List<Section> sectionList = null;
         try
         {

@@ -79,6 +79,7 @@ public class SelectSectionController implements Initializable, ControlledScreen 
     public void populatePage() {
         StudentSession s = (StudentSession)myController.getSession();
         SimpleCourse course = s.getCourse();
+        course.school = s.getSchool().name;
         
         Response rsp = getCourseSections.request(course);
         

@@ -77,7 +77,7 @@ public class SectionResource {
     @Consumes("application/json")
     public Response getCourseSections(SimpleCourse course)
     {
-        List<Section> sectionList = sectionBean.getCourseSections(course.identifier);
+        List<Section> sectionList = sectionBean.getCourseSections(course.identifier, course.school);
         
         List<SimpleSection> simpleSections = new ArrayList<>();
         SimpleSection s;
