@@ -5,7 +5,6 @@
  */
 package shield.client.view;
 
-import shield.client.main.CSE308GUI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,11 +14,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import shield.client.main.CSE308GUI;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
@@ -29,21 +29,21 @@ import shield.shared.dto.SimpleStudent;
 /**
  * FXML Controller class
  *
- * @author Evan Guby
+ * @author evanguby
  */
 public class StudentViewController implements Initializable, ControlledScreen {
 
     ScreensController myController;
-    
+
     @FXML
-    private ListView<?> friendsListView = new ListView<>();
-    
-    @FXML
-    private ListView<?> friendRequestsListView = new ListView<>();
-    
+    private Label welcome;
     @FXML
     private TextField add;
-    
+    @FXML
+    private ListView<?> friendsListView;
+    @FXML
+    private ListView<?> friendRequestsListView;
+
     private final ServerAccessPoint GET_FRIEND_LIST = 
             new ServerAccessPoint(ServerResource.GET_FRIENDS_URL);
     
@@ -59,14 +59,13 @@ public class StudentViewController implements Initializable, ControlledScreen {
     private List<SimpleFriendship> pendingRequests = null;
     private List<SimpleStudent> friends = null;
     
-    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        populatePage();
-    }    
+
+    }
 
     @FXML
     private void handleViewSchedules(ActionEvent event) {
@@ -75,50 +74,13 @@ public class StudentViewController implements Initializable, ControlledScreen {
     }
 
     @FXML
-    private void handleAddCourses(ActionEvent event) {
+    private void handleDesignASchedule(ActionEvent event) {
         myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
         myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
     @FXML
-    private void handleLogout(ActionEvent event) {
-        myController.setScreen(CSE308GUI.LoginPageID);
-    }
-
-    @FXML
-    private void handleAcceptSelected(ActionEvent event) {
-        int idx = friendRequestsListView.getSelectionModel().getSelectedIndex();
-        
-        SimpleFriendship sf = pendingRequests.get(idx);
-        sf.approved = true;
-        
-        
-        Response rsp =  APPROVE_FRIEND_REQUEST.request(sf);
-        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
-        {
-            //@TODO error handling
-            int code = rsp.getStatus();
-            if (code == Response.Status.CONFLICT.getStatusCode())
-            {
-                //account approved already
-            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
-            {
-                //account not exist
-            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
-            {
-                //something terrible happened
-            }
-           
-        }
-        
-        populateFriendRequestsListView();
-        populateFriendsListView();
-        
-    }
-
-    @FXML
     private void handleAdd(ActionEvent event) {
-        //get sender and receiver emails
         String recip = add.getText();
         StudentSession ses = (StudentSession) myController.getSession();
         String send = ses.getStudentAccount().email;
@@ -162,9 +124,48 @@ public class StudentViewController implements Initializable, ControlledScreen {
             alert.setContentText(recip + " has been sent a friend request!");
             alert.show();
         }
+    }
+
+    @FXML
+    private void handleAcceptSelected(ActionEvent event) {
+        int idx = friendRequestsListView.getSelectionModel().getSelectedIndex();
+        
+        SimpleFriendship sf = pendingRequests.get(idx);
+        sf.approved = true;
+        
+        
+        Response rsp =  APPROVE_FRIEND_REQUEST.request(sf);
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.CONFLICT.getStatusCode())
+            {
+                //account approved already
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //account not exist
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
+           
+        }
+        
+        populateFriendRequestsListView();
+        populateFriendsListView();
+    }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        myController.setScreen(CSE308GUI.LoginPageID);
+    }
+
+    @FXML
+    private void handleEnterAssignedSchedule(ActionEvent event) {
         
     }
-    
+
     @Override
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
@@ -174,8 +175,8 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @Override
     public void populatePage() {
-        
-        
+        StudentSession ss = (StudentSession)myController.getSession();
+        welcome.setText("Welcome " + ss.getStudentAccount().name + "!");
     }
     
     private void populateFriendsListView()
@@ -234,4 +235,5 @@ public class StudentViewController implements Initializable, ControlledScreen {
         friendRequestsListView.getItems().addAll(names);
         
     }
+
 }

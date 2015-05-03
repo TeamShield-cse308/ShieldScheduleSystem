@@ -7,13 +7,13 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.StudentViewController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Welcome  " underline="true">
+      <Label fx:id="welcome" layoutX="14.0" layoutY="14.0" text="Welcome  " underline="true">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <Button layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#handleViewSchedules" text="View Schedules" />
-      <Button layoutX="14.0" layoutY="108.0" mnemonicParsing="false" onAction="#handleAddCourses" text="Design a Schedule" />
+      <Button layoutX="14.0" layoutY="108.0" mnemonicParsing="false" onAction="#handleDesignASchedule" text="Design a Schedule" />
       <TextField fx:id="add" layoutX="383.0" layoutY="296.0" prefHeight="25.0" prefWidth="116.0" />
       <Button layoutX="499.0" layoutY="296.0" mnemonicParsing="false" onAction="#handleAdd" text="Add" />
       <Button layoutX="574.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleAcceptSelected" text="Accept Selected" />
@@ -35,5 +35,6 @@
             <Font size="14.0" />
          </font>
       </Label>
+      <Button layoutX="14.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleEnterAssignedSchedule" text="Enter Assigned Schedule" />
    </children>
 </AnchorPane>
