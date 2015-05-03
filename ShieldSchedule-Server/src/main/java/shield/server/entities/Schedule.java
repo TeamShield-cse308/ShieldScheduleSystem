@@ -41,12 +41,13 @@ public class Schedule implements Serializable, Comparable<Schedule>
 
     private int scheduleDays;
 
-    //Score is the measure of how many friends are in each class summed over every class
+    //Score is the measure of how many friends are in each class summed over every class.
+    //Used only by generated schedules.
     @Transient
     private int score = 0;
 
     //Flag indicating whether this schedule meets all generation criteria.
-    //Used only by generated schedules
+    //Used only by generated schedules.
     @Transient
     private boolean perfect = false;
 

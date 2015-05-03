@@ -57,6 +57,12 @@ public class GenerationCriteria implements Serializable
     {
     }
 
+    /**
+     * Create a new set of generation criteria.
+     * 
+     * @param sch The school this generation criteria applies to.
+     * @param sem The semester the desired schedule is for.
+     */
     GenerationCriteria(School sch,
             int sem)
     {
@@ -95,7 +101,7 @@ public class GenerationCriteria implements Serializable
 
     /**
      * Add a course to the desired schedule, optionally excluding sections or
-     * selecting instructors
+     * selecting instructors.
      *
      * @param c The course desired
      * @param exclusions The sections to exclude, EMPTY if omitted
