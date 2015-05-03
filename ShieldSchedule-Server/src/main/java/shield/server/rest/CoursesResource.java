@@ -85,6 +85,7 @@ public class CoursesResource {
             c = new SimpleCourse();
             c.name = course.getName();
             c.identifier = course.getIdentifier();
+            c.courseID = course.getId();
             simpleCourses.add(c);
         }
         //a wrapper for the list of students
@@ -96,4 +97,29 @@ public class CoursesResource {
         return Response.ok(wrapper).build();
     }
 
+    @POST
+    @Path("/getSchoolCoursesWithLunch")
+    @Consumes("application/json")
+    public Response getSchoolCoursesWithLunch(SimpleStudent stu)
+    {
+        List<Course> courseList = coursesBean.getSchoolCoursesWithLunch(stu.school);
+        
+        List<SimpleCourse> simpleCourses = new ArrayList<>();
+        SimpleCourse c;
+        for (Course course : courseList)
+        {
+            c = new SimpleCourse();
+            c.name = course.getName();
+            c.identifier = course.getIdentifier();
+            c.courseID = course.getId();
+            simpleCourses.add(c);
+        }
+        //a wrapper for the list of students
+        GenericEntity<List<SimpleCourse>> wrapper =
+                new GenericEntity<List<SimpleCourse>>(simpleCourses)
+                {
+                };
+        logger.log(Level.INFO, "Sending list of courses");
+        return Response.ok(wrapper).build();
+    }
 }

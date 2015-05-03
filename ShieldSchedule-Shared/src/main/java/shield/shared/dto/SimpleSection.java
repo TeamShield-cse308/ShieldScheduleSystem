@@ -17,4 +17,5 @@ public class SimpleSection {
     public String school;
     public String semesters;
     public String courseIdentifier;
+    public long sectionID;
 }

@@ -6,8 +6,10 @@ package shield.client.view.session;
 import java.util.ArrayList;
 import java.util.List;
 import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleSchedule;
 import shield.shared.dto.SimpleScheduleBlock;
 import shield.shared.dto.SimpleSchool;
+import shield.shared.dto.SimpleSection;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -30,10 +32,21 @@ public class StudentSession implements Session
 
     private String courseIdentifier;
     
+    private SimpleSchedule assignedSchedule;
+    
+    private List<SimpleSection> sections;
+    
+    private String assignedScheduleAsString = "";
+    
     public String getCourseName() {
         return courseName;
     }
-
+    
+    public void newAssignedSchedule(){
+        assignedSchedule = new SimpleSchedule();
+        assignedSchedule.courseIDs = new ArrayList<String>();
+        assignedSchedule.sectionIDs = new ArrayList<String>();
+    }
     
     public void setCourseName(String courseName) {
         for(SimpleCourse c : courses){
@@ -83,6 +96,14 @@ public class StudentSession implements Session
     public void setSchool(SimpleSchool school) {
         this.school = school;
     }
+
+    public List<SimpleSection> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<SimpleSection> sections) {
+        this.sections = sections;
+    }
     
     
 
@@ -93,6 +114,22 @@ public class StudentSession implements Session
     public void setScheduleBlocks(List<SimpleScheduleBlock> scheduleBlocks) {
         this.scheduleBlocks = scheduleBlocks;
     }
+
+    public void addCourseID(String courseID) {
+        assignedSchedule.courseIDs.add(courseID);
+    }
+
+    public void addSectionID(String sectionID) {
+        assignedSchedule.sectionIDs.add(sectionID);
+    }
+
+    public String getAssignedScheduleAsString() {
+        return assignedScheduleAsString;
+    }
     
+    public void sectionToAddToString(String add){
+        assignedScheduleAsString += add + "\n";
+    }
+
     
 }

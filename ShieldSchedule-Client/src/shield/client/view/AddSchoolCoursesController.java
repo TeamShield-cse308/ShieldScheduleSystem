@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import shield.client.view.session.Session;
@@ -32,9 +33,12 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
 
     @FXML
     private ComboBox<String> courseBox;
+    
+    @FXML
+    private Label schedule;
 
-    private final ServerAccessPoint getSchoolCourses
-            = new ServerAccessPoint(ServerResource.GET_SCHOOL_COURSES_URL);
+    private final ServerAccessPoint getSchoolCoursesWithLunch
+            = new ServerAccessPoint(ServerResource.GET_SCHOOL_COURSES_WITH_LUNCH_URL);
 
     ScreensController myController;
 
@@ -75,12 +79,12 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
 
     @Override
     public void populatePage() {
-        Session s = myController.getSession();
-        StudentSession ss = (StudentSession) s;
+        StudentSession ss = (StudentSession)myController.getSession();
+
         //String schoolName = ss.getStudentAccount().school;
         SimpleStudent stu = ss.getStudentAccount();
         //request list of courses
-        Response rsp = getSchoolCourses.request(stu);
+        Response rsp = getSchoolCoursesWithLunch.request(stu);
 
         //check the response status code
         if (rsp.getStatus() != Response.Status.OK.getStatusCode()) {
@@ -99,11 +103,13 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
             c.identifier = course.identifier;
             c.name = course.name;
             c.school = course.school;
+            c.courseID = course.courseID;
             courseNames.add(course.name + ", " + course.identifier);
             coursesArray.add(c);
         }
         ss.setCourses(coursesArray);
         //populate combobox
+        schedule.setText(ss.getAssignedScheduleAsString());
         courseBox.getItems().clear();
         courseBox.getItems().addAll(courseNames);
     }

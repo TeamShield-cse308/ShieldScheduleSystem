@@ -91,4 +91,25 @@ public class CoursesBean
         }
         return courseList;
     }
+    
+    public List<Course> getSchoolCoursesWithLunch(String schoolName)
+    {
+        em = DatabaseConnection.getEntityManager();
+        TypedQuery<School> query =
+                em.createNamedQuery("School.findByName", School.class);
+        query.setParameter("name", schoolName);
+        List<Course> courseList = null;
+        try
+        {
+            School school = query.getSingleResult();
+            courseList = new ArrayList<>(school.getCoursesWithLunch());
+            logger.log(Level.INFO, "Retrieving all courses from school in DB", school);
+        } finally
+        {
+            //Close the entity manager
+            em.close();
+            em = null;
+        }
+        return courseList;
+    }
 }

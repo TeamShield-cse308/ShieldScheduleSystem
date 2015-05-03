@@ -171,6 +171,12 @@ public class School implements Serializable
         }
         return toReturn;
     }
+    
+    public List<Course> getCoursesWithLunch()
+    {
+        List<Course> courses = new ArrayList<>(courseList);
+        return courses;
+    }
 
     public List<Course> getLunches()
     {

@@ -47,7 +47,16 @@ public class SelectSectionController implements Initializable, ControlledScreen 
 
     @FXML
     private void handleSelectSection(ActionEvent event) {
-        myController.setScreen(CSE308GUI.StudentViewID);
+        StudentSession ss = (StudentSession)myController.getSession();
+        String courseID = "" + ss.getCourse().courseID;
+        int index = section.getSelectionModel().getSelectedIndex();
+        String sectionID = "" + ss.getSections().get(index).sectionID;
+        ss.addCourseID(courseID);
+        ss.addSectionID(sectionID);
+        String toAdd = ss.getCourseName() + " " + section.getValue();
+        ss.sectionToAddToString(toAdd);
+        myController.loadScreen(CSE308GUI.AddSchoolCoursesID,CSE308GUI.AddSchoolCourses);
+        myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }
 
     @FXML
@@ -81,6 +90,7 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         };
         
         List<SimpleSection> sections = rsp.readEntity(gtlc);
+        s.setSections(sections);
         ArrayList<SimpleSection> sectionArray = new ArrayList<>();
         
         ArrayList<String> sectionNames = new ArrayList<>();

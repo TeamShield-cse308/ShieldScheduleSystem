@@ -88,6 +88,7 @@ public class SectionResource {
             ScheduleBlock sb = section.getScheduleBlock();
             s.scheduleBlockPeriod = sb.getPeriod();
             s.scheduleBlockDays = sb.getDaysString();
+            s.sectionID = section.getId();
             //s.scheduleBlockPeriod = section.g
             
             simpleSections.add(s);

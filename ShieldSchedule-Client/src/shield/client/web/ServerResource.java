@@ -118,6 +118,9 @@ public final class ServerResource
     public static final ServerResource GET_SCHOOL_COURSES_URL = new ServerResource(
             SERVER_BASE_URL + "courses/getSchoolCourses");
     
+    public static final ServerResource GET_SCHOOL_COURSES_WITH_LUNCH_URL = new ServerResource(
+            SERVER_BASE_URL + "courses/getSchoolCoursesWithLunch");
+    
     /**
      * The location of the web resource to get a Courses sectionList
      */
