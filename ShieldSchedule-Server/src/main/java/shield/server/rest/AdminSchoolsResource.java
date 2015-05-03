@@ -135,9 +135,11 @@ public class AdminSchoolsResource
     @POST
     @Path("/edit")
     @Consumes("application/json")
+    @Deprecated
     public Response editSchool(SimpleSchool school)
     {
-        try
+        throw new UnsupportedOperationException();
+        /*try
         {
             //edit the school
             adminSchoolsBean.editSchool(school.name, school.numSemesters, school.numPeriods,
@@ -151,14 +153,14 @@ public class AdminSchoolsResource
         {
             logger.log(Level.SEVERE, null, ex);
             return Response.serverError().build();
-        }
+        }*/
     }
 
     /**
      * Responds to POST requests at the /delete extension of this resource.
      * Deletes a school with the supplied information to the database.
      *
-     * @param content
+     * @param school
      */
     @POST
     @Path("/delete")

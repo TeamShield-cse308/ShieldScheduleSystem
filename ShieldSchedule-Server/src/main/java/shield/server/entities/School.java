@@ -103,16 +103,12 @@ public class School implements Serializable
         return name;
     }
 
-    public void setSchoolName(String name)
-    {
-        this.name = name;
-    }
-
     public int getSemesters()
     {
         return semesters;
     }
 
+    @Deprecated
     public void setSemesters(int numSemesters)
     {
         this.semesters = numSemesters;
@@ -123,6 +119,7 @@ public class School implements Serializable
         return scheduleDays;
     }
 
+    @Deprecated
     public void setScheduleDays(int numScheduleDays)
     {
         this.scheduleDays = numScheduleDays;
@@ -133,6 +130,7 @@ public class School implements Serializable
         return periods;
     }
 
+    @Deprecated
     public void setPeriods(int numPeriods)
     {
         this.periods = numPeriods;
@@ -143,6 +141,7 @@ public class School implements Serializable
         return startingLunch;
     }
 
+    @Deprecated
     public void setStartingLunch(int period)
     {
         this.startingLunch = period;
@@ -153,6 +152,7 @@ public class School implements Serializable
         return endingLunch;
     }
 
+    @Deprecated
     public void setEndingLunch(int period)
     {
         this.endingLunch = period;

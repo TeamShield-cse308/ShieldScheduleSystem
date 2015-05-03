@@ -33,8 +33,8 @@ public class AdminSchoolsBean
 {
 
     //Logger
-    private static final Logger logger
-            = Logger.getLogger("sss.ejb.AdminSchoolsBean");
+    private static final Logger logger =
+             Logger.getLogger("sss.ejb.AdminSchoolsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -117,8 +117,8 @@ public class AdminSchoolsBean
     {
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query =
+                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
         try
@@ -153,7 +153,11 @@ public class AdminSchoolsBean
      * @param newStartLunchPeriod
      * @param newEndLunchPeriod
      * @throws NoResultException
+     * @deprecated Editing parameters of the school will create conflicts in
+     * every existing course, section, schedule, and schedule block in that
+     * school.
      */
+    @Deprecated
     public void editSchool(String name,
             int newSemesters,
             int newPeriods,
@@ -163,8 +167,8 @@ public class AdminSchoolsBean
     {
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query =
+                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
         try
         {
@@ -204,8 +208,8 @@ public class AdminSchoolsBean
 
         // Create the entity manager and set up the query for all schools
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findAll", School.class);
+        TypedQuery<School> query =
+                 em.createNamedQuery("School.findAll", School.class);
         try
         {
             schools = query.getResultList();
@@ -231,8 +235,8 @@ public class AdminSchoolsBean
     {
         School sch = null;
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<School> query
-                = em.createNamedQuery("School.findByName", School.class);
+        TypedQuery<School> query =
+                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
         try
         {
