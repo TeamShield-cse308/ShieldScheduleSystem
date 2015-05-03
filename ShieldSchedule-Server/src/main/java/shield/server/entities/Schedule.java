@@ -37,7 +37,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
 
     private boolean[][] scheduleSlots;
 
-    private int semester;
+    private int year;
 
     private int scheduleDays;
 
@@ -59,12 +59,12 @@ public class Schedule implements Serializable, Comparable<Schedule>
      * Create a fresh new schedule
      *
      * @param school The school the schedule is for
-     * @param sem The semester the schedule is for
+     * @param year The year the schedule is for
      */
     Schedule(School school,
-            int sem)
+            int year)
     {
-        semester = sem;
+        this.year = year;
         scheduleDays = school.getScheduleDays();
 
         //need to add 1 since periods and schedule days are 1-indexed
@@ -85,7 +85,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
         this.courses = (HashSet) ((HashSet) s.courses).clone();
         this.sections = (ArrayList) ((ArrayList) s.sections).clone();
 
-        this.semester = s.semester;
+        this.year = s.year;
         this.scheduleDays = s.scheduleDays;
         this.score = s.score;
     }
@@ -105,7 +105,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
     public boolean addSection(Section s)
     {
         //If the section isn't offered this semester then it can't be added.
-        if (!s.getSemesters().contains(semester))
+        if (!(s.getCourse().getYear() == year))
         {
             return false;
         }

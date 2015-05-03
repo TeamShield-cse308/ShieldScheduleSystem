@@ -60,6 +60,8 @@ public class Course implements Serializable
     private String identifier;
 
     private String name;
+    
+    private int year;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<Section> sections;
@@ -83,6 +85,16 @@ public class Course implements Serializable
         this.name = name;
         this.sections = new ArrayList<>();
     }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+    
+    
 
     public School getSchool()
     {

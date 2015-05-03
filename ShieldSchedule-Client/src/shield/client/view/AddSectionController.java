@@ -99,7 +99,8 @@ public class AddSectionController implements Initializable, ControlledScreen {
 
     @FXML
     public void handleBack(ActionEvent event) {
-        myController.setScreen(CSE308GUI.AddCourseID);
+        myController.loadScreen(CSE308GUI.SelectSectionID,CSE308GUI.SelectSection);
+        myController.setScreen(CSE308GUI.SelectSectionID);
     }
     
     @Override
