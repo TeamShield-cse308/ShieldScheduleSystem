@@ -45,6 +45,7 @@ public class AdminViewController implements Initializable, ControlledScreen {
     
     @FXML
     private void handleLogout(ActionEvent event) {
+        myController.loadScreen(CSE308GUI.StudentRegistrationID, CSE308GUI.StudentRegistration);
         myController.setScreen(CSE308GUI.LoginPageID);
     }
 
