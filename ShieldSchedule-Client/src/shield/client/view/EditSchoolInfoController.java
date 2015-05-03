@@ -17,6 +17,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import shield.client.view.session.AdminSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleSchool;
@@ -97,7 +98,8 @@ public class EditSchoolInfoController implements Initializable, ControlledScreen
 
     public void populatePage() {
         String school = myController.getSchool();
-        List<SimpleSchool> schools = myController.getSchools();
+        AdminSession as = (AdminSession)myController.getSession();
+        List<SimpleSchool> schools = as.getSchools();
         SimpleSchool sch = null;
         name.setEditable(false);
         for(SimpleSchool s : schools){

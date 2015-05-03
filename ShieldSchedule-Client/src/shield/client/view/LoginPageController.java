@@ -128,9 +128,8 @@ public class LoginPageController implements Initializable, ControlledScreen {
                 SimpleAdmin adminAcct = rsp.readEntity(SimpleAdmin.class);
                 myController.createAdminSession(adminAcct);
                 myController.loadScreen(CSE308GUI.AdminViewID, CSE308GUI.AdminView);
-                myController.loadScreen(CSE308GUI.ManageSchoolsID, CSE308GUI.ManageSchools);
                 myController.loadScreen(CSE308GUI.NewSchoolID, CSE308GUI.NewSchool);
-                myController.loadScreen(CSE308GUI.ManageStudentAccountsID, CSE308GUI.ManageStudentAccounts);
+                
                 myController.setScreen(CSE308GUI.AdminViewID);
                 
             }
