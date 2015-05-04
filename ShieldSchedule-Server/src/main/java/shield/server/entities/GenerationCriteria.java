@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -233,8 +234,9 @@ public class GenerationCriteria implements Serializable
         Set<Course> localRemaining = new HashSet<>(remaining);
 
         //for each course desired
-        for (Course c : localRemaining)
+        for (Iterator<Course> iter = localRemaining.iterator(); iter.hasNext();)
         {
+            Course c = iter.next();
             //pop the course from the set of courses to add
             localRemaining.remove(c);
 

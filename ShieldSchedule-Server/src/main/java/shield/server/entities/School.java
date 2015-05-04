@@ -7,6 +7,7 @@ package shield.server.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -162,10 +163,11 @@ public class School implements Serializable
 
     public List<Course> getCourses()
     {
-        List<Course> courses = new ArrayList<>(courseList);
+//        List<Course> courses = new ArrayList<>(courseList);
         List<Course> toReturn = new ArrayList<>(courseList);
-        for (Course c : courses)
+        for (Iterator<Course> iter = toReturn.iterator(); iter.hasNext(); )
         {
+            Course c = iter.next();
             if (c.getIdentifier().contains("LUNCH_"))
             {
                 toReturn.remove(c);
@@ -183,8 +185,9 @@ public class School implements Serializable
     public List<Course> getLunches()
     {
         List<Course> lunches = new ArrayList<>(courseList);
-        for (Course c : lunches)
+        for (Iterator<Course> iter = lunches.iterator(); iter.hasNext(); )
         {
+            Course c = iter.next();
             if (!c.getIdentifier().contains("LUNCH_"))
             {
                 lunches.remove(c);
@@ -201,8 +204,9 @@ public class School implements Serializable
     public List<Course> getLunches(int year)
     {
         List<Course> lunches = new ArrayList<>(courseList);
-        for (Course c : lunches)
+        for (Iterator<Course> iter = lunches.iterator(); iter.hasNext(); )
         {
+            Course c = iter.next();
             if (c.getYear() != year || !c.getIdentifier().contains("LUNCH_"))
             {
                 lunches.remove(c);
