@@ -22,6 +22,7 @@ import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleCourse;
+import shield.shared.dto.SimpleSchedule;
 import shield.shared.dto.SimpleStudent;
 
 /**
@@ -40,6 +41,8 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
     private final ServerAccessPoint getSchoolCoursesWithLunch
             = new ServerAccessPoint(ServerResource.GET_SCHOOL_COURSES_WITH_LUNCH_URL);
 
+    private final ServerAccessPoint setAssignedSchedule
+            = new ServerAccessPoint(ServerResource.SET_ASSIGNED_SCHEDULE_URL);
     ScreensController myController;
 
     /**
@@ -98,15 +101,23 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
         //extract course names from schools;
         //extract course names from schools
         ArrayList<String> courseNames = new ArrayList<>();
+        List<String> list = ss.getAssignedSchedule().courseIDs;
+        //List<SimpleCourses> list = ss.
         for (SimpleCourse course : courses) {
             SimpleCourse c = new SimpleCourse();
             c.identifier = course.identifier;
             c.name = course.name;
             c.school = course.school;
             c.courseID = course.courseID;
-            if(course.year == 0 || course.year == ss.getScheduleYear()){
+            boolean toAdd = true;
+            for(String cid : list){
+                if(cid.equals("" + course.courseID))
+                    toAdd = false;
+            }
+            if((course.year == 0 || course.year == ss.getScheduleYear()) && toAdd){
                 courseNames.add(course.name + ", " + course.identifier);
             }
+            
             coursesArray.add(c);
         }
         ss.setCourses(coursesArray);
@@ -114,6 +125,15 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
         schedule.setText(ss.getAssignedScheduleAsString());
         courseBox.getItems().clear();
         courseBox.getItems().addAll(courseNames);
+    }
+    
+    @FXML
+    public void handleFinishSchedule(ActionEvent event){
+        StudentSession ss = (StudentSession)myController.getSession();
+        SimpleSchedule sched = ss.getAssignedSchedule();
+        sched.year = ss.getScheduleYear();
+        sched.studentEmail = ss.getStudentAccount().email;
+        Response rsp = setAssignedSchedule.request(sched);
     }
 
 }

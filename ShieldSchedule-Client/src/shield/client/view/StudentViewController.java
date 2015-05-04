@@ -236,5 +236,9 @@ public class StudentViewController implements Initializable, ControlledScreen {
         friendRequestsListView.getItems().addAll(names);
         
     }
+    @FXML
+    public void handleDeleteSelectedFriend(ActionEvent event){
+        
+    }
 
 }

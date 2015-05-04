@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -22,6 +24,11 @@ import javax.persistence.OneToOne;
  *
  * @author Phillip Elliot, Jeffrey Kabot
  */
+@NamedQueries(
+        {
+            @NamedQuery(name = "Section.findByID",
+                    query = "SELECT s FROM Section s WHERE s.id = :id")
+        })
 @Entity
 @SuppressWarnings("ValidPrimaryTableName")
 public class Section implements Serializable

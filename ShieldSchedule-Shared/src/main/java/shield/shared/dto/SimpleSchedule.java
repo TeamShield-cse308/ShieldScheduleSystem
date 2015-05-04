@@ -15,4 +15,5 @@ public class SimpleSchedule {
     public List<String> courseIDs;
     public List<String> sectionIDs;
     public int year;
+    public String studentEmail;
 }

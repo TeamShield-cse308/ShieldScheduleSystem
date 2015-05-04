@@ -64,11 +64,12 @@ public class SectionBean {
         TypedQuery<ScheduleBlock> query =
                  em.createNamedQuery("ScheduleBlock.findBySchoolPeriodDay", ScheduleBlock.class);
         TypedQuery<Course> query2 =
-                 em.createNamedQuery("Course.findByIdentifier", Course.class);
+                 em.createNamedQuery("Course.findByIdentifierSchool", Course.class);
         query.setParameter("school",section.school);
         query.setParameter("period",section.scheduleBlockPeriod);
         query.setParameter("days",section.scheduleBlockDays);
         query2.setParameter("identifier", section.courseIdentifier);
+        query2.setParameter("school", section.school);
         try{
             ScheduleBlock sb = query.getSingleResult();
             Course c = query2.getSingleResult();
@@ -78,8 +79,9 @@ public class SectionBean {
             }
             SortedSet<Integer> a = (SortedSet<Integer>)new TreeSet<>(al);
             Section toAdd = new Section(c,section.teacherName,sb,a);
+            c.addSection(toAdd.getTeacher(), toAdd.getScheduleBlock(), toAdd.getSemesters());
             em.getTransaction().begin();
-            em.persist(toAdd);
+            em.persist(c);
             em.getTransaction().commit();
         }finally
         {

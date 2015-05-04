@@ -129,6 +129,10 @@ public class StudentSession implements Session
         return assignedScheduleAsString;
     }
     
+    public void setAssignedScheduleAsString(String toSet) {
+        assignedScheduleAsString = toSet;
+    }
+    
     public void sectionToAddToString(String add){
         assignedScheduleAsString += add + "\n";
     }
@@ -139,6 +143,14 @@ public class StudentSession implements Session
 
     public void setScheduleYear(int scheduleYear) {
         this.scheduleYear = scheduleYear;
+    }
+
+    public SimpleSchedule getAssignedSchedule() {
+        return assignedSchedule;
+    }
+
+    public void setAssignedSchedule(SimpleSchedule assignedSchedule) {
+        this.assignedSchedule = assignedSchedule;
     }
     
     

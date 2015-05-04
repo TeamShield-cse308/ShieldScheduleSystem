@@ -93,6 +93,7 @@ public class AddSectionController implements Initializable, ControlledScreen {
         section.courseIdentifier = ss.getCourseIdentifier();
         Response rsp = addSection.request(section);
         //TODO error handling
+        myController.loadScreen(CSE308GUI.AddSchoolCoursesID,CSE308GUI.AddSchoolCourses);
         myController.loadScreen(CSE308GUI.SelectSectionID,CSE308GUI.SelectSection);
         myController.setScreen(CSE308GUI.SelectSectionID);
     }

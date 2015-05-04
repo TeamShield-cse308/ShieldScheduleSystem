@@ -16,7 +16,7 @@
          </font>
       </Label>
       <Button layoutX="665.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
-      <Button layoutX="18.0" layoutY="130.0" mnemonicParsing="false" text="Finish Schedule" />
+      <Button layoutX="18.0" layoutY="130.0" mnemonicParsing="false" onAction="#handleFinishSchedule" text="Finish Schedule" />
       <Label layoutX="314.0" layoutY="37.0" text="Schedule So Far:" />
       <Label fx:id="schedule" layoutX="314.0" layoutY="62.0" />
    </children>
