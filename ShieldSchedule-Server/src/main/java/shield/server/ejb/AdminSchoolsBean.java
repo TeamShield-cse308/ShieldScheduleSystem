@@ -34,7 +34,7 @@ public class AdminSchoolsBean
 
     //Logger
     private static final Logger logger =
-             Logger.getLogger("sss.ejb.AdminSchoolsBean");
+            Logger.getLogger("sss.ejb.AdminSchoolsBean");
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -118,7 +118,7 @@ public class AdminSchoolsBean
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
-                 em.createNamedQuery("School.findByName", School.class);
+                em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
 
         try
@@ -129,12 +129,12 @@ public class AdminSchoolsBean
             em.remove(school);
             em.getTransaction().commit();
             logger.log(Level.INFO, "School {0} removed from database", school);
-        } catch (NoResultException noex)
+        } catch (NoResultException nrex)
         {
             //school not found
             logger.log(Level.WARNING,
-                    "No such school with name {0} found in database", name);
-            throw noex;
+                    "No school with name {0} found in database", name);
+            throw nrex;
         } finally
         {
             //Close the entity manager
@@ -168,7 +168,7 @@ public class AdminSchoolsBean
         //Create the entity manager and set up the query by school name
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
-                 em.createNamedQuery("School.findByName", School.class);
+                em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
         try
         {
@@ -209,18 +209,18 @@ public class AdminSchoolsBean
         // Create the entity manager and set up the query for all schools
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
-                 em.createNamedQuery("School.findAll", School.class);
+                em.createNamedQuery("School.findAll", School.class);
         try
         {
             schools = query.getResultList();
             logger.log(Level.INFO, "Retrieving all schools in DB", schools);
+            return schools;
         } finally
         {
             //Close the entity manager
             em.close();
             em = null;
         }
-        return schools;
     }
 
     /**
@@ -231,33 +231,28 @@ public class AdminSchoolsBean
      * @deprecated
      */
     @Deprecated
-    public SimpleSchool getSchool(String name)
+    public School getSchool(String name)
     {
         School sch = null;
         em = DatabaseConnection.getEntityManager();
         TypedQuery<School> query =
-                 em.createNamedQuery("School.findByName", School.class);
+                em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", name);
+
         try
         {
+            logger.log(Level.INFO, "Retrieving school with name {0}", name);
             sch = query.getSingleResult();
-            logger.log(Level.INFO, "Retrieving school from DB", sch);
-        } catch (Exception ex)
+        } catch (NoResultException nrex)
         {
-            //@TODO
+            logger.log(Level.WARNING, "No school found with name {0}", name);
+            throw nrex;
         } finally
         {
             //Close the entity manager
             em.close();
             em = null;
         }
-        SimpleSchool ss = new SimpleSchool();
-        ss.endingLunchPeriod = sch.getEndingLunch();
-        ss.name = sch.getSchoolName();
-        ss.startingLunchPeriod = sch.getStartingLunch();
-        ss.numSemesters = sch.getSemesters();
-        ss.numScheduleDays = sch.getScheduleDays();
-        ss.numPeriods = sch.getPeriods();
-        return ss;
+        return sch;
     }
 }

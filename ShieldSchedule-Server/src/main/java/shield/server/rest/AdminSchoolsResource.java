@@ -20,8 +20,8 @@ import shield.server.ejb.AdminSchoolsBean;
 import shield.server.entities.School;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 
@@ -109,18 +109,13 @@ public class AdminSchoolsResource
                     school.numScheduleDays, school.startingLunchPeriod, school.endingLunchPeriod);
             logger.log(Level.INFO, "OK response");
             return Response.ok(school).build();
-        } catch (EntityExistsException eeex)
+        } catch (RollbackException rex)
         {
-            logger.log(Level.WARNING, "BAD REQUEST response");
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        } catch (NoResultException eeex)
-        {
-            //@TODO disambiguate with previous exception
-            logger.log(Level.WARNING, "BAD REQUEST response");
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "BAD REQUEST response", rex);
+            return Response.status(Response.Status.BAD_REQUEST).entity("A School already exists with name " + school.name).build();
         } catch (Exception ex)
         {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
             return Response.serverError().build();
         }
     }
@@ -160,7 +155,8 @@ public class AdminSchoolsResource
      * Responds to POST requests at the /delete extension of this resource.
      * Deletes a school with the supplied information to the database.
      *
-     * @param school
+     * @param school the school to delete
+     * @return HTTP response to client
      */
     @POST
     @Path("/delete")
@@ -175,10 +171,10 @@ public class AdminSchoolsResource
         } catch (NoResultException nrex)
         {
             logger.log(Level.WARNING, "BAD REQUEST response", nrex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("No school exists with name " + school.name).build();
         } catch (Exception ex)
         {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
             return Response.serverError().build();
         }
     }
@@ -190,7 +186,15 @@ public class AdminSchoolsResource
     {
         try
         {
-            SimpleSchool ss = adminSchoolsBean.getSchool(school);
+            School sch = adminSchoolsBean.getSchool(school);
+            SimpleSchool ss = new SimpleSchool();
+            ss.name = sch.getSchoolName();
+            ss.numSemesters = sch.getSemesters();
+            ss.numPeriods = sch.getPeriods();
+            ss.numScheduleDays = sch.getScheduleDays();
+            ss.startingLunchPeriod = sch.getStartingLunch();
+            ss.endingLunchPeriod = sch.getEndingLunch();
+            
             GenericEntity<SimpleSchool> wrapper =
                 new GenericEntity<SimpleSchool>(ss)
                 {
@@ -199,10 +203,10 @@ public class AdminSchoolsResource
         } catch (NoResultException nrex)
         {
             logger.log(Level.WARNING, "BAD REQUEST response", nrex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("No school exists with name " + school).build();
         } catch (Exception ex)
         {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
             return Response.serverError().build();
         }
     }
