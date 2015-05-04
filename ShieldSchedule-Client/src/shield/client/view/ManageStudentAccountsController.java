@@ -189,7 +189,7 @@ public class ManageStudentAccountsController implements Initializable, Controlle
         Response rsp;
         for (SimpleStudent student : pendingStudents)
         {
-            rsp = deleteStudent.request(student);
+            rsp = approveStudent.request(student);
             if (rsp.getStatus() != Response.Status.OK.getStatusCode())
             {
                 //@TODO error handling

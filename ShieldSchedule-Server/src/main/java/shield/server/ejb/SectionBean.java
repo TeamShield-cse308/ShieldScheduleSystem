@@ -93,6 +93,7 @@ public class SectionBean
             
             em.getTransaction().begin();
             c.addSection(teacher, sb, semSet);
+            em.persist(c.getSections().get(c.getSections().size()-1));
             em.getTransaction().commit();
         } finally
         {

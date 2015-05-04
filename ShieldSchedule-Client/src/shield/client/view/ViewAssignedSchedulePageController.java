@@ -6,33 +6,41 @@
 package shield.client.view;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import shield.client.main.CSE308GUI;
+import shield.client.view.session.StudentSession;
+import shield.shared.dto.SimpleSchedule;
 
 /**
  * FXML Controller class
  *
  * @author evanguby
  */
-public class ViewAssignedSchedulePageController implements Initializable {
+public class ViewAssignedSchedulePageController implements Initializable, ControlledScreen {
+
+    ScreensController myController;
+    
     @FXML
-    private ListView<?> day1Table;
+    private ListView<String> day1Table;
     @FXML
-    private ListView<?> day2Table;
+    private ListView<String> day2Table;
     @FXML
-    private ListView<?> day3Table;
+    private ListView<String> day3Table;
     @FXML
-    private ListView<?> day4Table;
+    private ListView<String> day4Table;
     @FXML
-    private ListView<?> day5Table;
+    private ListView<String> day5Table;
     @FXML
-    private ListView<?> day6Table;
+    private ListView<String> day6Table;
     @FXML
-    private ListView<?> day7Table;
+    private ListView<String> day7Table;
     @FXML
     private Label period1;
     @FXML
@@ -44,19 +52,19 @@ public class ViewAssignedSchedulePageController implements Initializable {
     @FXML
     private Label period5;
     @FXML
-    private Label day6;
+    private Label period6;
     @FXML
-    private Label day7;
+    private Label period7;
     @FXML
-    private Label day8;
+    private Label period8;
     @FXML
-    private Label day9;
+    private Label period9;
     @FXML
-    private Label day10;
+    private Label period10;
     @FXML
-    private Label day11;
+    private Label period11;
     @FXML
-    private Label day12;
+    private Label period12;
     @FXML
     private Label day1;
     @FXML
@@ -67,6 +75,10 @@ public class ViewAssignedSchedulePageController implements Initializable {
     private Label day4;
     @FXML
     private Label day5;
+    @FXML
+    private Label day6;
+    @FXML
+    private Label day7;
 
     /**
      * Initializes the controller class.
@@ -78,6 +90,60 @@ public class ViewAssignedSchedulePageController implements Initializable {
 
     @FXML
     private void handleBack(ActionEvent event) {
+        myController.getScene().getWindow().setWidth(720);
+        myController.setScreen(CSE308GUI.ViewSchedulesPageID);
+    }
+
+    @Override
+    public void setScreenParent(ScreensController screenPage) {
+        myController = screenPage;
+    }
+
+    @Override
+    public void populatePage() {
+        myController.getScene().getWindow().setWidth(900);
+        StudentSession ss = (StudentSession)myController.getSession();
+        int days = ss.getSchool().numScheduleDays;
+        int periods = ss.getSchool().numPeriods;
+        ArrayList<Label> schedDays = new ArrayList<>();
+        ArrayList<Label> schPeriods = new ArrayList<>();
+        ArrayList<ListView> tableDays = new ArrayList<>();
+        schedDays.add(day1);
+        schedDays.add(day2);
+        schedDays.add(day3);
+        schedDays.add(day4);
+        schedDays.add(day5);
+        schedDays.add(day6);
+        schedDays.add(day7);
+        schPeriods.add(period1);
+        schPeriods.add(period2);
+        schPeriods.add(period3);
+        schPeriods.add(period4);
+        schPeriods.add(period5);
+        schPeriods.add(period6);
+        schPeriods.add(period7);
+        schPeriods.add(period8);
+        schPeriods.add(period9);
+        schPeriods.add(period10);
+        schPeriods.add(period11);
+        schPeriods.add(period12);
+        tableDays.add(day1Table);
+        tableDays.add(day2Table);
+        tableDays.add(day3Table);
+        tableDays.add(day4Table);
+        tableDays.add(day5Table);
+        tableDays.add(day6Table);
+        tableDays.add(day7Table);
+        for(int i = 0; i < days; i++){
+            schedDays.get(i).setVisible(true);
+            tableDays.get(i).setVisible(true);
+        }
+        for(int i = 0; i < periods; i++){
+            schPeriods.get(i).setVisible(true);
+        }
+        
+        //SimpleSchedule schedule = getStudentsAssignedSchedule.request(ss.getStudentAccount());
+        
     }
     
 }

@@ -101,7 +101,7 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
         //extract course names from schools;
         //extract course names from schools
         ArrayList<String> courseNames = new ArrayList<>();
-        List<String> list = ss.getAssignedSchedule().courseIDs;
+        //List<String> list = ss.getAssignedSchedule().courseIDs;
         //List<SimpleCourses> list = ss.
         for (SimpleCourse course : courses) {
             SimpleCourse c = new SimpleCourse();
@@ -109,12 +109,12 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
             c.name = course.name;
             c.school = course.school;
             c.courseID = course.courseID;
-            boolean toAdd = true;
-            for(String cid : list){
-                if(cid.equals("" + course.courseID))
-                    toAdd = false;
-            }
-            if((course.year == 0 || course.year == ss.getScheduleYear()) && toAdd){
+//            boolean toAdd = true;
+//            for(String cid : list){
+//                if(cid.equals("" + course.courseID))
+//                    toAdd = false;
+//            }
+            if((course.year == ss.getScheduleYear()) && !course.name.contains("Lunch")){
                 courseNames.add(course.name + ", " + course.identifier);
             }
             

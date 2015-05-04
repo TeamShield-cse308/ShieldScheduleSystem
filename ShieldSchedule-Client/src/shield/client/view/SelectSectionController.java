@@ -54,8 +54,6 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         String courseID = "" + ss.getCourse().courseID;
         int index = section.getSelectionModel().getSelectedIndex();
         String sectionID = "" + ss.getSections().get(index).sectionID;
-        ss.addCourseID(courseID);
-        ss.addSectionID(sectionID);
         String toAdd = ss.getCourseName() + " " + section.getValue();
         ss.sectionToAddToString(toAdd);
         SimpleSection sec = new SimpleSection();
@@ -97,7 +95,7 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         }
         GenericType<List<SimpleSection>> gtlc = new GenericType<List<SimpleSection>>() {
         };
-        
+        try{
         List<SimpleSection> sections = rsp.readEntity(gtlc);
         s.setSections(sections);
         ArrayList<SimpleSection> sectionArray = new ArrayList<>();
@@ -106,16 +104,20 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         
         for (SimpleSection section : sections) {
             String sectionDays = "";
-            for(int i = 0; i<section.scheduleBlockDays.length();i++){
-                sectionDays += section.scheduleBlockDays.substring(i,i+1) + ", ";
+            for(int i = 0; i<section.scheduleBlock.scheduleDays.length();i++){
+                sectionDays += section.scheduleBlock.scheduleDays.substring(i,i+1) + ", ";
             }
-            sectionNames.add(section.teacherName + " Period: " + section.scheduleBlockPeriod + 
+            sectionNames.add(section.teacherName + " Period: " + section.scheduleBlock.period + 
                     " Days: " + sectionDays.substring(0,sectionDays.lastIndexOf(","))); //Add schedule block info
         }
         //ss.setCourses(coursesArray);
         //populate combobox
         section.getItems().clear();
         section.getItems().addAll(sectionNames);
+        }
+        catch (Exception e){
+            
+        }
     }
     
 }
