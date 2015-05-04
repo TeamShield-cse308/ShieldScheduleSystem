@@ -28,7 +28,7 @@ public class DesiredScheduleBean
 
     //Logger
     private static final Logger logger =
-            Logger.getLogger("sss.ejb.DesiredScheduleBean");
+            Logger.getLogger(DesiredScheduleBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -38,10 +38,12 @@ public class DesiredScheduleBean
      * Set whether the student desires lunch on each day of the schedule week.
      *
      * @param studentEmail The student in reference
+     * @param year
      * @param desiresLunch A boolean array indicating whether lunch is desired
      * on each day
      */
     public void setLunches(String studentEmail,
+            int year,
             boolean[] desiresLunch)
     {
         //Create the entity manager and set up the query for the student and his/her friends
@@ -52,10 +54,10 @@ public class DesiredScheduleBean
 
         try
         {
+            logger.log(Level.INFO, "Setting preferred lunch days for student {0} for year {1}", new Object[] {studentEmail, year});
             Student student = queryStudent.getSingleResult();
             GenerationCriteria gc = student.getGenerationCriteria();
             gc.setLunches(desiresLunch);
-            //@TODO catch exceptions
         } catch (NoResultException nrex)
         {
             logger.log(Level.WARNING, "No such account with email {0} found in database", studentEmail);
@@ -68,36 +70,44 @@ public class DesiredScheduleBean
     }
 
     /**
-     * Add a course to the schedule generation criteria.
      *
      * @param studentEmail
-     * @param course
+     * @param year
+     * @param courseID
      * @param instructor
-     * @param exclusions
-     * @return True if the course could be added, false if otherwise (i.e., the
-     * course is already among the generation criteria)
+     * @param excludedSectionIDs
+     * @return
      */
     public boolean addCourse(String studentEmail,
-            Course course,
+            int year,
+            long courseID,
             String instructor,
-            List<Section> exclusions)
+            List<Long> excludedSectionIDs)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> queryStudent =
                 em.createNamedQuery("Student.findByEmail", Student.class);
         queryStudent.setParameter("email", studentEmail);
 
+        TypedQuery<Course> queryCourse =
+                em.createNamedQuery("Course.findByID", Course.class);
+        queryCourse.setParameter("id", courseID);
+
+        TypedQuery<Section> querySections =
+                em.createNamedQuery("Section.batchFindByID", Section.class);
+        querySections.setParameter("id", excludedSectionIDs);
+
         boolean success = false;
         try
         {
+            logger.log(Level.INFO, "Adding course to desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
+
             Student student = queryStudent.getSingleResult();
             GenerationCriteria gc = student.getGenerationCriteria();
+
+            Course course = queryCourse.getSingleResult();
+            List<Section> exclusions = querySections.getResultList();
             success = gc.addCourse(course, exclusions, instructor);
-            //@TODO catch exceptions
-        } catch (NoResultException nrex)
-        {
-            logger.log(Level.WARNING, "No such account with email {0} found in database", studentEmail);
-            throw nrex;
         } finally
         {
             em.close();
@@ -107,23 +117,27 @@ public class DesiredScheduleBean
     }
 
     public void removeCourse(String studentEmail,
-            Course course)
+            int year,
+            long courseID)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> queryStudent =
                 em.createNamedQuery("Student.findByEmail", Student.class);
         queryStudent.setParameter("email", studentEmail);
 
+        TypedQuery<Course> queryCourse =
+                em.createNamedQuery("Course.findByID", Course.class);
+        queryCourse.setParameter("id", courseID);
+
         try
         {
+            logger.log(Level.INFO, "Removing course from desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
+            
             Student student = queryStudent.getSingleResult();
+            Course course = queryCourse.getSingleResult();
             GenerationCriteria gc = student.getGenerationCriteria();
             gc.removeCourse(course);
-            //@TODO catch exceptions
-        } catch (NoResultException nrex)
-        {
-            logger.log(Level.WARNING, "No such account with email {0} found in database", studentEmail);
-            throw nrex;
+
         } finally
         {
             em.close();
@@ -131,7 +145,8 @@ public class DesiredScheduleBean
         }
     }
 
-    public GenerationCriteria getCriteria(String studentEmail)
+    public GenerationCriteria getCriteria(String studentEmail,
+            int year)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Student> queryStudent =
@@ -141,9 +156,11 @@ public class DesiredScheduleBean
         GenerationCriteria gc = null;
         try
         {
+            logger.log(Level.INFO, "Retrieving generation criteria for student {0} for year {1}", new Object[] {studentEmail, year});
+            
             Student student = queryStudent.getSingleResult();
             gc = student.getGenerationCriteria();
-            //@TODO catch exceptions
+
         } catch (NoResultException nrex)
         {
             logger.log(Level.WARNING, "No such account with email {0} found in database", studentEmail);
@@ -156,7 +173,8 @@ public class DesiredScheduleBean
         return gc;
     }
 
-    public List<Schedule> generateSchedule(String studentEmail)
+    public List<Schedule> generateSchedule(String studentEmail,
+            int year)
     {
         //Create the entity manager and set up the query for the student and his/her friends
         em = DatabaseConnection.getEntityManager();
@@ -176,6 +194,8 @@ public class DesiredScheduleBean
 
         try
         {
+            logger.log(Level.INFO, "Generating desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
+            
             Student student = queryStudent.getSingleResult();
             List<Student> friends = queryFriends.getResultList();
             GenerationCriteria gc = student.getGenerationCriteria();

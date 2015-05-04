@@ -27,7 +27,9 @@ import javax.persistence.OneToOne;
 @NamedQueries(
         {
             @NamedQuery(name = "Section.findByID",
-                    query = "SELECT s FROM Section s WHERE s.id = :id")
+                    query = "SELECT s FROM Section s WHERE s.id = :id"),
+            @NamedQuery(name = "Section.batchFindByID",
+                    query = "SELECT s FROM Section s WHERE s.id IN :ids")
         })
 @Entity
 @SuppressWarnings("ValidPrimaryTableName")

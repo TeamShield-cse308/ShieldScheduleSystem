@@ -33,7 +33,7 @@ public class School implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static final int NUM_YEARS = 4;
 
     @Id
@@ -194,6 +194,24 @@ public class School implements Serializable
     }
 
     /**
+     * Retrieve the list of lunch courses for a particular year.
+     * @param year
+     * @return 
+     */
+    public List<Course> getLunches(int year)
+    {
+        List<Course> lunches = new ArrayList<>(courseList);
+        for (Course c : lunches)
+        {
+            if (c.getYear() != year || !c.getIdentifier().contains("LUNCH_"))
+            {
+                lunches.remove(c);
+            }
+        }
+        return lunches;
+    }
+
+    /**
      * Add a new course to those offered by the school.
      *
      * @param identifier The unique identifier for the course, e.g. PHY101
@@ -210,7 +228,8 @@ public class School implements Serializable
         return c;
     }
 
-    public Course addLunch(int scheduleDay, int year)
+    public Course addLunch(int scheduleDay,
+            int year)
     {
 
         Course c = new Course(this, "LUNCH_" + scheduleDay + "_Y" + year,

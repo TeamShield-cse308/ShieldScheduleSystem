@@ -36,13 +36,15 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints
         = @UniqueConstraint(columnNames =
                 {
-                    "SCHOOL_ID", "IDENTIFIER"
+                    "SCHOOL_ID", "IDENTIFIER", "YEAR" 
         })
 )
 @NamedQueries(
         {
             @NamedQuery(name = "Course.findByIdentifierSchool",
-                    query = "SELECT c FROM Course c WHERE c.identifier = :identifier AND c.school.name = :school")
+                    query = "SELECT c FROM Course c WHERE c.identifier = :identifier AND c.school.name = :school"),
+            @NamedQuery(name = "Course.findByID",
+                    query = "SELECT c FROM Course c WHERE c.id = :id")
         })
 public class Course implements Serializable
 {
@@ -60,7 +62,8 @@ public class Course implements Serializable
     private String identifier;
 
     private String name;
-    
+
+    @Column(name = "YEAR")
     private int year;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)

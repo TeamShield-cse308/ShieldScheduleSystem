@@ -48,6 +48,8 @@ public class GenerationCriteria implements Serializable
 
     @OneToOne
     private Schedule rootSchedule;
+    
+    private int year;
 
     @Transient
     private int bestScore;
@@ -60,16 +62,17 @@ public class GenerationCriteria implements Serializable
     /**
      * Create a new set of generation criteria.
      * 
-     * @param sch The school this generation criteria applies to.
-     * @param sem The semester the desired schedule is for.
+     * @param school The school this generation criteria applies to.
+     * @param sem The year the desired schedule is for.
      */
-    GenerationCriteria(School sch,
-            int sem)
+    GenerationCriteria(School school,
+            int year)
     {
         courses = new HashMap<>();
         excludedSections = new ArrayList<>();
-        lunches = sch.getLunches();
-        rootSchedule = new Schedule(sch, sem);
+        lunches = school.getLunches(year);
+        rootSchedule = new Schedule(school, year);
+        this.year = year;
     }
 
     /**
@@ -113,7 +116,7 @@ public class GenerationCriteria implements Serializable
             String instructor)
     {
         //don't add if the course is already in the schedule
-        if (courses.containsKey(c))
+        if (c.getYear() != year || courses.containsKey(c))
         {
             return false;
         }
