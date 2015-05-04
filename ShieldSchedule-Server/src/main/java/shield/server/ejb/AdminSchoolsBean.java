@@ -70,6 +70,25 @@ public class AdminSchoolsBean
             em.getTransaction().begin();
             //add the school
             em.persist(school);
+            
+            //Quick and dirty solution for creating schedule blocks before the lunch sections
+            //Just have an array of possible blocks for each day/period in the school week
+            //Create as needed for lunch periods
+            ScheduleBlock[][] scheduleBlocks = new ScheduleBlock[school.getScheduleDays()+1][school.getPeriods()+1];
+            //Create a schedule block for each day and lunch period
+            for (int day = 1; day <= school.getScheduleDays(); day++)
+            {
+                TreeSet<Integer> daySet = new TreeSet<>();
+                daySet.add(day);
+
+                //Create a schedule block and a lunch section for each period
+                for (int period = school.getStartingLunch(); period <= school.getEndingLunch(); period++)
+                {
+                    ScheduleBlock sb = new ScheduleBlock(school, period, daySet, true);
+                    em.persist(sb);
+                    scheduleBlocks[day][period] = sb;
+                }
+            }
 
             //create a Lunch course for each day of the week
             for (int year = 1; year <= School.NUM_YEARS; year++)
@@ -77,20 +96,16 @@ public class AdminSchoolsBean
                 for (int day = 1; day <= school.getScheduleDays(); day++)
                 {
                     Course c = school.addLunch(day, year);
-                    TreeSet<Integer> daySet = new TreeSet<>();
-                    daySet.add(day);
 
                     //Create a schedule block and a lunch section for each period
                     for (int period = school.getStartingLunch(); period <= school.getEndingLunch(); period++)
                     {
-                        ScheduleBlock sb = new ScheduleBlock(school, period, daySet, true);
-                        em.persist(sb);
                         TreeSet<Integer> semSet = new TreeSet<>();
                         for (int semester = 1; semester <= school.getSemesters(); semester++)
                         {
                             semSet.add(semester);
                         }
-                        c.addSection("STAFF", sb, semSet);
+                        c.addSection("STAFF", scheduleBlocks[day][period], semSet);
                     }
                 }
             }

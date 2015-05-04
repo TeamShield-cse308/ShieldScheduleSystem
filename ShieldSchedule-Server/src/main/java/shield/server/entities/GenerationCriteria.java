@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,7 +48,7 @@ public class GenerationCriteria implements Serializable
     @OneToMany
     private List<Section> excludedSections;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Schedule rootSchedule;
     
     private int year;
