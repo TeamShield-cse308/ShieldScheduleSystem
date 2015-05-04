@@ -44,11 +44,11 @@ public class StudentSession implements Session
         return courseName;
     }
     
-//    public void newAssignedSchedule(){
-//        assignedSchedule = new SimpleSchedule();
-//        assignedSchedule.courseIDs = new ArrayList<String>();
-//        assignedSchedule.sectionIDs = new ArrayList<String>();
-//    }
+    public void newAssignedSchedule(){
+        assignedSchedule = new SimpleSchedule();
+        assignedSchedule.courseIDs = new ArrayList<String>();
+        assignedSchedule.sectionIDs = new ArrayList<String>();
+    }
     
     public void setCourseName(String courseName) {
         for(SimpleCourse c : courses){
@@ -117,13 +117,13 @@ public class StudentSession implements Session
         this.scheduleBlocks = scheduleBlocks;
     }
 
-//    public void addCourseID(String courseID) {
-//        assignedSchedule.courseIDs.add(courseID);
-//    }
-//
-//    public void addSectionID(String sectionID) {
-//        assignedSchedule.sectionIDs.add(sectionID);
-//    }
+    public void addCourseID(String courseID) {
+        assignedSchedule.courseIDs.add(courseID);
+    }
+
+    public void addSectionID(String sectionID) {
+        assignedSchedule.sectionIDs.add(sectionID);
+    }
 
     public String getAssignedScheduleAsString() {
         return assignedScheduleAsString;
