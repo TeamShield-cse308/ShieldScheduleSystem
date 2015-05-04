@@ -84,16 +84,17 @@ public class SectionResource
             List<Section> sectionList = sectionBean.getCourseSections(course.identifier, course.school, course.year);
 
             List<SimpleSection> simpleSections = new ArrayList<>();
-            SimpleSection s;
+            SimpleSection ss;
             for (Section section : sectionList)
             {
-                s = new SimpleSection();
-                s.teacherName = section.getTeacher();
+                ss = new SimpleSection();
+                ss.teacherName = section.getTeacher();
                 ScheduleBlock sb = section.getScheduleBlock();
-                s.setScheduleBlock(sb.getPeriod(), sb.getDaysString());
-                s.sectionID = section.getId();
+                ss.setScheduleBlock(sb.getPeriod(), sb.getDaysString());
+                ss.studentsEnrolled = section.getEnrolledStudents().size();
+                ss.sectionID = section.getId();
 
-                simpleSections.add(s);
+                simpleSections.add(ss);
             }
             //a wrapper for the list of students
             GenericEntity<List<SimpleSection>> wrapper =
