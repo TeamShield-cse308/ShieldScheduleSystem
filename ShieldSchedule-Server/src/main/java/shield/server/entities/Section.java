@@ -9,29 +9,41 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * Class to persist Sections of classes in the database
  *
  * @author Phillip Elliot, Jeffrey Kabot
  */
+@Entity
 @NamedQueries(
         {
             @NamedQuery(name = "Section.findByID",
                     query = "SELECT s FROM Section s WHERE s.id = :id"),
             @NamedQuery(name = "Section.batchFindByID",
                     query = "SELECT s FROM Section s WHERE s.id IN :ids")
+        }
+)
+@Table(uniqueConstraints =
+        @UniqueConstraint(columnNames =
+                {
+                    "COURSE_ID", "SCHEDULE_BLOCK_ID", "SEMESTERS",
         })
-@Entity
+)
 @SuppressWarnings("ValidPrimaryTableName")
 public class Section implements Serializable
 {
@@ -42,15 +54,18 @@ public class Section implements Serializable
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "SCHEDULE_BLOCK_ID")
     private ScheduleBlock scheduleBlock;
 
     @ManyToOne
+    @JoinColumn(name = "COURSE_ID")
     private Course course;
 
-    private SortedSet<Integer> semesters;
-    
+    @Column(name = "SEMESTERS")
+    private String semesters;
+
     private String teacherName;
-    
+
     @OneToMany
     private Set<Student> enrolledStudents;
 
@@ -75,11 +90,15 @@ public class Section implements Serializable
     {
         course = initCourse;
         teacherName = teacher;
+        semesters = "";
         if (initSemesters.first() < 1 || initSemesters.last() > initCourse.getSchool().getSemesters())
         {
             throw new IllegalArgumentException("The set of semesters for this section must be in the valid range defined by the school");
         }
-        semesters = initSemesters;
+        for (int sem : initSemesters)
+        {
+            semesters += sem;
+        }
         scheduleBlock = sb;
         enrolledStudents = new HashSet<>();
     }
@@ -91,7 +110,12 @@ public class Section implements Serializable
 
     public SortedSet<Integer> getSemesters()
     {
-        return semesters;
+        SortedSet<Integer> semSet = new TreeSet<>();
+        for (int i = 0; i < semesters.length(); i++)
+        {
+            semSet.add(Integer.parseInt("" + semesters.charAt(i)));
+        }
+        return semSet;
     }
 
     public String getTeacher()
@@ -103,26 +127,28 @@ public class Section implements Serializable
     {
         return scheduleBlock;
     }
-    
+
     public Set<Student> getEnrolledStudents()
     {
         return enrolledStudents;
     }
-    
+
     /**
      * Enroll a student in the section.
+     *
      * @param s
-     * @return 
+     * @return
      */
     public boolean addStudent(Student s)
     {
         return enrolledStudents.add(s);
     }
-    
+
     /**
      * Drop a student from the section.
+     *
      * @param s
-     * @return 
+     * @return
      */
     public boolean removeStudent(Student s)
     {
