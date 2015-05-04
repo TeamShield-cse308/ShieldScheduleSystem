@@ -277,5 +277,11 @@ public class StudentViewController implements Initializable, ControlledScreen {
             populateFriendsListView();
         }
     }
+    
+    @FXML
+    public void handleCourseOfferings(ActionEvent event){
+        myController.loadScreen(CSE308GUI.SelectAcademicYearPageID, CSE308GUI.SelectAcademicYearPage);
+        myController.setScreen(CSE308GUI.SelectAcademicYearPageID);
+    }
 
 }

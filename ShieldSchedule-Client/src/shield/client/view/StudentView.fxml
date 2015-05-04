@@ -37,5 +37,6 @@
       </Label>
       <Button layoutX="14.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleEnterAssignedSchedule" text="Enter Assigned Schedule" />
       <Button layoutX="385.0" layoutY="272.0" mnemonicParsing="false" onAction="#handleDeleteSelectedFriend" text="Delete Selected Friend" />
+      <Button layoutX="14.0" layoutY="191.0" mnemonicParsing="false" onAction="#handleCourseOfferings" text="View Course Offerings" />
    </children>
 </AnchorPane>
