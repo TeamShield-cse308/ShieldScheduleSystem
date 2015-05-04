@@ -5,6 +5,7 @@
  */
 package shield.shared.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,4 +16,12 @@ public class SimpleSchedule {
     public String studentEmail;
     public int year;
     public List<SimpleSection> sections;
+    
+    public void addSection(SimpleSection section)
+    {
+        if (sections == null)
+            sections = new ArrayList<>();
+        
+        sections.add(section);
+    }
 }

@@ -68,7 +68,7 @@ public class Section implements Serializable
      * @throws IllegalArgumentException when the set of semesters provided is
      * not valid for the school
      */
-    public Section(Course initCourse,
+    Section(Course initCourse,
             String teacher,
             ScheduleBlock sb,
             SortedSet<Integer> initSemesters) throws IllegalArgumentException

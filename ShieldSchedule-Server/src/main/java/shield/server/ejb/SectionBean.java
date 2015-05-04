@@ -6,6 +6,7 @@
 package shield.server.ejb;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -17,32 +18,35 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import shield.server.entities.Course;
 import shield.server.entities.ScheduleBlock;
-import shield.server.entities.School;
 import shield.server.entities.Section;
 import shield.server.util.DatabaseConnection;
-import shield.shared.dto.SimpleSection;
 
 /**
  *
  * @author evanguby
  */
 @Stateful
-public class SectionBean {
+public class SectionBean
+{
+
     //Logger
+
     private static final Logger logger =
-             Logger.getLogger("sss.ejb.SectionBean");
+            Logger.getLogger("sss.ejb.SectionBean");
 
     //reference to the perisstence layer
     @PersistenceContext
     private EntityManager em;
-    
-    public List<Section> getCourseSections(String courseIdentifier, String school)
+
+    public List<Section> getCourseSections(String courseIdentifier,
+            String school, int year)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Course> query =
-                em.createNamedQuery("Course.findByIdentifierSchool", Course.class);
+                em.createNamedQuery("Course.findByIdentifierSchoolYear", Course.class);
         query.setParameter("identifier", courseIdentifier);
         query.setParameter("school", school);
+        query.setParameter("year", year);
         List<Section> sectionList = null;
         try
         {
@@ -58,37 +62,45 @@ public class SectionBean {
         return sectionList;
     }
 
-    public void addSection(SimpleSection section) {
-        
+    public void addSection(String school,
+            int period,
+            String days,
+            String identifier,
+            int year,
+            String teacher,
+            List<Integer> semesters)
+    {
+
         em = DatabaseConnection.getEntityManager();
         TypedQuery<ScheduleBlock> query =
-                 em.createNamedQuery("ScheduleBlock.findBySchoolPeriodDay", ScheduleBlock.class);
+                em.createNamedQuery("ScheduleBlock.findBySchoolPeriodDay", ScheduleBlock.class);
         TypedQuery<Course> query2 =
-                 em.createNamedQuery("Course.findByIdentifierSchool", Course.class);
-        query.setParameter("school",section.school);
-        query.setParameter("period",section.scheduleBlockPeriod);
-        query.setParameter("days",section.scheduleBlockDays);
-        query2.setParameter("identifier", section.courseIdentifier);
-        query2.setParameter("school", section.school);
-        try{
+                em.createNamedQuery("Course.findByIdentifierSchoolYear", Course.class);
+        query.setParameter("school", school);
+        query.setParameter("period", period);
+        query.setParameter("days", days);
+
+        query2.setParameter("identifier", identifier);
+        query2.setParameter("school", school);
+        query2.setParameter("year", year);
+        try
+        {
             ScheduleBlock sb = query.getSingleResult();
             Course c = query2.getSingleResult();
-            ArrayList<Integer> al = new ArrayList<>();
-            for(int i = 0; i < section.semesters.length(); i++){
-                al.add(Integer.parseInt(section.semesters.substring(i,i+1)));
-            }
-            SortedSet<Integer> a = (SortedSet<Integer>)new TreeSet<>(al);
-            Section toAdd = new Section(c,section.teacherName,sb,a);
-            c.addSection(toAdd.getTeacher(), toAdd.getScheduleBlock(), toAdd.getSemesters());
+            
+
+            SortedSet<Integer> semSet = new TreeSet<>();
+            semSet.addAll(semesters);
+            
             em.getTransaction().begin();
-            em.persist(c);
+            c.addSection(teacher, sb, semSet);
             em.getTransaction().commit();
-        }finally
+        } finally
         {
             //Close the entity manager
             em.close();
             em = null;
         }
     }
-    
+
 }

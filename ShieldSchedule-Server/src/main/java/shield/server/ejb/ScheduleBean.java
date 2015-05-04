@@ -22,106 +22,101 @@ import shield.shared.dto.SimpleSection;
  * @author evanguby
  */
 @Stateful
-public class ScheduleBean {
+public class ScheduleBean
+{
 
     //Logger
-    private static final Logger logger
-            = Logger.getLogger("sss.ejb.ScheduleBean");
+    private static final Logger logger =
+            Logger.getLogger(ScheduleBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
     private EntityManager em;
 
-    public void setAssignedSchedule(SimpleSchedule schedule) {
-//        em = DatabaseConnection.getEntityManager();
-//        TypedQuery<Student> query
-//                = em.createNamedQuery("Student.findByEmail", Student.class);
-//        query.setParameter("email", schedule.studentEmail);
-//        try {
-//            Student s = query.getSingleResult();
-//            s.createSchedule(schedule.year);
-//            Schedule assigned = s.getSchedule(schedule.year);
-//            for (String sID : schedule.sectionIDs) {
-//                TypedQuery<Section> query2
-//                        = em.createNamedQuery("Section.findByID", Section.class);
-//                query2.setParameter("id", Long.parseLong(sID));
-//                Section sec = query2.getSingleResult();
-//                assigned.addSection(sec);
-//                
-//            }
-//            em.getTransaction().begin();
-//            em.persist(assigned);
-//            em.getTransaction().commit();
-//        } finally {
-//            //Close the entity manager
-//            em.close();
-//            em = null;
-//        }
+    public Schedule getSchedule(String studentEmail,
+            int year)
+    {
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<Student> query
-                = em.createNamedQuery("Student.findByEmail", Student.class);
-        query.setParameter("email", schedule.studentEmail);
-        try {
-            Student s = query.getSingleResult();
-            Schedule assigned = s.getAssignedSchedule(schedule.year);
-            for (String sID : schedule.sectionIDs) {
-                TypedQuery<Section> query2
-                        = em.createNamedQuery("Section.findByID", Section.class);
-                query2.setParameter("id", Long.parseLong(sID));
-                Section sec = query2.getSingleResult();
-                assigned.addSection(sec);
+        TypedQuery<Student> query =
+                em.createNamedQuery("Student.findByEmail", Student.class);
+        query.setParameter("email", studentEmail);
 
-            }
-            em.getTransaction().begin();
-            em.persist(assigned);
-            em.getTransaction().commit();
-        } finally {
+        Schedule sch = null;
+        try
+        {
+            Student s = query.getSingleResult();
+            sch = s.getAssignedSchedule(year);
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;
         }
+        return sch;
     }
 
-    public void addSectionToSchedule(SimpleSection section) {
+    public boolean addSectionToSchedule(String studentEmail,
+            int year,
+            long sectionID)
+    {
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<Student> query
-                = em.createNamedQuery("Student.findByEmail", Student.class);
-        query.setParameter("email", section.studentEmail);
-        try {
-            Student s = query.getSingleResult();
-            Schedule assigned = s.getAssignedSchedule(section.year);
+        TypedQuery<Student> query =
+                em.createNamedQuery("Student.findByEmail", Student.class);
+        query.setParameter("email", studentEmail);
 
-            TypedQuery<Section> query2
-                    = em.createNamedQuery("Section.findByID", Section.class);
-            query2.setParameter("id", section.sectionID);
+        TypedQuery<Section> query2 =
+                em.createNamedQuery("Section.findByID", Section.class);
+        query2.setParameter("id", sectionID);
+
+        boolean success = false;
+        try
+        {
+            Student s = query.getSingleResult();
+            Schedule assigned = s.getAssignedSchedule(year);
+
             Section sec = query2.getSingleResult();
-            assigned.addSection(sec);
 
             em.getTransaction().begin();
-            em.persist(assigned);
+            success = assigned.addSection(sec);
             em.getTransaction().commit();
-        } finally {
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;
         }
+        return success;
     }
 
-    public void createSchedule(SimpleSchedule ss) {
+    public void removeSectionFromSchedule(String studentEmail,
+            int year,
+            long sectionID)
+    {
         em = DatabaseConnection.getEntityManager();
-        TypedQuery<Student> query
-                = em.createNamedQuery("Student.findByEmail", Student.class);
-        query.setParameter("email", ss.studentEmail);
-        try {
+        TypedQuery<Student> query =
+                em.createNamedQuery("Student.findByEmail", Student.class);
+        query.setParameter("email", studentEmail);
+
+        TypedQuery<Section> query2 =
+                em.createNamedQuery("Section.findByID", Section.class);
+        query2.setParameter("id", sectionID);
+
+        try
+        {
             Student s = query.getSingleResult();
+            Schedule assigned = s.getAssignedSchedule(year);
+
+            Section sec = query2.getSingleResult();
+
             em.getTransaction().begin();
-            em.persist(s);
+            assigned.removeSection(sec);
             em.getTransaction().commit();
-        } finally {
+
+        } finally
+        {
             //Close the entity manager
             em.close();
             em = null;
         }
     }
-
 }

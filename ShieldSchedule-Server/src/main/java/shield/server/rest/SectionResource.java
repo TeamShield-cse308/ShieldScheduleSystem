@@ -33,8 +33,11 @@ import shield.shared.dto.SimpleSection;
  */
 @Path("section")
 @RequestScoped
-public class SectionResource {
+public class SectionResource
+{
+
     //Logger
+
     private static final Logger logger = Logger.getLogger(SectionResource.class.getName());
 
     @Context
@@ -42,22 +45,28 @@ public class SectionResource {
 
     @Inject
     private SectionBean sectionBean;
-    
-        /**
+
+    /**
      * Creates a new instance of SectionREST
      */
     public SectionResource()
     {
     }
-    
+
     @POST
     @Path("/add")
     @Consumes("application/json")
     public Response addSection(SimpleSection section)
     {
-         try
+        try
         {
-            sectionBean.addSection(section);
+            sectionBean.addSection(section.school,
+                    section.scheduleBlock.period,
+                    section.scheduleBlock.scheduleDays,
+                    section.courseIdentifier,
+                    section.year,
+                    section.teacherName,
+                    section.semesters);
             logger.log(Level.INFO, "OK Response");
             return Response.ok(section).build();
         } catch (RollbackException rex)
@@ -71,14 +80,14 @@ public class SectionResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-    
+
     @POST
     @Path("/getCourseSections")
     @Consumes("application/json")
     public Response getCourseSections(SimpleCourse course)
     {
-        List<Section> sectionList = sectionBean.getCourseSections(course.identifier, course.school);
-        
+        List<Section> sectionList = sectionBean.getCourseSections(course.identifier, course.school, course.year);
+
         List<SimpleSection> simpleSections = new ArrayList<>();
         SimpleSection s;
         for (Section section : sectionList)
@@ -86,11 +95,9 @@ public class SectionResource {
             s = new SimpleSection();
             s.teacherName = section.getTeacher();
             ScheduleBlock sb = section.getScheduleBlock();
-            s.scheduleBlockPeriod = sb.getPeriod();
-            s.scheduleBlockDays = sb.getDaysString();
+            s.setScheduleBlock(sb.getPeriod(), sb.getDaysString());
             s.sectionID = section.getId();
-            //s.scheduleBlockPeriod = section.g
-            
+
             simpleSections.add(s);
         }
         //a wrapper for the list of students
@@ -103,5 +110,3 @@ public class SectionResource {
     }
 
 }
-
-

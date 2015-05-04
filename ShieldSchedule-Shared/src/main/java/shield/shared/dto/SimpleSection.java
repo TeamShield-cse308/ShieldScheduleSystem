@@ -5,19 +5,27 @@
  */
 package shield.shared.dto;
 
+import java.util.List;
+
 /**
  *
  * @author evanguby
  */
-public class SimpleSection {
+public class SimpleSection
+{
     public String teacherName;
-    public int scheduleBlockPeriod;
-    public String scheduleBlockDays;
-    public long scheduleBlockID;
+    public SimpleScheduleBlock scheduleBlock;
     public String school;
-    public String semesters;
+    public List<Integer> semesters;
     public String courseIdentifier;
     public long sectionID;
     public String studentEmail;
     public int year;
+    
+    public void setScheduleBlock(int period, String days)
+    {
+        scheduleBlock = new SimpleScheduleBlock();
+        scheduleBlock.period = period;
+        scheduleBlock.scheduleDays = days;
+    }
 }

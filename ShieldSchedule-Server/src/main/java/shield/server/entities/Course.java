@@ -41,8 +41,8 @@ import javax.persistence.UniqueConstraint;
 )
 @NamedQueries(
         {
-            @NamedQuery(name = "Course.findByIdentifierSchool",
-                    query = "SELECT c FROM Course c WHERE c.identifier = :identifier AND c.school.name = :school"),
+            @NamedQuery(name = "Course.findByIdentifierSchoolYear",
+                    query = "SELECT c FROM Course c WHERE c.identifier = :identifier AND c.school.name = :school AND c.year = :year"),
             @NamedQuery(name = "Course.findByID",
                     query = "SELECT c FROM Course c WHERE c.id = :id")
         })
