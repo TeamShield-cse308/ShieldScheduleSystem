@@ -13,8 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 import shield.server.entities.Course;
 import shield.server.entities.ScheduleBlock;
@@ -85,6 +85,7 @@ public class SectionBean
         query2.setParameter("year", year);
         try
         {
+            logger.log(Level.INFO, "Creating new Section for Couurse {0} at School {1}", new String[] {identifier, school});
             ScheduleBlock sb = query.getSingleResult();
             Course c = query2.getSingleResult();
 

@@ -71,7 +71,11 @@ public class SectionResource
         {
             logger.log(Level.WARNING, "No course found!", nrex);
             return Response.status(Response.Status.BAD_REQUEST).entity("No course found!").build();
-        }
+        } catch (RollbackException rex)
+        {
+            logger.log(Level.WARNING, "A section already exists in that schedule block for those semesters.");
+            return Response.status(Response.Status.BAD_REQUEST).entity("A section already exists in that schedule block for those semesters.").build();
+        } 
     }
 
     @POST
