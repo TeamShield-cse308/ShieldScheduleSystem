@@ -238,7 +238,7 @@ public class GenerationCriteria implements Serializable
         {
             Course c = iter.next();
             //pop the course from the set of courses to add
-            localRemaining.remove(c);
+            iter.remove();
 
             //track whether we were able to add any section of the course to the schedule
             boolean success = false;

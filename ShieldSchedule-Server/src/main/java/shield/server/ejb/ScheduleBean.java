@@ -34,30 +34,30 @@ public class ScheduleBean {
     private EntityManager em;
 
     public void setAssignedSchedule(SimpleSchedule schedule) {
-        em = DatabaseConnection.getEntityManager();
-        TypedQuery<Student> query
-                = em.createNamedQuery("Student.findByEmail", Student.class);
-        query.setParameter("email", schedule.studentEmail);
-        try {
-            Student s = query.getSingleResult();
-            s.createSchedule(schedule.year);
-            Schedule assigned = s.getSchedule(schedule.year);
-            for (String sID : schedule.sectionIDs) {
-                TypedQuery<Section> query2
-                        = em.createNamedQuery("Section.findByID", Section.class);
-                query2.setParameter("id", Long.parseLong(sID));
-                Section sec = query2.getSingleResult();
-                assigned.addSection(sec);
-                
-            }
-            em.getTransaction().begin();
-            em.persist(assigned);
-            em.getTransaction().commit();
-        } finally {
-            //Close the entity manager
-            em.close();
-            em = null;
-        }
+//        em = DatabaseConnection.getEntityManager();
+//        TypedQuery<Student> query
+//                = em.createNamedQuery("Student.findByEmail", Student.class);
+//        query.setParameter("email", schedule.studentEmail);
+//        try {
+//            Student s = query.getSingleResult();
+//            s.createSchedule(schedule.year);
+//            Schedule assigned = s.getSchedule(schedule.year);
+//            for (String sID : schedule.sectionIDs) {
+//                TypedQuery<Section> query2
+//                        = em.createNamedQuery("Section.findByID", Section.class);
+//                query2.setParameter("id", Long.parseLong(sID));
+//                Section sec = query2.getSingleResult();
+//                assigned.addSection(sec);
+//                
+//            }
+//            em.getTransaction().begin();
+//            em.persist(assigned);
+//            em.getTransaction().commit();
+//        } finally {
+//            //Close the entity manager
+//            em.close();
+//            em = null;
+//        }
     }
 
 }

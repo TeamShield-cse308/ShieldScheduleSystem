@@ -170,7 +170,7 @@ public class School implements Serializable
             Course c = iter.next();
             if (c.getIdentifier().contains("LUNCH_"))
             {
-                toReturn.remove(c);
+                iter.remove();
             }
         }
         return toReturn;
@@ -190,7 +190,7 @@ public class School implements Serializable
             Course c = iter.next();
             if (!c.getIdentifier().contains("LUNCH_"))
             {
-                lunches.remove(c);
+                iter.remove();
             }
         }
         return lunches;
@@ -209,7 +209,7 @@ public class School implements Serializable
             Course c = iter.next();
             if (c.getYear() != year || !c.getIdentifier().contains("LUNCH_"))
             {
-                lunches.remove(c);
+                iter.remove();
             }
         }
         return lunches;
