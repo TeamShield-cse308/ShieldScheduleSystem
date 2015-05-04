@@ -272,8 +272,9 @@ public class StudentViewController implements Initializable, ControlledScreen {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success!");
             alert.setHeaderText("Friend Deleted");
-            alert.setContentText("You have deleted");
+            alert.setContentText("You have deleted " + ss.email + " from your friends list.");
             alert.show();
+            populateFriendsListView();
         }
     }
 
