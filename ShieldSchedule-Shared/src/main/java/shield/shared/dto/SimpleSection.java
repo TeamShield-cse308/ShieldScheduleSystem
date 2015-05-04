@@ -23,6 +23,7 @@ public class SimpleSection
     public String school;
     public String studentEmail;
     public int year;
+    public int studentsEnrolled;
 
     public void setScheduleBlock(int period,
             String days)

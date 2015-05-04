@@ -60,6 +60,9 @@ public class CSE308GUI extends Application {
     public static String CourseOfferingsPageID = "CourseOfferingsPage";
     public static String SelectAcademicYearPage = "SelectAcademicYearPage.fxml";
     public static String SelectAcademicYearPageID = "SelectAcademicYearPage";
+    public static String CourseSectionsPage = "CourseSectionsPage.fxml";
+    public static String CourseSectionsPageID = "CourseSectionsPage";
+    
     
     private Stage primaryStage;
     private AnchorPane rootLayout;

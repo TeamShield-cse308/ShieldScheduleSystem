@@ -52,6 +52,7 @@ public class CourseOfferingsPageController implements Initializable, ControlledS
 
     @FXML
     private void handleBack(ActionEvent event) {
+        myController.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
         myController.setScreen(CSE308GUI.StudentViewID);
     }
 
@@ -59,7 +60,10 @@ public class CourseOfferingsPageController implements Initializable, ControlledS
     private void handleViewSection(ActionEvent event) {
         int index = courses.getSelectionModel().getSelectedIndex();
         StudentSession ss = (StudentSession)myController.getSession();
-        //SimepleCourse c = ss.getCourses().get(index);
+        SimpleCourse c = ss.getCourses().get(index);
+        ss.setCourse(c);
+        myController.loadScreen(CSE308GUI.CourseSectionsPageID, CSE308GUI.CourseSectionsPage);
+        myController.setScreen(CSE308GUI.CourseSectionsPageID);
         
     }
 
