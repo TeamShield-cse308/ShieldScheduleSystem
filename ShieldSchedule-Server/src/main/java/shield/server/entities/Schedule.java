@@ -15,8 +15,10 @@ import javax.persistence.Transient;
 /**
  * Entity class representing a Schedule that a Student has entered.
  *
+ * <p>
  * A schedule is a list of sections, satisfying the two constraints that each
- * course is unique and that schedule blocks do not overlap.
+ * course is unique and that schedule blocks do not overlap. Schedules are per
+ * each academic year.
  *
  * @author Jeffrey Kabot
  */
@@ -35,7 +37,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
     @OneToMany
     private List<Section> sections;
 
-    private boolean[][] scheduleSlots;
+    private boolean[][][] scheduleSlots;
 
     private int year;
 
@@ -56,7 +58,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
     }
 
     /**
-     * Create a fresh new schedule
+     * Create a fresh new schedule.
      *
      * @param school The school the schedule is for
      * @param year The year the schedule is for
@@ -67,15 +69,15 @@ public class Schedule implements Serializable, Comparable<Schedule>
         this.year = year;
         scheduleDays = school.getScheduleDays();
 
-        //need to add 1 since periods and schedule days are 1-indexed
-        scheduleSlots = new boolean[school.getPeriods() + 1][school.getScheduleDays() + 1];
+        //need to add 1 since semesters, periods and schedule days are 1-indexed
+        scheduleSlots = new boolean[school.getSemesters() + 1][school.getPeriods() + 1][school.getScheduleDays() + 1];
         courses = new HashSet<>();
         sections = new ArrayList<>();
     }
 
     /**
      * Copy constructor, creates a schedule that is a clone of the schedule
-     * passed
+     * passed.
      *
      * @param s The schedule to copy
      */
@@ -104,14 +106,14 @@ public class Schedule implements Serializable, Comparable<Schedule>
      */
     public boolean addSection(Section s)
     {
-        //If the section isn't offered this semester then it can't be added.
+        //If the section isn't offered this year then it can't be added.
         if (!(s.getCourse().getYear() == year))
         {
             return false;
         }
 
         //Check if the section fits in with the schedule
-        boolean[][] sandbox = fillScheduleSlots(s, true);
+        boolean[][][] sandbox = fillScheduleSlots(s, true);
         if (sandbox == null)
         {
             return false;
@@ -140,7 +142,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
         }
 
         //Clear the schedule slots.
-        boolean[][] sandbox = fillScheduleSlots(s, false);
+        boolean[][][] sandbox = fillScheduleSlots(s, false);
         scheduleSlots = sandbox;
         return success;
     }
@@ -155,29 +157,36 @@ public class Schedule implements Serializable, Comparable<Schedule>
      *
      * @param s The section being added or removed from the schedule.
      * @param fill Whether we are filling or clearing schedule blocks.
-     * @return Returns the new matrix of schedule slots if successful, otherwise
-     * returns null
+     * @return If successful, returns the new matrix of schedule slots,
+     * otherwise returns null
      */
-    private boolean[][] fillScheduleSlots(Section s,
+    private boolean[][][] fillScheduleSlots(Section s,
             boolean fill)
     {
         //Create a locally scoped copy of the boolean matrix
-        boolean[][] sandbox = scheduleSlots.clone();
+        boolean[][][] sandbox = scheduleSlots.clone();
 
-        //Extract the period slot
-        int p = s.getScheduleBlock().getPeriod();
+        //Extract the period slot for the section
+        int q = s.getScheduleBlock().getPeriod();
+
+        //Get the semesters
+        Set<Integer> semesters = s.getSemesters();
         //Get the Days
         Set<Integer> days = s.getScheduleBlock().getDays();
-        //Iterate over the days
-        for (int q : days)
+
+        //Iterate over the semesters and days
+        for (int p : semesters)
         {
-            //If we are adding the section to the schedule, we need to check for conflicts
-            if (fill && sandbox[p][q])
+            for (int r : days)
             {
-                return null;
-            } else
-            {
-                sandbox[q][q] = fill;
+                //If we are adding the section to the schedule, we need to check for conflicts
+                if (fill && sandbox[p][q][r])
+                {
+                    return null;
+                } else
+                {
+                    sandbox[p][q][q] = fill;
+                }
             }
         }
         return sandbox;

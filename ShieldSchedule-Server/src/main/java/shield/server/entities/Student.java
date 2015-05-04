@@ -38,6 +38,7 @@ public class Student extends GenericUser implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
+    private static final int NUMBER_OF_YEARS = 4;
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     //annotations go here_________________________________________
@@ -50,7 +51,7 @@ public class Student extends GenericUser implements Serializable
 
     private StudentAccountState accountState;
 
-    //a schedule for each year in the academic year
+    //a schedule for each year
     @OneToMany(cascade = CascadeType.ALL)
     private List<Schedule> assignedSchedule;
 
@@ -73,7 +74,7 @@ public class Student extends GenericUser implements Serializable
         school = initSchool;
 
         accountState = StudentAccountState.PENDING;
-        assignedSchedule = new ArrayList<>(4);
+        assignedSchedule = new ArrayList<>(NUMBER_OF_YEARS);
     }
 
     /**
@@ -139,14 +140,15 @@ public class Student extends GenericUser implements Serializable
 
     /**
      * Retrieve an assigned schedule entered by the student.
+     *
      * @param year The year the schedule is for.
-     * @return 
+     * @return
      */
     public Schedule getSchedule(int year)
     {
-        return assignedSchedule.get(year-1);
+        return assignedSchedule.get(year - 1);
     }
-    
+
     public GenerationCriteria getGenerationCriteria()
     {
         return desiredSchedule;
@@ -154,16 +156,17 @@ public class Student extends GenericUser implements Serializable
 
     /**
      * Create a new assigned schedule for the student.
+     *
      * @param year The year the schedule is for.
      */
     public void createSchedule(int year)
     {
         //if there is already a schedule for that year, then we assume that it's being replaced
-        if (assignedSchedule.get(year-1) != null)
+        if (assignedSchedule.get(year - 1) != null)
         {
-            assignedSchedule.remove(year-1);
+            assignedSchedule.remove(year - 1);
         }
-        assignedSchedule.add(year-1, new Schedule(this.school, year-1));
+        assignedSchedule.add(year - 1, new Schedule(this.school, year - 1));
     }
 
     public String getId()
