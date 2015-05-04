@@ -21,7 +21,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import shield.server.ejb.SectionBean;
-import shield.server.entities.Course;
 import shield.server.entities.ScheduleBlock;
 import shield.server.entities.Section;
 import shield.shared.dto.SimpleCourse;
@@ -37,7 +36,6 @@ public class SectionResource
 {
 
     //Logger
-
     private static final Logger logger = Logger.getLogger(SectionResource.class.getName());
 
     @Context
@@ -69,13 +67,8 @@ public class SectionResource
                     section.semesters);
             logger.log(Level.INFO, "OK Response");
             return Response.ok(section).build();
-        } catch (RollbackException rex)
-        {
-            logger.log(Level.WARNING, "BAD REQUEST");
-            return Response.status(Response.Status.BAD_REQUEST).build();
         } catch (NoResultException nrex)
         {
-            //@TODO disambiguate errors
             logger.log(Level.WARNING, "BAD REQUEST");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -86,27 +79,33 @@ public class SectionResource
     @Consumes("application/json")
     public Response getCourseSections(SimpleCourse course)
     {
-        List<Section> sectionList = sectionBean.getCourseSections(course.identifier, course.school, course.year);
-
-        List<SimpleSection> simpleSections = new ArrayList<>();
-        SimpleSection s;
-        for (Section section : sectionList)
+        try
         {
-            s = new SimpleSection();
-            s.teacherName = section.getTeacher();
-            ScheduleBlock sb = section.getScheduleBlock();
-            s.setScheduleBlock(sb.getPeriod(), sb.getDaysString());
-            s.sectionID = section.getId();
+            List<Section> sectionList = sectionBean.getCourseSections(course.identifier, course.school, course.year);
 
-            simpleSections.add(s);
+            List<SimpleSection> simpleSections = new ArrayList<>();
+            SimpleSection s;
+            for (Section section : sectionList)
+            {
+                s = new SimpleSection();
+                s.teacherName = section.getTeacher();
+                ScheduleBlock sb = section.getScheduleBlock();
+                s.setScheduleBlock(sb.getPeriod(), sb.getDaysString());
+                s.sectionID = section.getId();
+
+                simpleSections.add(s);
+            }
+            //a wrapper for the list of students
+            GenericEntity<List<SimpleSection>> wrapper =
+                    new GenericEntity<List<SimpleSection>>(simpleSections)
+                    {
+                    };
+            logger.log(Level.INFO, "Sending list of sections");
+            return Response.ok(wrapper).build();
+        } catch(NoResultException nrex) {
+            logger.log(Level.WARNING, "No course found!");
+            return Response.status(Response.Status.BAD_REQUEST).entity("No course found!").build();
         }
-        //a wrapper for the list of students
-        GenericEntity<List<SimpleSection>> wrapper =
-                new GenericEntity<List<SimpleSection>>(simpleSections)
-                {
-                };
-        logger.log(Level.INFO, "Sending list of sections");
-        return Response.ok(wrapper).build();
     }
 
 }

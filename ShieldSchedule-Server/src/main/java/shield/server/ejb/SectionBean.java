@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import shield.server.entities.Course;
@@ -29,7 +30,6 @@ public class SectionBean
 {
 
     //Logger
-
     private static final Logger logger =
             Logger.getLogger("sss.ejb.SectionBean");
 
@@ -38,7 +38,8 @@ public class SectionBean
     private EntityManager em;
 
     public List<Section> getCourseSections(String courseIdentifier,
-            String school, int year)
+            String school,
+            int year)
     {
         em = DatabaseConnection.getEntityManager();
         TypedQuery<Course> query =
@@ -52,6 +53,10 @@ public class SectionBean
             Course course = query.getSingleResult();
             sectionList = new ArrayList<>(course.getSections());
             logger.log(Level.INFO, "Retrieving all sections from Course", course);
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No such course found", nrex);
+            throw nrex;
         } finally
         {
             //Close the entity manager
@@ -86,11 +91,10 @@ public class SectionBean
         {
             ScheduleBlock sb = query.getSingleResult();
             Course c = query2.getSingleResult();
-            
 
             SortedSet<Integer> semSet = new TreeSet<>();
             semSet.addAll(semesters);
-            
+
             em.getTransaction().begin();
             c.addSection(teacher, sb, semSet);
             em.getTransaction().commit();
