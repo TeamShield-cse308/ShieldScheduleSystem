@@ -107,38 +107,6 @@ public class ScheduleBlock implements Serializable
         }
     }
 
-    //@TODO check boundaries on scheduleDays?
-    //@TODO check unique days?
-    /**
-     * Creates a new schedule block for a school.
-     *
-     * Each schedule block is unique up to the combination of its school, period
-     * and which days it uses.
-     *
-     * @param initSchool The school owning this schedule block
-     * @param initPeriod The period during which the block takes place
-     * @param scheduleDays A string representing the combination of days used by
-     * this schedule block
-     * @throws IllegalArgumentException when the scheduleDays string is invalid
-     * @deprecated Use {@link #ScheduleBlock(shield.server.entities.School, int, java.util.SortedSet)
-     * }
-     */
-    @Deprecated
-    public ScheduleBlock(School initSchool,
-            int initPeriod,
-            String scheduleDays) throws IllegalArgumentException
-    {
-        school = initSchool;
-        period = initPeriod;
-        if (!scheduleDays.matches("\\d+") || scheduleDays.contains("0"))
-        {
-            throw new IllegalArgumentException("Schedule Days string can't have zeroes or non-digit characters");
-        } else
-        {
-            days = scheduleDays;
-        }
-    }
-
     public School getSchool()
     {
         return school;

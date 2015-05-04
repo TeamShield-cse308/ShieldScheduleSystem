@@ -86,26 +86,11 @@ public class Course implements Serializable
         this.year = year;
         this.sections = new ArrayList<>();
     }
-
-    Course(School school, String identifier,
-            String name)
-    {
-        this.school = school;
-        this.identifier = identifier;
-        this.name = name;
-        this.sections = new ArrayList<>();
-    }
     
     public int getYear() {
         return year;
     }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
     
-    
-
     public School getSchool()
     {
         return school;
@@ -126,34 +111,19 @@ public class Course implements Serializable
         return sections;
     }
 
-    @Deprecated
-    public Set<Section> getSectionsByInstructor(String instructor)
-    {
-        Set<Section> instructorSections = new HashSet<>();
-        for (Section s : sections)
-        {
-            if (s.getTeacher().equals(instructor))
-            {
-                instructorSections.add(s);
-            }
-        }
-        return instructorSections;
-    }
-
     /**
      * Create a new section and add it to this course.
      *
      * @param teacher The instructor for the course.
      * @param sb The schedule block during which the section occurs.
      * @param initSemesters The set of semesters the section exists for.
-     * @return True if the section could be added. False if otherwise.
      */
-    public boolean addSection(String teacher,
+    public void addSection(String teacher,
             ScheduleBlock sb,
             SortedSet<Integer> initSemesters)
     {
         Section s = new Section(this, teacher, sb, initSemesters);
-        return sections.add(s);
+        sections.add(s);
     }
 
     public Long getId()

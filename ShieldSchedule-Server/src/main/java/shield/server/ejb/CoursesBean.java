@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
@@ -28,7 +29,7 @@ public class CoursesBean
 
     //Logger
     private static final Logger logger =
-             Logger.getLogger("sss.ejb.CoursesBean");
+             Logger.getLogger(CoursesBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -40,6 +41,7 @@ public class CoursesBean
      * @param identifier The new course unique identifier.
      * @param courseName The new course name.
      * @param schoolName The school to which the course is added.
+     * @param year The year the course is valid for
      */
     public void addCourse(String identifier,
             String courseName,
@@ -52,17 +54,19 @@ public class CoursesBean
         query.setParameter("name", schoolName);
         try
         {
+            logger.log(Level.INFO, "Adding new course with identifier {0} at school {1}", new String[] {identifier, schoolName});
+            
             School school = query.getSingleResult();
             //add the course
             em.getTransaction().begin();
-            //@TODO check return of addCourse to see if it worked
             school.addCourse(identifier, courseName, year);
             em.getTransaction().commit();
-            logger.log(Level.INFO, "New course added to database {0}", identifier);
+            
+            logger.log(Level.INFO, "New course created with identifier {0} at school {1}", new String[] {identifier, schoolName});
         } catch (RollbackException rex)
         {
-            //a course with that id already exists in database
-            logger.log(Level.WARNING, "Collision on course ID within database");
+            //a course at that school that id already exists database
+            logger.log(Level.WARNING, "Course with identifier {0} already exists at school {1}", new String[] {identifier, schoolName});
             throw rex;
         } finally
         {
@@ -82,9 +86,14 @@ public class CoursesBean
         try
         {
             School school = query.getSingleResult();
-            courseList = new ArrayList<>(school.getCourses());
-            logger.log(Level.INFO, "Retrieving all courses from school in DB", school);
-        } finally
+            courseList = school.getCourses();
+            logger.log(Level.INFO, "Retrieving all courses from school {0} in DB", school);
+        } catch(NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No school exists with name {0}", schoolName);
+            throw nrex;
+        }
+        finally
         {
             //Close the entity manager
             em.close();
@@ -104,7 +113,11 @@ public class CoursesBean
         {
             School school = query.getSingleResult();
             courseList = new ArrayList<>(school.getCoursesWithLunch());
-            logger.log(Level.INFO, "Retrieving all courses from school in DB", school);
+            logger.log(Level.INFO, "Retrieving all courses and lunches from school {0} in DB", school);
+        } catch(NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No school exists with name {0}", schoolName);
+            throw nrex;
         } finally
         {
             //Close the entity manager

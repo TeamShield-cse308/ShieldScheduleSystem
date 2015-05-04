@@ -21,20 +21,10 @@ public abstract class GenericUser
     {
         return name;
     }
-    //@TODO check error conditions on new name
-    public void setName(String newName)
-    {
-        name = newName;
-    }
     
     public String getPassword()
     {
         return password;
-    }
-    //@TODO check error conditions on new password
-    public void setPassword(String newPassword)
-    {
-        password = newPassword;
     }
     
 //    public Long getId()

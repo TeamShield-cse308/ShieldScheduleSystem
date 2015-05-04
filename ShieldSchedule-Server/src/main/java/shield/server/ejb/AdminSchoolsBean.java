@@ -66,28 +66,32 @@ public class AdminSchoolsBean
 
         try
         {
+            logger.log(Level.INFO, "Create new school with name {0}", initName);
             em.getTransaction().begin();
             //add the school
             em.persist(school);
 
             //create a Lunch course for each day of the week
-            for (int i = 1; i <= school.getScheduleDays(); i++)
+            for (int year = 1; year <= School.NUM_YEARS; year++)
             {
-                Course c = school.addLunch(i);
-                TreeSet<Integer> daySet = new TreeSet<>();
-                daySet.add(i);
-
-                //Create a schedule block and a lunch section for each period
-                for (int j = school.getStartingLunch(); j <= school.getEndingLunch(); j++)
+                for (int day = 1; day <= school.getScheduleDays(); day++)
                 {
-                    ScheduleBlock sb = new ScheduleBlock(school, j, daySet, true);
-                    em.persist(sb);
-                    TreeSet<Integer> semSet = new TreeSet<>();
-                    for (int k = 1; k <= school.getSemesters(); k++)
+                    Course c = school.addLunch(day, year);
+                    TreeSet<Integer> daySet = new TreeSet<>();
+                    daySet.add(day);
+
+                    //Create a schedule block and a lunch section for each period
+                    for (int period = school.getStartingLunch(); period <= school.getEndingLunch(); period++)
                     {
-                        semSet.add(k);
+                        ScheduleBlock sb = new ScheduleBlock(school, period, daySet, true);
+                        em.persist(sb);
+                        TreeSet<Integer> semSet = new TreeSet<>();
+                        for (int semester = 1; semester <= school.getSemesters(); semester++)
+                        {
+                            semSet.add(semester);
+                        }
+                        c.addSection("STAFF", sb, semSet);
                     }
-                    c.addSection("STAFF", sb, semSet);
                 }
             }
             em.getTransaction().commit();

@@ -33,6 +33,8 @@ public class School implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
+    
+    public static final int NUM_YEARS = 4;
 
     @Id
     @NotNull
@@ -171,7 +173,7 @@ public class School implements Serializable
         }
         return toReturn;
     }
-    
+
     public List<Course> getCoursesWithLunch()
     {
         List<Course> courses = new ArrayList<>(courseList);
@@ -196,33 +198,25 @@ public class School implements Serializable
      *
      * @param identifier The unique identifier for the course, e.g. PHY101
      * @param name The name of the course, e.g. Intro to Physics
-     * @return The course created if it was successfully added, null if
-     * otherwise
+     * @param year The year the course is valid for
+     * @return The course created
      */
     public Course addCourse(String identifier,
-            String name, int year)
+            String name,
+            int year)
     {
         Course c = new Course(this, identifier, name, year);
-        if (courseList.add(c))
-        {
-            return c;
-        } else
-        {
-            return null;
-        }
+        courseList.add(c);
+        return c;
     }
 
-    public Course addLunch(int scheduleDay)
+    public Course addLunch(int scheduleDay, int year)
     {
-        Course c = new Course(this, "LUNCH_" + scheduleDay,
-                "Lunch - Day " + scheduleDay);
-        if (courseList.add(c))
-        {
-            return c;
-        } else
-        {
-            return null;
-        }
+
+        Course c = new Course(this, "LUNCH_" + scheduleDay + "_Y" + year,
+                "Lunch - Day " + scheduleDay, year);
+        courseList.add(c);
+        return c;
     }
 
     //JPA methods
