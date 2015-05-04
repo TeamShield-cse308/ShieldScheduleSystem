@@ -99,22 +99,22 @@ public class AuthenticationResource
         } catch (WrongPasswordException wpex)
         {
             logger.log(Level.WARNING, "UNAUTHORIZED resposne");
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Wrong password.").build();
         } catch (AccountPendingException apax)
         {
-            logger.log(Level.WARNING, "Account pending, FORBIDDEN response");
-            return Response.status(Response.Status.FORBIDDEN).build();
+            logger.log(Level.WARNING, "FORBIDDEN response");
+            return Response.status(Response.Status.FORBIDDEN).entity("The account hasn't yet been approved.").build();
         } catch (AccountActiveException aaex)
         {
-            logger.log(Level.WARNING, "Account already active, CONFLICT resposne");
+            logger.log(Level.WARNING, "CONFLICT resposne");
             return Response.status(Response.Status.CONFLICT).build();
         } catch (NoResultException nrex)
         {
-            logger.log(Level.WARNING, "No such account, BAD REQUEST response");
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "BAD REQUEST response");
+            return Response.status(Response.Status.BAD_REQUEST).entity("An account with that name doesn't exist.").build();
         } catch (Exception ex)
         {
-            //logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
             return Response.serverError().build();
         }
     }

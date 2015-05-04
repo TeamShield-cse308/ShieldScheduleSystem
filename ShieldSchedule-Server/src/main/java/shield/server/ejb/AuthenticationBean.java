@@ -30,14 +30,14 @@ public class AuthenticationBean
 
     //Logger
     private static final Logger logger =
-            Logger.getLogger("sss.ejb.AuthenticationBean");
+            Logger.getLogger(AuthenticationBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
     private EntityManager em;
 
     /**
-     * Checks validity of the supplied log-in credentails.
+     * Checks validity of the supplied log-in credentials.
      * 
      * @param username The username for the account
      * @param password The password for the account
