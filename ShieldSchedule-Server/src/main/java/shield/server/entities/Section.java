@@ -114,7 +114,7 @@ public class Section implements Serializable
      * @param s
      * @return 
      */
-    boolean addStudent(Student s)
+    public boolean addStudent(Student s)
     {
         return enrolledStudents.add(s);
     }
@@ -124,7 +124,7 @@ public class Section implements Serializable
      * @param s
      * @return 
      */
-    boolean removeStudent(Student s)
+    public boolean removeStudent(Student s)
     {
         return enrolledStudents.remove(s);
     }

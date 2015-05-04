@@ -78,6 +78,10 @@ public class ScheduleBean
 
             em.getTransaction().begin();
             success = assigned.addSection(sec);
+            if (success)
+            {
+                sec.addStudent(s);
+            }
             em.getTransaction().commit();
         } finally
         {
@@ -110,6 +114,7 @@ public class ScheduleBean
 
             em.getTransaction().begin();
             assigned.removeSection(sec);
+            sec.removeStudent(s);
             em.getTransaction().commit();
 
         } finally
