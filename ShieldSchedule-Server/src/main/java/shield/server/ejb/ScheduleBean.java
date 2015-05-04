@@ -39,7 +39,6 @@ public class ScheduleBean {
                 = em.createNamedQuery("Student.findByEmail", Student.class);
         query.setParameter("email", schedule.studentEmail);
         try {
-            Thread.currentThread().setContextClassLoader(ScheduleBean.class.getClassLoader());
             Student s = query.getSingleResult();
             s.createSchedule(schedule.year);
             Schedule assigned = s.getSchedule(schedule.year);
