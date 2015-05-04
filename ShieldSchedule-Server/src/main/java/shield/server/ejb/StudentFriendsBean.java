@@ -29,7 +29,7 @@ public class StudentFriendsBean
 
     //Logger
     private static final Logger logger =
-             Logger.getLogger("sss.ejb.StudentFriendsBean");
+            Logger.getLogger(StudentFriendsBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -46,22 +46,22 @@ public class StudentFriendsBean
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<Student> query =
-                 em.createNamedQuery("Friendship.getFriends", Student.class);
+                em.createNamedQuery("Friendship.getFriends", Student.class);
         query.setParameter("email", email);
 
-        logger.log(Level.INFO, "Retrieving list of friends for student {0}",
+        logger.log(Level.INFO, "Retrieving friends for student {0}",
                 email);
 
         List<Student> friendsList = null;
         try
         {
             friendsList = query.getResultList();
-            //@TODO catch exceptions
         } finally
         {
             em.close();
             em = null;
         }
+
         return friendsList;
     }
 
@@ -80,7 +80,7 @@ public class StudentFriendsBean
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<Friendship> query =
-                 em.createNamedQuery("Friendship.getFriendRequests",
+                em.createNamedQuery("Friendship.getFriendRequests",
                         Friendship.class);
         query.setParameter("email", recipientEmail);
 
@@ -91,7 +91,6 @@ public class StudentFriendsBean
         {
             //get the list of friend requests
             friendRequests = query.getResultList();
-            //@TODO catch exceptions
         } finally
         {
             //close the entity manager
@@ -111,31 +110,38 @@ public class StudentFriendsBean
      * @throws NoResultException When the student sending the request name does
      * not exist.
      */
-    public void addFriend(String senderEmail,
+    public List<Student> addFriendByName(String senderEmail,
             String recipientName) throws NoResultException
     {
         //set up the entity manager and the queries
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<Student> senderQuery =
-                 em.createNamedQuery("Student.findByEmail", Student.class);
+                em.createNamedQuery("Student.findByEmail", Student.class);
         senderQuery.setParameter("email", senderEmail);
         TypedQuery<Student> recipientQuery =
-                 em.createNamedQuery("Student.findByNameAndSchool",
+                em.createNamedQuery("Student.findByNameAndSchool",
                         Student.class);
         recipientQuery.setParameter("name", recipientName);
 
         Student sender, recipient;
         School school;
+
+        List<Student> recipients = null;
         try
         {
+            logger.log(Level.INFO, "Student {0} requests friendship for {1}", new String[]
+            {
+                senderEmail, recipientName
+            });
+
             //get the sender and the sender's school
             sender = senderQuery.getSingleResult();
             school = sender.getSchool();
 
             //check the sender's school for the supplied student name
             recipientQuery.setParameter("school", school.getSchoolName());
-            List<Student> recipients = recipientQuery.getResultList();
+            recipients = recipientQuery.getResultList();
 
             if (recipients.isEmpty())
             {
@@ -146,22 +152,85 @@ public class StudentFriendsBean
                 recipient = recipients.get(0);
                 Friendship f = new Friendship(sender, recipient);
 
+                logger.log(Level.INFO, "Single result for name {0}", recipientName);
+
                 em.getTransaction().begin();
                 em.persist(f);
                 em.getTransaction().commit();
 
-                logger.log(Level.INFO, "New friend request created {0}", f);
+                logger.log(Level.INFO, "New friendship created {0}", f);
             } else
             {
-                //@TODO when there is more than one matching student
+                logger.log(Level.INFO, "Multiple results for name {0}", recipientName);
             }
         } catch (NoResultException nrex)
         {
-            //@TODO error handling
             logger.log(Level.WARNING,
-                    "No student found with name {0} in School {1}", recipientName);
+                    "No student found with name {0} in same school as {1}", new String[]
+                    {
+                        recipientName, senderEmail
+                    });
+            throw nrex;
+
+        } finally
+        {
+            // close the entity manager
             em.close();
             em = null;
+        }
+        return recipients;
+    }
+
+    /**
+     * Create a new friend request associating the student sending it and the
+     * student receiving it.
+     *
+     * @param senderEmail The student sending the friend request
+     * @param recipientEmail The student receiving the friend request
+     * @throws NoResultException When the student sending the request name does
+     * not exist.
+     */
+    public void addFriendByEmail(String senderEmail,
+            String recipientEmail) throws NoResultException
+    {
+        //set up the entity manager and the queries
+        em = DatabaseConnection.getEntityManager();
+
+        TypedQuery<Student> senderQuery =
+                em.createNamedQuery("Student.findByEmail", Student.class);
+        senderQuery.setParameter("email", senderEmail);
+        TypedQuery<Student> recipientQuery =
+                em.createNamedQuery("Student.findByEmail",
+                        Student.class);
+        recipientQuery.setParameter("email", recipientEmail);
+
+        Student sender, recipient;
+
+        try
+        {
+            logger.log(Level.INFO, "Student {0} requests friendship for {1}", new String[]
+            {
+                senderEmail, recipientEmail
+            });
+
+            //get the sender and receiver
+            sender = senderQuery.getSingleResult();
+            recipient = recipientQuery.getSingleResult();
+
+            Friendship f = new Friendship(sender, recipient);
+
+            em.getTransaction().begin();
+            em.persist(f);
+            em.getTransaction().commit();
+
+            logger.log(Level.INFO, "New friendship created {0}", f);
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING,
+                    "Not both students exist found with email {0}, {1}", new String[]
+                    {
+                        senderEmail, recipientEmail
+                    });
             throw nrex;
 
         } finally
@@ -187,7 +256,7 @@ public class StudentFriendsBean
         em = DatabaseConnection.getEntityManager();
 
         TypedQuery<Friendship> query =
-                 em.createNamedQuery("Friendship.findBySenderAndRecipient",
+                em.createNamedQuery("Friendship.findBySenderAndRecipient",
                         Friendship.class);
         query.setParameter("sender", senderEmail);
         query.setParameter("recipient", recipientEmail);
@@ -195,6 +264,10 @@ public class StudentFriendsBean
         try
         {
             //get the friendship
+            logger.log(Level.INFO, "Modification on friendship {0}<->{1}", new String[]
+            {
+                senderEmail, recipientEmail
+            });
             Friendship f = query.getSingleResult();
 
             //approve or delete it
@@ -202,15 +275,20 @@ public class StudentFriendsBean
             if (approved)
             {
                 f.approve();
-                logger.log(Level.INFO, "Friendship request {0} accepted", f);
+                logger.log(Level.INFO, "Friendship request {0} approved", f);
             } else
             {
                 em.remove(f);
                 logger.log(Level.INFO, "Friendship {0} deleted", f);
             }
             em.getTransaction().commit();
-
-            //@TODO catch exceptions
+        } catch (NoResultException nrex)
+        {
+            logger.log(Level.WARNING, "No friendship found with sender {0} and recipient {1}", new String[]
+            {
+                senderEmail, recipientEmail
+            });
+            throw nrex;
         } finally
         {
             //close the entity manager

@@ -5,6 +5,8 @@ package shield.server.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -39,6 +41,10 @@ public class StudentFriendsResource
     @Inject
     private StudentFriendsBean studentFriendsBean;
 
+    //Logger
+    private static final Logger logger =
+            Logger.getLogger(StudentFriendsResource.class.getName());
+
     /**
      * Creates a new instance of StudentFriendsResource
      */
@@ -69,24 +75,12 @@ public class StudentFriendsResource
             ss.name = s.getName();
             simpleFriendsList.add(ss);
         }
-        GenericEntity<List<SimpleStudent>> wrapper
-                = new GenericEntity<List<SimpleStudent>>(simpleFriendsList)
+        GenericEntity<List<SimpleStudent>> wrapper =
+                new GenericEntity<List<SimpleStudent>>(simpleFriendsList)
                 {
                 };
+        logger.log(Level.INFO, "OK response");
         return Response.ok(wrapper).build();
-    }
-
-    /**
-     * PUT method for updating or creating an instance of StudentFriendsResource
-     *
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
-    @PUT
-    @Consumes("application/json")
-    public void putJson(String content)
-    {
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -115,10 +109,11 @@ public class StudentFriendsResource
             sf.recipientEmail = f.getRecipient().getEmail();
             simpleFriendRequests.add(sf);
         }
-        GenericEntity<List<SimpleFriendship>> wrapper
-                = new GenericEntity<List<SimpleFriendship>>(simpleFriendRequests)
+        GenericEntity<List<SimpleFriendship>> wrapper =
+                new GenericEntity<List<SimpleFriendship>>(simpleFriendRequests)
                 {
                 };
+        logger.log(Level.INFO, "OK response");
         return Response.ok(wrapper).build();
     }
 
@@ -135,19 +130,59 @@ public class StudentFriendsResource
     {
         try
         {
-            studentFriendsBean.addFriend(sf.senderEmail,
-                    sf.recipientName);
-            return Response.ok(sf).build();
+            //if the recipient's email was specified, send a direct friendship request
+            if (sf.recipientEmail != null)
+            {
+                studentFriendsBean.addFriendByEmail(sf.senderEmail,
+                        sf.recipientEmail);
+                logger.log(Level.INFO, "OK response");
+                return Response.ok(sf).build();
+            } else //otherwise we have to search by the recipients name
+            {
+                List<Student> recipients =
+                        studentFriendsBean.addFriendByName(sf.senderEmail,
+                                sf.recipientName);
+
+                //if there was just one result then return OK
+                if (recipients.size() == 1)
+                {
+                    logger.log(Level.INFO, "OK response");
+                    return Response.ok(sf).build();
+                } else
+                {
+                    //if there were multiple results then send the list of students with that name
+                    //response code is set to SEE OTHER to disambiguate from a single result
+                    //this is not standard use of SEE OTHER, but JAX-RS does not have MULTIPLE CHOICES code
+                    List<SimpleStudent> simpleRecipients = new ArrayList<>(
+                            recipients.size());
+                    SimpleStudent ss;
+                    for (Student s : recipients)
+                    {
+                        ss = new SimpleStudent();
+                        ss.email = s.getEmail();
+                        ss.name = s.getName();
+                        simpleRecipients.add(ss);
+                    }
+                    GenericEntity<List<SimpleStudent>> wrapper =
+                            new GenericEntity<List<SimpleStudent>>(simpleRecipients)
+                            {
+                            };
+                    logger.log(Level.INFO, "SEE OTHER response");
+                    return Response.status(Response.Status.SEE_OTHER).entity(wrapper).build();
+                }
+            }
         } catch (NoResultException nrex)
         {
+            logger.log(Level.WARNING, "Bad Request response");
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
     /**
      * POST method for approving or denying friend requests.
+     *
      * @param sf The Friendship message sent by the client.
-     * @return 
+     * @return
      */
     @POST
     @Path("/approve")
@@ -159,16 +194,17 @@ public class StudentFriendsResource
             studentFriendsBean.approveFriend(sf.senderEmail,
                     sf.recipientEmail, sf.approved);
             return Response.ok(sf).build();
-        } catch (Exception ex)
+        } catch (NoResultException nrex)
         {
-            return Response.serverError().build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("The friendship does not exist").build();
         }
     }
-    
+
     /**
      * POST method for deleting friends.
+     *
      * @param sf The Friendship message sent by the client.
-     * @return 
+     * @return
      */
     @POST
     @Path("/delete")
@@ -180,9 +216,9 @@ public class StudentFriendsResource
             studentFriendsBean.approveFriend(sf.senderEmail,
                     sf.recipientEmail, false);
             return Response.ok(sf).build();
-        } catch (Exception ex)
+        } catch (NoResultException nrex)
         {
-            return Response.serverError().build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("The friendship does not exit").build();
         }
     }
 }

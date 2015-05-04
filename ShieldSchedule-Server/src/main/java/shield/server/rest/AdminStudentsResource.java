@@ -77,6 +77,7 @@ public class AdminStudentsResource
                 new GenericEntity<List<SimpleStudent>>(simpleStudents)
                 {
                 };
+        logger.log(Level.INFO, "OK response");
         return Response.ok(wrapper).build();
     }
 
@@ -110,6 +111,7 @@ public class AdminStudentsResource
                 new GenericEntity<List<SimpleStudent>>(simpleStudents)
                 {
                 };
+        logger.log(Level.INFO, "OK response");
         return Response.ok(wrapper).build();
     }
 
