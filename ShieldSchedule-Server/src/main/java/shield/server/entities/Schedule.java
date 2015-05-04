@@ -23,6 +23,7 @@ import javax.persistence.Transient;
  * @author Jeffrey Kabot
  */
 @Entity
+@SuppressWarnings("ValidAttributes")
 public class Schedule implements Serializable, Comparable<Schedule>
 {
 

@@ -12,8 +12,7 @@ import java.util.List;
  * @author evanguby
  */
 public class SimpleSchedule {
-    public List<String> courseIDs;
-    public List<String> sectionIDs;
-    public int year;
     public String studentEmail;
+    public int year;
+    public List<SimpleSection> sections;
 }
