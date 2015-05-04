@@ -50,7 +50,7 @@ public class GenerationCriteria implements Serializable
 
     @OneToOne(cascade = CascadeType.ALL)
     private Schedule rootSchedule;
-    
+
     private int year;
 
     @Transient
@@ -63,7 +63,7 @@ public class GenerationCriteria implements Serializable
 
     /**
      * Create a new set of generation criteria.
-     * 
+     *
      * @param school The school this generation criteria applies to.
      * @param sem The year the desired schedule is for.
      */
@@ -145,17 +145,6 @@ public class GenerationCriteria implements Serializable
     }
 
     /**
-     * Retrieve the set of desired courses.
-     *
-     * @return The set of desired courses.
-     */
-    @Deprecated
-    public Set<Course> getCourses()
-    {
-        return courses.keySet();
-    }
-
-    /**
      * Perform a combinatorial search on the Schedule Space for a valid (i.e.,
      * with no conflicting sections) schedule optimally meeting the requirements
      * specified in this generation criteria object and maximizing the overlap
@@ -175,13 +164,13 @@ public class GenerationCriteria implements Serializable
         //perform the search
         backtrackSchedule(rootSchedule, new HashSet<>(courses.keySet()), 0, friends,
                 acceptableSchedules, nearSchedules);
-        
+
         if (!acceptableSchedules.isEmpty()) //the search found perfect schedules
         {
             //acceptableSchedules are already sorted by ascending friends overlap
             //When we have found any perfect schedules, we only want to return the best one
             int idx = acceptableSchedules.size() - 1;
-            return acceptableSchedules.subList(idx, idx+1);
+            return acceptableSchedules.subList(idx, idx + 1);
         } else //the search only found nearly-perfect schedules
         {
             //Sort by maximum overlap with friends' schedules
@@ -284,6 +273,16 @@ public class GenerationCriteria implements Serializable
             }
 
         }
+    }
+
+    public Map<Course, String> getCourses()
+    {
+        return new HashMap<>(courses);
+    }
+    
+    public List<Section> getExlcusions()
+    {
+        return excludedSections;
     }
 
     public Long getId()
