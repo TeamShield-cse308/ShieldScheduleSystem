@@ -6,6 +6,7 @@
 package shield.server.ejb;
 
 import java.util.List;
+import java.util.Properties;
 import javax.ejb.Stateful;
 import shield.server.entities.Student;
 import javax.persistence.EntityManager;
@@ -19,6 +20,10 @@ import javax.persistence.RollbackException;
 import shield.server.entities.School;
 import shield.server.exceptions.AccountApprovedException;
 import shield.server.util.DatabaseConnection;
+import javax.mail.*;
+import javax.activation.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Provides functionality to add, approve, and delete students. Exposes a list
@@ -170,6 +175,36 @@ public class AdminStudentsBean
                 student.approve();
                 logger.log(Level.INFO, "Student account {0} approved", student);
                 //@TODO send email message to student?
+                
+                String from = "ShieldEmailService@gmail.com";
+                String host = "localhost";
+                
+                Properties props = System.getProperties();
+                
+                props.setProperty("mail.smtp.host", host);
+                
+                Session session = Session.getDefaultInstance(props);
+                
+                try{
+                    MimeMessage message = new MimeMessage(session);
+                    
+                    message.setFrom(new InternetAddress(from));
+                    
+                    message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
+                    
+                    message.setSubject("This is the Subject Line!");
+                    
+                    message.setText("This is actual message");
+                    
+                    Transport.send(message);
+                    
+                    System.out.println("Sent message successfully....");
+                    
+                }catch(MessagingException mex){
+                    mex.printStackTrace();
+                }
+     
+                
             } else
             {
                 em.remove(student);
