@@ -15,8 +15,8 @@ import javax.enterprise.context.RequestScoped;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
+import javax.persistence.RollbackException;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import shield.server.exceptions.AccountApprovedException;
@@ -128,17 +128,20 @@ public class AdminStudentsResource
         try
         {
             adminStudentsBean.addStudent(student.name, student.email, student.password, student.school);
-            logger.log(Level.INFO, "OK Response");
+            logger.log(Level.INFO, "OK response");
             return Response.ok(student).build();
-        } catch (EntityExistsException eeex)
+        } catch (RollbackException rex)
         {
-            logger.log(Level.WARNING, "BAD REQUEST");
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "BAD REQUEST response");
+            return Response.status(Response.Status.BAD_REQUEST).entity("A Student already exists with email " + student.email).build();
         } catch (NoResultException nrex)
         {
-            //@TODO disambiguate errors
-            logger.log(Level.WARNING, "BAD REQUEST");
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "BAD REQUEST response");
+            return Response.status(Response.Status.BAD_REQUEST).entity("No school exists with name " + student.school).build();
+        } catch (Exception ex)
+        {
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
+            return Response.serverError().build();
         }
     }
 
@@ -162,15 +165,15 @@ public class AdminStudentsResource
             return Response.ok(student).build();
         } catch (AccountApprovedException aaex)
         {
-            logger.log(Level.WARNING, "Account Approved, CONFLICT response", aaex);
-            return Response.status(Response.Status.CONFLICT).build();
+            logger.log(Level.WARNING, "CONFLICT response", aaex);
+            return Response.status(Response.Status.CONFLICT).entity("Account already approved").build();
         } catch (NoResultException nrex)
         {
-            logger.log(Level.WARNING, "No such account, BAD REQUEST response", nrex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).entity("The account doesn't exist").build();
         } catch (Exception ex)
         {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
             return Response.serverError().build();
         }
     }
@@ -193,11 +196,11 @@ public class AdminStudentsResource
             return Response.ok(student).build();
         } catch (NoResultException nrex)
         {
-            logger.log(Level.WARNING, "No such account, BAD REQUEST response", nrex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "BAD REQUEST response", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).entity("The account doesn't exist").build();
         } catch (Exception ex)
         {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "INTERNAL SERVER ERROR", ex);
             return Response.serverError().build();
         }
     }

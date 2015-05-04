@@ -15,12 +15,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.persistence.EntityExistsException;
 import javax.persistence.RollbackException;
 import shield.server.entities.Course;
 import shield.server.entities.ScheduleBlock;
 import shield.server.util.DatabaseConnection;
-import shield.shared.dto.SimpleSchool;
 
 /**
  * A javabean that provides functionality to add, delete, and edit schools. To
@@ -34,7 +32,7 @@ public class AdminSchoolsBean
 
     //Logger
     private static final Logger logger =
-            Logger.getLogger("sss.ejb.AdminSchoolsBean");
+            Logger.getLogger(AdminSchoolsBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -97,7 +95,7 @@ public class AdminSchoolsBean
         } catch (RollbackException rex)
         {
             //a school with that id already exists in database
-            logger.log(Level.WARNING, "Collision on school ID within database");
+            logger.log(Level.WARNING, "School with name {0} already exists", initName);
             throw rex;
         } finally
         {

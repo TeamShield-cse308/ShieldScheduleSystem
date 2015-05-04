@@ -15,6 +15,7 @@ import javax.persistence.TypedQuery;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.persistence.EntityExistsException;
+import javax.persistence.RollbackException;
 import shield.server.entities.School;
 import shield.server.exceptions.AccountApprovedException;
 import shield.server.util.DatabaseConnection;
@@ -31,7 +32,7 @@ public class AdminStudentsBean
 
     //Logger
     private static final Logger logger =
-            Logger.getLogger("sss.ejb.AdminSchoolsBean");
+            Logger.getLogger(AdminStudentsBean.class.getName());
 
     //reference to the perisstence layer
     @PersistenceContext
@@ -101,13 +102,12 @@ public class AdminStudentsBean
      * @param initPassword The account password.
      * @param initSchool The school the student attends.
      * @throws NoResultException when there is school with the name supplied.
-     * @throws EntityExistsException when a student with that email already
-     * exists.
+     * @throws RollbackException when a student with that email already exists.
      */
     public void addStudent(String initName,
             String initEmail,
             String initPassword,
-            String initSchool) throws NoResultException, EntityExistsException
+            String initSchool) throws NoResultException, RollbackException
     {
         //Create the Entity Manager and set up the query for school
         em = DatabaseConnection.getEntityManager();
@@ -128,10 +128,10 @@ public class AdminStudentsBean
         {
             logger.log(Level.WARNING, "No school found with name {0}", initSchool);
             throw nrex;
-        } catch (EntityExistsException eeex)
+        } catch (RollbackException rex)
         {
-            logger.log(Level.WARNING, "Student with email {0} already exists", initEmail);
-            throw eeex;
+            logger.log(Level.WARNING, "Student account with email {0} already exists", initEmail);
+            throw rex;
         } finally
         {
             //close the Entity Manager
@@ -162,6 +162,7 @@ public class AdminStudentsBean
         try
         {
             //query the email and approve or delete the student
+            logger.log(Level.INFO, "Retrieving student with email {0}", email);
             Student student = query.getSingleResult();
             em.getTransaction().begin();
             if (approved)
@@ -176,9 +177,13 @@ public class AdminStudentsBean
                 //@TODO send email message to student?
             }
             em.getTransaction().commit();
+        } catch (AccountApprovedException aae)
+        {
+            logger.log(Level.WARNING, "Student account {0} is already approved!", email);
+            throw aae;
         } catch (NoResultException nrex)
         {
-            logger.log(Level.WARNING, "No such account with email {0} found in database", email);
+            logger.log(Level.WARNING, "No account found with email {0}", email);
             throw nrex;
         } finally
         {
