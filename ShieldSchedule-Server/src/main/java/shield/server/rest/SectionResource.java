@@ -63,7 +63,7 @@ public class SectionResource
             sectionBean.addSection(section.school,
                     section.scheduleBlock.period,
                     section.scheduleBlock.scheduleDays,
-                    section.courseIdentifier,
+                    section.course.identifier,
                     section.year,
                     section.teacherName,
                     section.semesters);

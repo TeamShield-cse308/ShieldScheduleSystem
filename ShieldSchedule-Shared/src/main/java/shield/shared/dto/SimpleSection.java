@@ -13,19 +13,29 @@ import java.util.List;
  */
 public class SimpleSection
 {
+    public SimpleCourse course;
     public String teacherName;
     public SimpleScheduleBlock scheduleBlock;
-    public String school;
     public List<Integer> semesters;
-    public String courseIdentifier;
+    
     public long sectionID;
+
+    public String school;
     public String studentEmail;
     public int year;
-    
-    public void setScheduleBlock(int period, String days)
+
+    public void setScheduleBlock(int period,
+            String days)
     {
         scheduleBlock = new SimpleScheduleBlock();
         scheduleBlock.period = period;
         scheduleBlock.scheduleDays = days;
+    }
+    
+    public void setCourse(String identifier, String name)
+    {
+        course = new SimpleCourse();
+        course.identifier = identifier;
+        course.name = name;
     }
 }

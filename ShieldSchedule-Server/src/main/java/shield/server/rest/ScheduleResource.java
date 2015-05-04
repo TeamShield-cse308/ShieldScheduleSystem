@@ -60,7 +60,7 @@ public class ScheduleResource
             SimpleSection s = new SimpleSection();
             s.teacherName = section.getTeacher();
             s.setScheduleBlock(section.getScheduleBlock().getPeriod(), section.getScheduleBlock().getDaysString());
-            s.courseIdentifier = section.getCourse().getIdentifier();
+            s.setCourse(section.getCourse().getIdentifier(), section.getCourse().getName());
             s.semesters = new ArrayList<>(section.getSemesters());
             ss.addSection(s);
         }
