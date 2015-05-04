@@ -57,6 +57,10 @@ public class CourseOfferingsPageController implements Initializable, ControlledS
 
     @FXML
     private void handleViewSection(ActionEvent event) {
+        int index = courses.getSelectionModel().getSelectedIndex();
+        StudentSession ss = (StudentSession)myController.getSession();
+        //SimepleCourse c = ss.getCourses().get(index);
+        
     }
 
     @Override
@@ -100,9 +104,10 @@ public class CourseOfferingsPageController implements Initializable, ControlledS
 //            }
             if((course.year == ss.getScheduleYear()) && !course.name.contains("Lunch")){
                 courseNames.add(course.name + ", " + course.identifier);
+                coursesArray.add(c);
             }
             
-            coursesArray.add(c);
+            
         }
         ss.setCourses(coursesArray);
         //populate combobox

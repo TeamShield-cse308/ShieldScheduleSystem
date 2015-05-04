@@ -86,7 +86,7 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         StudentSession s = (StudentSession)myController.getSession();
         SimpleCourse course = s.getCourse();
         course.school = s.getSchool().name;
-        
+        course.year = s.getScheduleYear();
         Response rsp = getCourseSections.request(course);
         
         //check the response status code

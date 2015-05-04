@@ -70,6 +70,10 @@ public class StudentSession implements Session
         this.courses = courses;
     }
 
+    public ArrayList<SimpleCourse> getCourses() {
+        return courses;
+    }
+    
 
     public StudentSession(SimpleStudent acct)
     {
