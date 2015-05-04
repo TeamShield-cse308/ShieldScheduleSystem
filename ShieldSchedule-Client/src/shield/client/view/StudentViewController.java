@@ -56,6 +56,9 @@ public class StudentViewController implements Initializable, ControlledScreen {
     private final ServerAccessPoint APPROVE_FRIEND_REQUEST = 
             new ServerAccessPoint(ServerResource.APPROVE_FRIEND_URL);
     
+    private final ServerAccessPoint DELETE_FRIEND = 
+            new ServerAccessPoint(ServerResource.DELETE_FRIEND_URL);
+    
     private List<SimpleFriendship> pendingRequests = null;
     private List<SimpleStudent> friends = null;
     
@@ -238,7 +241,28 @@ public class StudentViewController implements Initializable, ControlledScreen {
     }
     @FXML
     public void handleDeleteSelectedFriend(ActionEvent event){
+        int idx = friendRequestsListView.getSelectionModel().getSelectedIndex();
         
+        SimpleFriendship sf = pendingRequests.get(idx);
+        
+        
+        
+        Response rsp =  DELETE_FRIEND.request(sf);
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling
+            int code = rsp.getStatus();
+            if (code == Response.Status.CONFLICT.getStatusCode())
+            {
+                //account approved already
+            } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
+            {
+                //account not exist
+            } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
+            {
+                //something terrible happened
+            }
+        }
     }
 
 }

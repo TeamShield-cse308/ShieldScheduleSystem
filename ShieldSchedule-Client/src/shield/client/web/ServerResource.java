@@ -103,7 +103,7 @@ public final class ServerResource
      * The location of the web resource accepting requests for deleting friends.
      */
     public static final ServerResource DELETE_FRIEND_URL = new ServerResource(
-            SERVER_BASE_URL + "students/friends/delete");
+            SERVER_BASE_URL + "student/friends/delete");
 
     /**
      * The location of the web resource accepting requests to create new

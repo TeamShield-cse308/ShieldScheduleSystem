@@ -176,27 +176,35 @@ public class AdminStudentsBean
                 logger.log(Level.INFO, "Student account {0} approved", student);
                 //@TODO send email message to student?
                 
-                String from = "ShieldEmailService@gmail.com";
+                final String from = "ShieldEmailService@gmail.com";
+                final String pass = "shield123";
                 String host = "localhost";
                 
-                Properties props = System.getProperties();
+                Properties props = new Properties();
                 
-                props.setProperty("mail.smtp.host", host);
                 
-                Session session = Session.getDefaultInstance(props);
+                props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+                Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(from, pass);
+			}
+		  });
                 
                 try{
-                    MimeMessage message = new MimeMessage(session);
-                    
+                    Message message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(from));
-                    
-                    message.addRecipient(Message.RecipientType.TO,new InternetAddress(email));
-                    
-                    message.setSubject("This is the Subject Line!");
-                    
-                    message.setText("This is actual message");
-                    
-                    Transport.send(message);
+                    message.setRecipients(Message.RecipientType.TO,
+			InternetAddress.parse(email));
+                    message.setSubject("Account has been approved!");
+                    message.setText("Dear " + email + ","
+				+ "\n\n Your account has been succesfully approved by our admin."
+                            + " You may now log in at any time!");
+ 
+			Transport.send(message);
                     
                     System.out.println("Sent message successfully....");
                     
@@ -210,6 +218,41 @@ public class AdminStudentsBean
                 em.remove(student);
                 logger.log(Level.INFO, "Student account {0} deleted", student);
                 //@TODO send email message to student?
+                final String from = "ShieldEmailService@gmail.com";
+                final String pass = "shield123";
+                String host = "localhost";
+                
+                Properties props = new Properties();
+                
+                
+                props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+                Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(from, pass);
+			}
+		  });
+                
+                try{
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(from));
+                    message.setRecipients(Message.RecipientType.TO,
+			InternetAddress.parse(email));
+                    message.setSubject("Account has been deleted.");
+                    message.setText("Dear " + email + ","
+				+ "\n\n Your account has been deleted by our admin."
+                            + " You may no longer log in, feel free to register again!");
+ 
+			Transport.send(message);
+                    
+                    System.out.println("Sent message successfully....");
+                    
+                }catch(MessagingException mex){
+                    mex.printStackTrace();
+                }
             }
             em.getTransaction().commit();
         } catch (AccountApprovedException aae)
