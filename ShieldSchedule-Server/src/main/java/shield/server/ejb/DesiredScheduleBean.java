@@ -56,7 +56,7 @@ public class DesiredScheduleBean
         {
             logger.log(Level.INFO, "Setting preferred lunch days for student {0} for year {1}", new Object[] {studentEmail, year});
             Student student = queryStudent.getSingleResult();
-            GenerationCriteria gc = student.getGenerationCriteria();
+            GenerationCriteria gc = student.getGenerationCriteria(year);
             gc.setLunches(desiresLunch);
         } catch (NoResultException nrex)
         {
@@ -103,7 +103,7 @@ public class DesiredScheduleBean
             logger.log(Level.INFO, "Adding course to desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
 
             Student student = queryStudent.getSingleResult();
-            GenerationCriteria gc = student.getGenerationCriteria();
+            GenerationCriteria gc = student.getGenerationCriteria(year);
 
             Course course = queryCourse.getSingleResult();
             List<Section> exclusions = querySections.getResultList();
@@ -135,7 +135,7 @@ public class DesiredScheduleBean
             
             Student student = queryStudent.getSingleResult();
             Course course = queryCourse.getSingleResult();
-            GenerationCriteria gc = student.getGenerationCriteria();
+            GenerationCriteria gc = student.getGenerationCriteria(year);
             gc.removeCourse(course);
 
         } finally
@@ -159,7 +159,7 @@ public class DesiredScheduleBean
             logger.log(Level.INFO, "Retrieving generation criteria for student {0} for year {1}", new Object[] {studentEmail, year});
             
             Student student = queryStudent.getSingleResult();
-            gc = student.getGenerationCriteria();
+            gc = student.getGenerationCriteria(year);
 
         } catch (NoResultException nrex)
         {
@@ -198,7 +198,7 @@ public class DesiredScheduleBean
             
             Student student = queryStudent.getSingleResult();
             List<Student> friends = queryFriends.getResultList();
-            GenerationCriteria gc = student.getGenerationCriteria();
+            GenerationCriteria gc = student.getGenerationCriteria(year);
             generatedSchedules = gc.generateSchedule(friends);
         } catch (NoResultException nrex)
         {

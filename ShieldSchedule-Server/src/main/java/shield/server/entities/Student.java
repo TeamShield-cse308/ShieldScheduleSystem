@@ -38,7 +38,6 @@ public class Student extends GenericUser implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
-    private static final int NUMBER_OF_YEARS = 4;
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
     //annotations go here_________________________________________
@@ -53,10 +52,10 @@ public class Student extends GenericUser implements Serializable
 
     //a schedule for each year
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Schedule> assignedSchedule;
+    private List<Schedule> assignedSchedules;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private GenerationCriteria desiredSchedule;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<GenerationCriteria> desiredSchedules;
 
     //required by JPA
     protected Student()
@@ -74,7 +73,13 @@ public class Student extends GenericUser implements Serializable
         school = initSchool;
 
         accountState = StudentAccountState.PENDING;
-        assignedSchedule = new ArrayList<>(NUMBER_OF_YEARS);
+        assignedSchedules = new ArrayList<>(School.NUM_YEARS);
+        desiredSchedules = new ArrayList<>(School.NUM_YEARS);
+        for (int i = 0; i < School.NUM_YEARS; i++)
+        {
+            assignedSchedules.add(new Schedule(school, i));
+            desiredSchedules.add(new GenerationCriteria(school, i));
+        }
     }
 
     /**
@@ -144,29 +149,14 @@ public class Student extends GenericUser implements Serializable
      * @param year The year the schedule is for.
      * @return
      */
-    public Schedule getSchedule(int year)
+    public Schedule getAssignedSchedule(int year)
     {
-        return assignedSchedule.get(year - 1);
+        return assignedSchedules.get(year - 1);
     }
 
-    public GenerationCriteria getGenerationCriteria()
+    public GenerationCriteria getGenerationCriteria(int year)
     {
-        return desiredSchedule;
-    }
-
-    /**
-     * Create a new assigned schedule for the student.
-     *
-     * @param year The year the schedule is for.
-     */
-    public void createSchedule(int year)
-    {
-        //if there is already a schedule for that year, then we assume that it's being replaced
-        if (assignedSchedule.get(year - 1) != null)
-        {
-            assignedSchedule.remove(year - 1);
-        }
-        assignedSchedule.add(year - 1, new Schedule(this.school, year - 1));
+        return desiredSchedules.get(year - 1);
     }
 
     public String getId()
