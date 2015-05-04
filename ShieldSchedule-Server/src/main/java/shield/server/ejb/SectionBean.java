@@ -53,10 +53,6 @@ public class SectionBean
             Course course = query.getSingleResult();
             sectionList = new ArrayList<>(course.getSections());
             logger.log(Level.INFO, "Retrieving all sections from Course", course);
-        } catch (NoResultException nrex)
-        {
-            logger.log(Level.WARNING, "No such course found", nrex);
-            throw nrex;
         } finally
         {
             //Close the entity manager

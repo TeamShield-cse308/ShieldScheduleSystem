@@ -69,8 +69,8 @@ public class SectionResource
             return Response.ok(section).build();
         } catch (NoResultException nrex)
         {
-            logger.log(Level.WARNING, "BAD REQUEST");
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            logger.log(Level.WARNING, "No course found!", nrex);
+            return Response.status(Response.Status.BAD_REQUEST).entity("No course found!").build();
         }
     }
 
