@@ -241,9 +241,14 @@ public class StudentViewController implements Initializable, ControlledScreen {
     }
     @FXML
     public void handleDeleteSelectedFriend(ActionEvent event){
-        int idx = friendRequestsListView.getSelectionModel().getSelectedIndex();
+        int idx = friendsListView.getSelectionModel().getSelectedIndex();
         
-        SimpleFriendship sf = pendingRequests.get(idx);
+        SimpleStudent ss = friends.get(idx);
+        StudentSession ses = (StudentSession) myController.getSession();
+        SimpleStudent stu = ses.getStudentAccount();
+        SimpleFriendship sf = new SimpleFriendship();
+        sf.recipientEmail = stu.email;
+        sf.senderEmail = ss.email;
         
         
         
@@ -254,14 +259,21 @@ public class StudentViewController implements Initializable, ControlledScreen {
             int code = rsp.getStatus();
             if (code == Response.Status.CONFLICT.getStatusCode())
             {
-                //account approved already
+                
             } else if (code == Response.Status.BAD_REQUEST.getStatusCode())
             {
-                //account not exist
+                
             } else if (code == Response.Status.INTERNAL_SERVER_ERROR.getStatusCode())
             {
-                //something terrible happened
+                
             }
+        }else
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success!");
+            alert.setHeaderText("Friend Deleted");
+            alert.setContentText("You have deleted");
+            alert.show();
         }
     }
 
