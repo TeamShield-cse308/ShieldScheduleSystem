@@ -91,6 +91,7 @@ public class DesiredScheduleResource
     }
 
     @POST
+    @Path("/lunch")
     @Consumes("application/json")
     @Produces("application/json")
     public Response setLunches(SimpleCriteria sc)
@@ -106,6 +107,7 @@ public class DesiredScheduleResource
     }
 
     @POST
+    @Path("/add")
     @Consumes("application/json")
     @Produces("application/json")
     public Response addCourse(SimpleCriteriaCourse scc)
@@ -127,6 +129,7 @@ public class DesiredScheduleResource
     }
 
     @POST
+    @Path("/remove")
     @Consumes("application/json")
     @Produces("application/json")
     public Response removeCourse(SimpleCriteriaCourse scc)
@@ -136,6 +139,7 @@ public class DesiredScheduleResource
     }
 
     @POST
+    @Path("/generate")
     @Consumes("application/json")
     @Produces("application/json")
     public Response generateSchedule(SimpleCriteria sc)
