@@ -37,6 +37,9 @@ public class SelectSectionController implements Initializable, ControlledScreen 
     private final ServerAccessPoint getCourseSections =
             new ServerAccessPoint(ServerResource.GET_COURSE_SECTIONS_URL);
     
+    private final ServerAccessPoint addSectionToSchedule
+            = new ServerAccessPoint(ServerResource.ADD_SECTION_TO_SCHEDULE_URL);
+    
     /**
      * Initializes the controller class.
      */
@@ -55,6 +58,11 @@ public class SelectSectionController implements Initializable, ControlledScreen 
         ss.addSectionID(sectionID);
         String toAdd = ss.getCourseName() + " " + section.getValue();
         ss.sectionToAddToString(toAdd);
+        SimpleSection sec = new SimpleSection();
+        sec.sectionID = Long.parseLong(sectionID);
+        sec.studentEmail = ss.getStudentAccount().email;
+        sec.year = ss.getScheduleYear();
+        Response rsp = addSectionToSchedule.request(sec);
         myController.loadScreen(CSE308GUI.AddSchoolCoursesID,CSE308GUI.AddSchoolCourses);
         myController.setScreen(CSE308GUI.AddSchoolCoursesID);
     }

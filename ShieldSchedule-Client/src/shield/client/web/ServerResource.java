@@ -139,6 +139,13 @@ public final class ServerResource
     public static final ServerResource SET_ASSIGNED_SCHEDULE_URL = new ServerResource(
             SERVER_BASE_URL + "schedule/setAssignedSchedule");
     
+    public static final ServerResource ADD_SECTION_TO_SCHEDULE_URL = new ServerResource(
+            SERVER_BASE_URL + "schedule/addSectionToSchedule");
+    
+    
+    public static final ServerResource CREATE_SCHEDULE_URL = new ServerResource(
+            SERVER_BASE_URL + "schedule/createSchedule");
+    
     private String resourceUrl;
 
     public String getUrl()

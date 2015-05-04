@@ -18,4 +18,6 @@ public class SimpleSection {
     public String semesters;
     public String courseIdentifier;
     public long sectionID;
+    public String studentEmail;
+    public int year;
 }

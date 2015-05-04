@@ -21,6 +21,7 @@ import shield.server.ejb.ScheduleBean;
 import shield.server.ejb.ScheduleBlockBean;
 import shield.shared.dto.SimpleSchedule;
 import shield.shared.dto.SimpleScheduleBlock;
+import shield.shared.dto.SimpleSection;
 
 /**
  *
@@ -52,6 +53,52 @@ public class ScheduleResource {
             scheduleBean.setAssignedSchedule(scheduleBlock);
             logger.log(Level.INFO, "OK Response");
             return Response.ok(scheduleBlock).build();
+        } catch (RollbackException rex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NoResultException nrex)
+        {
+            //@TODO disambiguate errors
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        
+    }
+    
+    @POST
+    @Path("/addSectionToSchedule")
+    @Consumes("application/json")
+    public Response addScheduleBlock(SimpleSection section)
+    {
+        try
+        {
+            scheduleBean.addSectionToSchedule(section);
+            logger.log(Level.INFO, "OK Response");
+            return Response.ok(section).build();
+        } catch (RollbackException rex)
+        {
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NoResultException nrex)
+        {
+            //@TODO disambiguate errors
+            logger.log(Level.WARNING, "BAD REQUEST");
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        
+    }
+    
+    @POST
+    @Path("/createSchedule")
+    @Consumes("application/json")
+    public Response createSchedule(SimpleSchedule sch)
+    {
+        try
+        {
+            scheduleBean.createSchedule(sch);
+            logger.log(Level.INFO, "OK Response");
+            return Response.ok(sch).build();
         } catch (RollbackException rex)
         {
             logger.log(Level.WARNING, "BAD REQUEST");

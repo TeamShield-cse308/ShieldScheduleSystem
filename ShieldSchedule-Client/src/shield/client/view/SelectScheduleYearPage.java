@@ -13,8 +13,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javax.ws.rs.core.Response;
 import shield.client.main.CSE308GUI;
 import shield.client.view.session.StudentSession;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResource;
+import shield.shared.dto.SimpleSchedule;
 
 /**
  * FXML Controller class
@@ -28,6 +32,9 @@ public class SelectScheduleYearPage implements Initializable, ControlledScreen {
     @FXML
     private ComboBox<String> year;
 
+    private final ServerAccessPoint createSchedule
+            = new ServerAccessPoint(ServerResource.CREATE_SCHEDULE_URL);
+    
     /**
      * Initializes the controller class.
      */
@@ -43,7 +50,10 @@ public class SelectScheduleYearPage implements Initializable, ControlledScreen {
             ss.setScheduleYear(Integer.parseInt(year.getValue()));
             ss.newAssignedSchedule();
             ss.setAssignedScheduleAsString("");
-            
+            SimpleSchedule sss = new SimpleSchedule();
+            sss.studentEmail = ss.getStudentAccount().email;
+            sss.year = ss.getScheduleYear();
+            //Response rsp = createSchedule.request(sss);
             myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
             myController.setScreen(CSE308GUI.AddSchoolCoursesID);
         }
