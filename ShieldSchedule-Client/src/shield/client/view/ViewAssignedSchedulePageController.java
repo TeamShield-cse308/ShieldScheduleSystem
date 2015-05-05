@@ -162,6 +162,8 @@ public class ViewAssignedSchedulePageController implements Initializable, Contro
         
         SimpleSchedule schedule = rsp.readEntity(gtlc);
         List<SimpleSection> sections = schedule.sections;
+        if(sections == null)
+            sections = new ArrayList<SimpleSection>();
         for(int i = 1; i <= days; i++){
             for(int j = 1; j <= periods; j++){
                 boolean added = false;
@@ -172,7 +174,11 @@ public class ViewAssignedSchedulePageController implements Initializable, Contro
                     }
                 }
                 if(!added){
-                    tableDays.get(i - 1).getItems().add("Study Hall");
+                    if(j >= ss.getSchool().startingLunchPeriod && j <= ss.getSchool().endingLunchPeriod)
+                        tableDays.get(i - 1).getItems().add("Lunch");
+                    else
+                        tableDays.get(i - 1).getItems().add("Study Hall");
+                    
                 }
             }
         }
