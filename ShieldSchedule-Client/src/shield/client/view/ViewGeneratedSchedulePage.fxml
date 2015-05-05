@@ -39,5 +39,6 @@
       <Label fx:id="day5" layoutX="560.0" layoutY="37.0" text="Day 5" visible="false" />
       <Label fx:id="day6" layoutX="683.0" layoutY="37.0" text="Day 6" visible="false" />
       <Label fx:id="day7" layoutX="806.0" layoutY="37.0" text="Day 7" visible="false" />
+      <Button fx:id="nextSchedule" layoutX="8.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleNextSchedule" text="Next Schedule" />
    </children>
 </AnchorPane>

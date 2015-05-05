@@ -40,6 +40,10 @@ public class StudentSession implements Session
     
     private int scheduleYear;
     
+    private List<SimpleSchedule> schedules;
+    
+    private int currentScheduleIndex;
+    
     public String getCourseName() {
         return courseName;
     }
@@ -153,6 +157,22 @@ public class StudentSession implements Session
 
     public void setAssignedSchedule(SimpleSchedule assignedSchedule) {
         this.assignedSchedule = assignedSchedule;
+    }
+
+    public List<SimpleSchedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<SimpleSchedule> schedules) {
+        this.schedules = schedules;
+    }
+
+    public int getCurrentScheduleIndex() {
+        return currentScheduleIndex;
+    }
+
+    public void setCurrentScheduleIndex(int currentScheduleIndex) {
+        this.currentScheduleIndex = currentScheduleIndex;
     }
     
     

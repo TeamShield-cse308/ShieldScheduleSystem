@@ -12,15 +12,19 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+import shield.client.main.CSE308GUI;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
 import shield.shared.dto.SimpleCriteria;
 import shield.shared.dto.SimpleSchedule;
+import shield.shared.dto.SimpleSection;
 
 /**
  * FXML Controller class
@@ -83,9 +87,13 @@ public class ViewGeneratedSchedulePageController implements Initializable, Contr
     private Label day6;
     @FXML
     private Label day7;
+    @FXML
+    private Button nextSchedule;
     
     private final ServerAccessPoint generateSchedule =
             new ServerAccessPoint(ServerResource.GENERATE_SCHEDULE_URL);
+    
+    
 
     /**
      * Initializes the controller class.
@@ -97,13 +105,63 @@ public class ViewGeneratedSchedulePageController implements Initializable, Contr
 
     @FXML
     private void handleBack(ActionEvent event) {
-
+        myController.getScene().getWindow().setWidth(720);
+        myController.setScreen(CSE308GUI.ViewSchedulesPageID);
     }
 
     @Override
     public void setScreenParent(ScreensController screenPage) {
         myController = screenPage;
     }
+    
+    @FXML
+    private void handleNextSchedule(ActionEvent event) {
+        StudentSession ss = (StudentSession)myController.getSession();
+        List<SimpleSchedule> list = ss.getSchedules();
+        int index = ss.getCurrentScheduleIndex();
+        SimpleSchedule schedule = null;
+        if(index == list.size() -1){
+            schedule = list.get(0);
+            ss.setCurrentScheduleIndex(0);
+        }
+        else{
+            schedule = list.get(index + 1);
+            ss.setCurrentScheduleIndex(index+1);
+        }
+        List<SimpleSection> sections = schedule.sections;
+        int days = ss.getSchool().numScheduleDays;
+        int periods = ss.getSchool().numPeriods;
+        if(sections == null)
+            sections = new ArrayList<SimpleSection>();
+        ArrayList<ListView> tableDays = new ArrayList<>();
+        tableDays.add(day1Table);
+        tableDays.add(day2Table);
+        tableDays.add(day3Table);
+        tableDays.add(day4Table);
+        tableDays.add(day5Table);
+        tableDays.add(day6Table);
+        tableDays.add(day7Table);
+        for(int i = 1; i <= days; i++){
+            for(int j = 1; j <= periods; j++){
+                boolean added = false;
+                for(SimpleSection section : sections){
+                    if(section.scheduleBlock.period == j && section.scheduleBlock.scheduleDays.contains("" + i)){
+                        tableDays.get(i - 1).getItems().add(section.course.name + " with " + section.teacherName);
+                        added = true;
+                    }
+                }
+                if(!added){
+                    if(j >= ss.getSchool().startingLunchPeriod && j <= ss.getSchool().endingLunchPeriod)
+                        tableDays.get(i - 1).getItems().add("Lunch");
+                    else
+                        tableDays.get(i - 1).getItems().add("Study Hall");
+                    
+                }
+            }
+        }
+        
+    }
+    
 
     @Override
     public void populatePage() {
@@ -119,13 +177,28 @@ public class ViewGeneratedSchedulePageController implements Initializable, Contr
         GenericType<List<SimpleSchedule>> gtlc2 = new GenericType<List<SimpleSchedule>>()
         {
         };
-        SimpleSchedule schedule;
+        SimpleSchedule schedule = null;
         List<SimpleSchedule> schedList;
-        if(rsp.getStatus() == 200)
+        if(rsp.getStatus() == 200){
+            nextSchedule.setVisible(false);
             schedule = rsp.readEntity(gtlc);
+        }
+        if(rsp.getStatus() == 204){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Schedule Error");
+            alert.setHeaderText("No Schedule Found");
+            alert.setContentText("Could not generate a schedule based off criteria");
+            alert.show();
+            myController.getScene().getWindow().setWidth(720);
+            myController.setScreen(CSE308GUI.ViewSchedulesPageID);
+            return;
+        }
         if(rsp.getStatus() == 303){
+            nextSchedule.setVisible(true);
             schedList = rsp.readEntity(gtlc2);
             schedule = schedList.get(0);
+            ss.setSchedules(schedList);
+            ss.setCurrentScheduleIndex(0);
         }
         
         myController.getScene().getWindow().setWidth(900);
@@ -166,6 +239,27 @@ public class ViewGeneratedSchedulePageController implements Initializable, Contr
         }
         for(int i = 0; i < periods; i++){
             schPeriods.get(i).setVisible(true);
+        }
+        List<SimpleSection> sections = schedule.sections;
+        if(sections == null)
+            sections = new ArrayList<SimpleSection>();
+        for(int i = 1; i <= days; i++){
+            for(int j = 1; j <= periods; j++){
+                boolean added = false;
+                for(SimpleSection section : sections){
+                    if(section.scheduleBlock.period == j && section.scheduleBlock.scheduleDays.contains("" + i)){
+                        tableDays.get(i - 1).getItems().add(section.course.name + " with " + section.teacherName);
+                        added = true;
+                    }
+                }
+                if(!added){
+                    if(j >= ss.getSchool().startingLunchPeriod && j <= ss.getSchool().endingLunchPeriod)
+                        tableDays.get(i - 1).getItems().add("Lunch");
+                    else
+                        tableDays.get(i - 1).getItems().add("Study Hall");
+                    
+                }
+            }
         }
         }
 
