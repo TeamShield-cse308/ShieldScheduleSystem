@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.ChoosePreferredSectionsController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="Choose Preferred Sections" underline="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ListView fx:id="sections" layoutX="40.0" layoutY="66.0" prefHeight="267.0" prefWidth="281.0" />
+      <ListView fx:id="notWantedSections" layoutX="392.0" layoutY="66.0" prefHeight="267.0" prefWidth="281.0" />
+      <Label layoutX="40.0" layoutY="50.0" text="Sections" />
+      <Label layoutX="392.0" layoutY="50.0" text="Sections Not Wanted" />
+      <Button layoutX="40.0" layoutY="345.0" mnemonicParsing="false" text="Remove Section" />
+      <ComboBox fx:id="preferredProfessor" layoutX="40.0" layoutY="385.0" prefHeight="26.0" prefWidth="163.0" promptText="Preferred Professor" />
+      <Button layoutX="40.0" layoutY="425.0" mnemonicParsing="false" text="Save Preferences" />
+   </children>
+</AnchorPane>

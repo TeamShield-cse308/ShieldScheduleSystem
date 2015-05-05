@@ -51,7 +51,7 @@ public class CourseSectionsPageController implements Initializable, ControlledSc
     @FXML
     private void handleBack(ActionEvent event) {
         myController.loadScreen(CSE308GUI.CourseOfferingsPageID, CSE308GUI.CourseOfferingsPage);
-        myController.setScreen(CSE308GUI.CourseOfferingsPage);
+        myController.setScreen(CSE308GUI.CourseOfferingsPageID);
     }
 
     @Override
@@ -74,13 +74,13 @@ public class CourseSectionsPageController implements Initializable, ControlledSc
         GenericType<List<SimpleSection>> gtlc = new GenericType<List<SimpleSection>>() {
         };
         try {
-            List<SimpleSection> sections = rsp.readEntity(gtlc);
-            s.setSections(sections);
+            List<SimpleSection> sectionsList = rsp.readEntity(gtlc);
+            s.setSections(sectionsList);
             ArrayList<SimpleSection> sectionArray = new ArrayList<>();
 
             ArrayList<String> sectionNames = new ArrayList<>();
 
-            for (SimpleSection section : sections) {
+            for (SimpleSection section : sectionsList) {
                 String sectionDays = "";
                 for (int i = 0; i < section.scheduleBlock.scheduleDays.length(); i++) {
                     sectionDays += section.scheduleBlock.scheduleDays.substring(i, i + 1) + ", ";
@@ -88,6 +88,8 @@ public class CourseSectionsPageController implements Initializable, ControlledSc
                 sectionNames.add(section.teacherName + " Period: " + section.scheduleBlock.period
                         + " Days: " + sectionDays.substring(0, sectionDays.lastIndexOf(",")) + " Number of Students Enrolled: " + section.studentsEnrolled); //Add schedule block info
             }
+            sections.getItems().clear();
+            sections.getItems().setAll(sectionNames);
         //ss.setCourses(coursesArray);
             //populate combobox
             
