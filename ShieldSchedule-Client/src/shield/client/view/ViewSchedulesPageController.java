@@ -36,8 +36,8 @@ public class ViewSchedulesPageController implements Initializable, ControlledScr
 
     @FXML
     private void handleViewGeneratedSchedule(ActionEvent event) {
-        myController.loadScreen(CSE308GUI.SelectGeneratedScheduleYearPageID, CSE308GUI.SelectGeneratedScheduleYearPage);
-        myController.setScreen(CSE308GUI.SelectGeneratedScheduleYearPageID);
+        myController.loadScreen(CSE308GUI.SelectGeneratedSchedulePageID, CSE308GUI.SelectGeneratedSchedulePage);
+        myController.setScreen(CSE308GUI.SelectGeneratedSchedulePageID);
     }
 
     @FXML

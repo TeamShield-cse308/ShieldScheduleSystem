@@ -160,7 +160,7 @@ public class GenerationCriteria implements Serializable
         List<Schedule> acceptableSchedules = new ArrayList<>();
         List<Schedule> nearSchedules = new ArrayList<>();
 
-        bestScore = 0;
+        this.bestScore = -1;
         //perform the search
         backtrackSchedule(rootSchedule, new HashSet<>(courses.keySet()), 0, friends,
                 acceptableSchedules, nearSchedules);

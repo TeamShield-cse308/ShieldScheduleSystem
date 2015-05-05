@@ -66,8 +66,8 @@ public class CSE308GUI extends Application {
     public static String SelectAssignedScheduleYearPageID = "SelectAssignedScheduleYearPage";
     public static String ViewGeneratedSchedulePage = "ViewGeneratedSchedulePage.fxml";
     public static String ViewGeneratedSchedulePageID = "ViewGeneratedSchedulePage";
-    public static String SelectGeneratedScheduleYearPage = "SelectGeneratedScheduleYearPage.fxml";
-    public static String SelectGeneratedScheduleYearPageID = "SelectGeneratedScheduleYearPage";
+    public static String SelectGeneratedSchedulePage = "SelectGeneratedSchedulePage.fxml";
+    public static String SelectGeneratedSchedulePageID = "SelectGeneratedSchedulePage";
     
     /* Desired Schedule pages */
     public static String SelectDesignScheduleYearPage = "SelectDesignScheduleYearPage.fxml";
