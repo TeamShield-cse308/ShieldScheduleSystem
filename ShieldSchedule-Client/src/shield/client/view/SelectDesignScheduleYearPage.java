@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
  */
 package shield.client.view;
 
@@ -15,16 +13,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import shield.client.main.CSE308GUI;
 import shield.client.view.session.StudentSession;
-import shield.shared.dto.SimpleSchedule;
 
 /**
  * FXML Controller class
  *
- * @author evanguby
+ * @author Jeffrey Kabot
  */
-public class SelectAcademicYearPageController implements Initializable, ControlledScreen
+public class SelectDesignScheduleYearPage implements Initializable, ControlledScreen
 {
-
+    
     ScreensController myController;
 
     @FXML
@@ -47,14 +44,9 @@ public class SelectAcademicYearPageController implements Initializable, Controll
         {
             StudentSession ss = (StudentSession) myController.getSession();
             ss.setScheduleYear(Integer.parseInt(year.getValue()));
-            //ss.newAssignedSchedule();
-            //ss.setAssignedScheduleAsString("");
-            //SimpleSchedule sss = new SimpleSchedule();
-            //sss.studentEmail = ss.getStudentAccount().email;
-            //sss.year = ss.getScheduleYear();
-            //Response rsp = createSchedule.request(sss);
-            myController.loadScreen(CSE308GUI.CourseOfferingsPageID, CSE308GUI.CourseOfferingsPage);
-            myController.setScreen(CSE308GUI.CourseOfferingsPageID);
+            
+            myController.loadScreen(CSE308GUI.DesignASchedulePageID, CSE308GUI.DesignASchedulePage);
+            myController.setScreen(CSE308GUI.DesignASchedulePageID);
         }
     }
 
@@ -74,13 +66,7 @@ public class SelectAcademicYearPageController implements Initializable, Controll
     @Override
     public void populatePage()
     {
-        ObservableList<String> options =
-                 FXCollections.observableArrayList(
-                        "1",
-                        "2",
-                        "3",
-                        "4"
-                );
+        ObservableList<String> options = FXCollections.observableArrayList("1", "2", "3", "4");
         year.setItems(options);
     }
 

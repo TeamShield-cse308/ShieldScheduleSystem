@@ -78,7 +78,8 @@ public class StudentViewController implements Initializable, ControlledScreen {
 
     @FXML
     private void handleDesignASchedule(ActionEvent event) {
-        
+        myController.loadScreen(CSE308GUI.SelectDesignScheduleYearPageID, CSE308GUI.SelectDesignScheduleYearPage);
+        myController.setScreen(CSE308GUI.SelectDesignScheduleYearPageID);
     }
 
     @FXML

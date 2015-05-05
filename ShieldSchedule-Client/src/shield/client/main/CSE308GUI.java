@@ -65,6 +65,18 @@ public class CSE308GUI extends Application {
     public static String SelectAssignedScheduleYearPageID = "SelectAssignedScheduleYearPage.fxml";
     public static String SelectAssignedScheduleYearPage = "SelectAssignedScheduleYearPage";
     
+    /* Desired Schedule pages */
+    public static String SelectDesignScheduleYearPage = "SelectDesignScheduleYear.fxml";
+    public static String SelectDesignScheduleYearPageID = "SelectDesignScheduleYear";
+    
+    public static String DesignASchedulePage = "DesignASchedulePage.fxml";
+    public static String DesignASchedulePageID = "DesignASchedulePage";
+    
+    public static String SelectLunchDaysPage = "SelectLunchDays.fxml";
+    public static String SelectLunchDaysPageID = "SelectLunchDays";
+    
+    public static String ChoosePreferredSectionsPage = "ChoosePreferredSections.fxml";
+    public static String ChoosePreferredSectionsPageID = "ChoosePreferredSections";
     
     private Stage primaryStage;
     private AnchorPane rootLayout;
