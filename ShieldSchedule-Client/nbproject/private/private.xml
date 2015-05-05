@@ -2,34 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSectionController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSection.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/CourseOfferingsPageController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentView.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectLunchDaysPage.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/EditSchoolInfoController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/web/ServerAccessPoint.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectAssignedScheduleYearPage.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ScreensController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ViewSchedulesPageController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ManageStudentAccountsController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/web/ServerResource.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/session/StudentSession.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/CourseSectionsPage.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ViewAssignedSchedulePageController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/CourseSectionsPageController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectAcademicYearPageController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/StudentViewController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSchoolCourses.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectScheduleYearPage.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/AddSchoolCoursesController.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/main/CSE308GUI.java</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ViewSchedulesPage.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/CourseOfferingsPage.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/ViewAssignedSchedulePage.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectAcademicYearPage.fxml</file>
-            <file>file:/Users/evanguby/Documents/ShieldScheduleSystem/ShieldSchedule-Client/src/shield/client/view/SelectSectionController.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
