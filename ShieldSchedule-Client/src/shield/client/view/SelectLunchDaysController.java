@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javax.ws.rs.core.Response;
+import shield.client.main.CSE308GUI;
 import shield.client.view.session.StudentSession;
 import shield.client.web.ServerAccessPoint;
 import shield.client.web.ServerResource;
@@ -39,8 +41,6 @@ public class SelectLunchDaysController implements Initializable, ControlledScree
     @FXML
     private CheckBox lunchDay7;
     
-    private CheckBox[] checkboxes = { lunchDay1, lunchDay2, lunchDay3, lunchDay4, lunchDay5, lunchDay6, lunchDay7};
-    
     ScreensController myController;
     
     private final ServerAccessPoint setDesiredLunches = 
@@ -62,6 +62,7 @@ public class SelectLunchDaysController implements Initializable, ControlledScree
         StudentSession ss = (StudentSession) myController.getSession();
         SimpleCriteria sc = new SimpleCriteria();
         boolean[] lunches = new boolean[ss.getSchool().numScheduleDays];
+        CheckBox[] checkboxes = { lunchDay1, lunchDay2, lunchDay3, lunchDay4, lunchDay5, lunchDay6, lunchDay7};
         for (int i = 0; i < ss.getSchool().numScheduleDays; i++)
         {
             lunches[i] = checkboxes[i].selectedProperty().get();
@@ -69,6 +70,19 @@ public class SelectLunchDaysController implements Initializable, ControlledScree
         sc.studentEmail = ss.getStudentAccount().email;
         sc.year = ss.getScheduleYear();
         sc.hasLunches = lunches;
+        
+        Response rsp = setDesiredLunches.request(sc);
+        
+        if (rsp.getStatus() != Response.Status.OK.getStatusCode())
+        {
+            //@TODO error handling  
+//            return;
+        }
+        
+        myController.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
+        myController.setScreen(CSE308GUI.StudentViewID);
+        
+        
     }
 
     @Override
@@ -82,10 +96,10 @@ public class SelectLunchDaysController implements Initializable, ControlledScree
     {
         StudentSession ss = (StudentSession) myController.getSession();
         int days = ss.getSchool().numScheduleDays;
-        
-        for (int i = days; i < 7; i++)
+        CheckBox[] checkboxes = { lunchDay1, lunchDay2, lunchDay3, lunchDay4, lunchDay5, lunchDay6, lunchDay7};
+        for (int i = 0; i < days; i++)
         {
-            checkboxes[i].setVisible(false);
+            checkboxes[i].setVisible(true);
         }
     }
     
