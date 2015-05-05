@@ -168,7 +168,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
         boolean[][][] sandbox = scheduleSlots.clone();
 
         //Extract the period slot for the section
-        int q = s.getScheduleBlock().getPeriod();
+        int block = s.getScheduleBlock().getPeriod();
 
         //Get the semesters
         Set<Integer> semesters = s.getSemesters();
@@ -176,17 +176,17 @@ public class Schedule implements Serializable, Comparable<Schedule>
         Set<Integer> days = s.getScheduleBlock().getDays();
 
         //Iterate over the semesters and days
-        for (int p : semesters)
+        for (int sem : semesters)
         {
-            for (int r : days)
+            for (int day : days)
             {
                 //If we are adding the section to the schedule, we need to check for conflicts
-                if (fill && sandbox[p][q][r])
+                if (fill && sandbox[sem][block][day])
                 {
                     return null;
                 } else
                 {
-                    sandbox[p][q][r] = fill;
+                    sandbox[sem][block][day] = fill;
                 }
             }
         }
