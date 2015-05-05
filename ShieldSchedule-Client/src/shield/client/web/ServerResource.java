@@ -144,11 +144,11 @@ public final class ServerResource
     public static final ServerResource CREATE_SCHEDULE_URL = new ServerResource(
             SERVER_BASE_URL + "schedule/createSchedule");
 
-    public static final ServerResource GET_STUDENTS_ASSIGNED_SCHEDULE = new ServerResource(
-            SERVER_BASE_URL + "schedule/get");
-
     public static final ServerResource ADD_DESIRED_COURSE_URL = new ServerResource(
             SERVER_BASE_URL + "desiredschedule/add");
+
+    public static final ServerResource GET_STUDENTS_ASSIGNED_SCHEDULE = new ServerResource(
+            SERVER_BASE_URL + "schedule/getSchedule");
 
     private String resourceUrl;
 

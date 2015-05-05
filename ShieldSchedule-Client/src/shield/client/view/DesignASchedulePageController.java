@@ -55,9 +55,13 @@ public class DesignASchedulePageController implements Initializable, ControlledS
     {
         String course = courseBox.getValue().substring(0, courseBox.getValue().indexOf(","));
         StudentSession ss = (StudentSession) myController.getSession();
-
-        ss.setCourseName(course);
-        ss.setCourseIdentifier(courseBox.getValue().substring(courseBox.getValue().indexOf(",") + 2));
+        
+        int idx = courseBox.getSelectionModel().getSelectedIndex();
+        
+        ss.setCourse(ss.getCourses().get(idx));
+        
+//        ss.setCourseName(course);
+//        ss.setCourseIdentifier(courseBox.getValue().substring(courseBox.getValue().indexOf(",") + 2));
 
         myController.loadScreen(CSE308GUI.ChoosePreferredSectionsPageID, CSE308GUI.ChoosePreferredSectionsPage);
         myController.setScreen(CSE308GUI.ChoosePreferredSectionsPageID);
@@ -73,7 +77,8 @@ public class DesignASchedulePageController implements Initializable, ControlledS
     @FXML
     private void handleFinished(ActionEvent event)
     {
-        return;
+        myController.loadScreen(CSE308GUI.SelectLunchDaysPageID, CSE308GUI.SelectLunchDaysPage);
+        myController.setScreen(CSE308GUI.SelectLunchDaysPageID);
     }
 
     @Override
