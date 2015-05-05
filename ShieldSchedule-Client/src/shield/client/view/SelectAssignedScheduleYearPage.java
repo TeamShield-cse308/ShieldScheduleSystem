@@ -42,8 +42,8 @@ public class SelectAssignedScheduleYearPage implements Initializable, Controlled
         if(year.getValue() != null){
             StudentSession ss = (StudentSession)myController.getSession();
             ss.setScheduleYear(Integer.parseInt(year.getValue()));
-            myController.loadScreen(CSE308GUI.AddSchoolCoursesID, CSE308GUI.AddSchoolCourses);
-            myController.setScreen(CSE308GUI.AddSchoolCoursesID);
+            myController.loadScreen(CSE308GUI.ViewAssignedSchedulePageID, CSE308GUI.ViewAssignedSchedulePage);
+            myController.setScreen(CSE308GUI.ViewAssignedSchedulePageID);
         }
     }
 

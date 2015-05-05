@@ -16,8 +16,8 @@
       <ListView fx:id="notWantedSections" layoutX="392.0" layoutY="66.0" prefHeight="267.0" prefWidth="281.0" />
       <Label layoutX="40.0" layoutY="50.0" text="Sections" />
       <Label layoutX="392.0" layoutY="50.0" text="Sections Not Wanted" />
-      <Button layoutX="40.0" layoutY="345.0" mnemonicParsing="false" text="Remove Section" />
+      <Button layoutX="40.0" layoutY="345.0" mnemonicParsing="false" onAction="#handleRemoveSection" text="Remove Section" />
       <ComboBox fx:id="preferredProfessor" layoutX="40.0" layoutY="385.0" prefHeight="26.0" prefWidth="163.0" promptText="Preferred Professor" />
-      <Button layoutX="40.0" layoutY="425.0" mnemonicParsing="false" text="Save Preferences" />
+      <Button layoutX="40.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleSavePreferences" text="Save Preferences" />
    </children>
 </AnchorPane>

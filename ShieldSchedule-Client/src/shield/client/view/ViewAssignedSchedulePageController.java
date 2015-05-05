@@ -7,6 +7,7 @@ package shield.client.view;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,9 +15,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
 import shield.client.main.CSE308GUI;
 import shield.client.view.session.StudentSession;
+import shield.client.web.ServerAccessPoint;
+import shield.client.web.ServerResource;
+import shield.shared.dto.SimpleFriendship;
 import shield.shared.dto.SimpleSchedule;
+import shield.shared.dto.SimpleSection;
 
 /**
  * FXML Controller class
@@ -80,6 +87,9 @@ public class ViewAssignedSchedulePageController implements Initializable, Contro
     @FXML
     private Label day7;
 
+    private final ServerAccessPoint getStudentsAssignedSchedule = 
+            new ServerAccessPoint(ServerResource.GET_STUDENTS_ASSIGNED_SCHEDULE);
+    
     /**
      * Initializes the controller class.
      */
@@ -141,8 +151,31 @@ public class ViewAssignedSchedulePageController implements Initializable, Contro
         for(int i = 0; i < periods; i++){
             schPeriods.get(i).setVisible(true);
         }
+        SimpleSchedule sched = new SimpleSchedule();
+        sched.studentEmail = ss.getStudentAccount().email;
+        sched.year = ss.getScheduleYear();
         
-        //SimpleSchedule schedule = getStudentsAssignedSchedule.request(ss.getStudentAccount());
+        Response rsp = getStudentsAssignedSchedule.request(sched);
+        GenericType<SimpleSchedule> gtlc = new GenericType<SimpleSchedule>()
+        {
+        };
+        
+        SimpleSchedule schedule = rsp.readEntity(gtlc);
+        List<SimpleSection> sections = schedule.sections;
+        for(int i = 1; i <= days; i++){
+            for(int j = 1; j <= periods; j++){
+                boolean added = false;
+                for(SimpleSection section : sections){
+                    if(section.scheduleBlock.period == j && section.scheduleBlock.scheduleDays.contains("" + i)){
+                        tableDays.get(i - 1).getItems().add(section.course.name + " with " + section.teacherName);
+                        added = true;
+                    }
+                }
+                if(!added){
+                    tableDays.get(i - 1).getItems().add("Study Hall");
+                }
+            }
+        }
         
     }
     
