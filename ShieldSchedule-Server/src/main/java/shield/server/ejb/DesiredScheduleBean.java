@@ -2,6 +2,7 @@
  */
 package shield.server.ejb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +55,10 @@ public class DesiredScheduleBean
 
         try
         {
-            logger.log(Level.INFO, "Setting preferred lunch days for student {0} for year {1}", new Object[] {studentEmail, year});
+            logger.log(Level.INFO, "Setting preferred lunch days for student {0} for year {1}", new Object[]
+            {
+                studentEmail, year
+            });
             Student student = queryStudent.getSingleResult();
             GenerationCriteria gc = student.getGenerationCriteria(year);
             gc.setLunches(desiresLunch);
@@ -100,13 +104,23 @@ public class DesiredScheduleBean
         boolean success = false;
         try
         {
-            logger.log(Level.INFO, "Adding course to desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
+            logger.log(Level.INFO, "Adding course to desired schedule for student {0} for year {1}", new Object[]
+            {
+                studentEmail, year
+            });
 
             Student student = queryStudent.getSingleResult();
             GenerationCriteria gc = student.getGenerationCriteria(year);
 
             Course course = queryCourse.getSingleResult();
-            List<Section> exclusions = querySections.getResultList();
+            List<Section> exclusions;
+            if (excludedSectionIDs.isEmpty())
+            {
+                exclusions = new ArrayList<>();
+            } else
+            {
+                exclusions = querySections.getResultList();
+            }
             success = gc.addCourse(course, exclusions, instructor);
         } finally
         {
@@ -131,8 +145,11 @@ public class DesiredScheduleBean
 
         try
         {
-            logger.log(Level.INFO, "Removing course from desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
-            
+            logger.log(Level.INFO, "Removing course from desired schedule for student {0} for year {1}", new Object[]
+            {
+                studentEmail, year
+            });
+
             Student student = queryStudent.getSingleResult();
             Course course = queryCourse.getSingleResult();
             GenerationCriteria gc = student.getGenerationCriteria(year);
@@ -156,8 +173,11 @@ public class DesiredScheduleBean
         GenerationCriteria gc = null;
         try
         {
-            logger.log(Level.INFO, "Retrieving generation criteria for student {0} for year {1}", new Object[] {studentEmail, year});
-            
+            logger.log(Level.INFO, "Retrieving generation criteria for student {0} for year {1}", new Object[]
+            {
+                studentEmail, year
+            });
+
             Student student = queryStudent.getSingleResult();
             gc = student.getGenerationCriteria(year);
 
@@ -194,8 +214,11 @@ public class DesiredScheduleBean
 
         try
         {
-            logger.log(Level.INFO, "Generating desired schedule for student {0} for year {1}", new Object[] {studentEmail, year});
-            
+            logger.log(Level.INFO, "Generating desired schedule for student {0} for year {1}", new Object[]
+            {
+                studentEmail, year
+            });
+
             Student student = queryStudent.getSingleResult();
             List<Student> friends = queryFriends.getResultList();
             GenerationCriteria gc = student.getGenerationCriteria(year);

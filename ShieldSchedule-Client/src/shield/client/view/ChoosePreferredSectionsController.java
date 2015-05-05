@@ -69,19 +69,24 @@ public class ChoosePreferredSectionsController implements Initializable, Control
     private void handleSavePreferences(ActionEvent event)
     {
         StudentSession ss = (StudentSession) myController.getSession();
-        ObservableList<Integer> indices = sections.getSelectionModel().getSelectedIndices();
-        List<SimpleSection> sectionList = new ArrayList<>();
-        for (int i : indices)
-        {
-            sectionList.add(ss.getSections().get(i));
-        }
         SimpleCriteriaCourse scc = new SimpleCriteriaCourse();
+        List<SimpleSection> sectionList = new ArrayList<>();
+
+        if (!sections.getSelectionModel().getSelectedItem().equals("No Preference"))
+        {
+            ObservableList<Integer> indices = sections.getSelectionModel().getSelectedIndices();
+
+            for (int i : indices)
+            {
+                sectionList.add(ss.getSections().get(i));
+            }
+        }
+
         scc.course = ss.getCourse();
-        if (preferredProfessor.getSelectionModel().isEmpty())
+        if (preferredProfessor.getSelectionModel().isEmpty() || preferredProfessor.getSelectionModel().getSelectedItem().equals("No Preference"))
         {
             scc.teacher = null;
-        }
-        else 
+        } else
         {
             scc.teacher = preferredProfessor.getSelectionModel().getSelectedItem();
         }
@@ -144,6 +149,9 @@ public class ChoosePreferredSectionsController implements Initializable, Control
                     " Days: " + sectionDays.substring(0, sectionDays.lastIndexOf(",")));
             teacherNames.add(s.teacherName);
         }
+
+        sectionNames.add("No Preference");
+        teacherNames.add("No Preference");
 
         sections.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         sections.getItems().clear();
