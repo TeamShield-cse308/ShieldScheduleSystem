@@ -66,14 +66,14 @@ public class CSE308GUI extends Application {
     public static String SelectAssignedScheduleYearPageID = "SelectAssignedScheduleYearPage";
     
     /* Desired Schedule pages */
-    public static String SelectDesignScheduleYearPage = "SelectDesignScheduleYear.fxml";
-    public static String SelectDesignScheduleYearPageID = "SelectDesignScheduleYear";
+    public static String SelectDesignScheduleYearPage = "SelectDesignScheduleYearPage.fxml";
+    public static String SelectDesignScheduleYearPageID = "SelectDesignScheduleYearPage";
     
     public static String DesignASchedulePage = "DesignASchedulePage.fxml";
     public static String DesignASchedulePageID = "DesignASchedulePage";
     
-    public static String SelectLunchDaysPage = "SelectLunchDays.fxml";
-    public static String SelectLunchDaysPageID = "SelectLunchDays";
+    public static String SelectLunchDaysPage = "SelectLunchDaysPage.fxml";
+    public static String SelectLunchDaysPageID = "SelectLunchDaysPage";
     
     public static String ChoosePreferredSectionsPage = "ChoosePreferredSections.fxml";
     public static String ChoosePreferredSectionsPageID = "ChoosePreferredSections";

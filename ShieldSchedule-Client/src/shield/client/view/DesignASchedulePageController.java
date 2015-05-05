@@ -55,14 +55,13 @@ public class DesignASchedulePageController implements Initializable, ControlledS
     {
         String course = courseBox.getValue().substring(0, courseBox.getValue().indexOf(","));
         StudentSession ss = (StudentSession) myController.getSession();
-        
+
         int idx = courseBox.getSelectionModel().getSelectedIndex();
-        
+
         ss.setCourse(ss.getCourses().get(idx));
-        
+
 //        ss.setCourseName(course);
 //        ss.setCourseIdentifier(courseBox.getValue().substring(courseBox.getValue().indexOf(",") + 2));
-
         myController.loadScreen(CSE308GUI.ChoosePreferredSectionsPageID, CSE308GUI.ChoosePreferredSectionsPage);
         myController.setScreen(CSE308GUI.ChoosePreferredSectionsPageID);
     }
@@ -106,21 +105,25 @@ public class DesignASchedulePageController implements Initializable, ControlledS
             alert.show();
             return;
         }
-        
+
         //read the list of courses
-        GenericType<List<SimpleCourse>> gtlc = new GenericType<List<SimpleCourse>>() {
+        GenericType<List<SimpleCourse>> gtlc = new GenericType<List<SimpleCourse>>()
+        {
         };
-        
+
         List<SimpleCourse> courses = rsp.readEntity(gtlc);
         ss.setCourses(new ArrayList<>(courses));
-        
+
         //copy the names
         ArrayList<String> courseNames = new ArrayList<>();
         for (SimpleCourse sc : courses)
         {
-            courseNames.add(sc.name);
+            if ((sc.year == ss.getScheduleYear()) && !sc.name.contains("Lunch"))
+            {
+                courseNames.add(sc.name + ", " + sc.identifier);
+            }
         }
-        
+
         //fill the box
         courseBox.getItems().clear();
         courseBox.getItems().addAll(courseNames);

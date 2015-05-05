@@ -95,7 +95,7 @@ public class DesiredScheduleBean
 
         TypedQuery<Section> querySections =
                 em.createNamedQuery("Section.batchFindByID", Section.class);
-        querySections.setParameter("id", excludedSectionIDs);
+        querySections.setParameter("ids", excludedSectionIDs);
 
         boolean success = false;
         try
