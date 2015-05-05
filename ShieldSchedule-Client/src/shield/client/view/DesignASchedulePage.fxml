@@ -16,7 +16,5 @@
       </Label>
       <Button layoutX="665.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
       <Button layoutX="18.0" layoutY="90.0" mnemonicParsing="false" onAction="#handleFinished" text="Finished With Courses" />
-      <Label layoutX="314.0" layoutY="37.0" text="Courses added so far:" />
-      <Label fx:id="courses" layoutX="314.0" layoutY="62.0" />
    </children>
 </AnchorPane>

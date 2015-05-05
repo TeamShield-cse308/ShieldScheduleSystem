@@ -13,11 +13,9 @@
          </font>
       </Label>
       <ListView fx:id="sections" layoutX="40.0" layoutY="66.0" prefHeight="267.0" prefWidth="281.0" />
-      <ListView fx:id="notWantedSections" layoutX="392.0" layoutY="66.0" prefHeight="267.0" prefWidth="281.0" />
       <Label layoutX="40.0" layoutY="50.0" text="Sections" />
-      <Label layoutX="392.0" layoutY="50.0" text="Sections Not Wanted" />
-      <Button layoutX="40.0" layoutY="345.0" mnemonicParsing="false" onAction="#handleRemoveSection" text="Remove Section" />
-      <ComboBox fx:id="preferredProfessor" layoutX="40.0" layoutY="385.0" prefHeight="26.0" prefWidth="163.0" promptText="Preferred Professor" />
-      <Button layoutX="40.0" layoutY="425.0" mnemonicParsing="false" onAction="#handleSavePreferences" text="Save Preferences" />
+      <ComboBox fx:id="preferredProfessor" layoutX="43.0" layoutY="361.0" prefHeight="26.0" prefWidth="163.0" promptText="Preferred Professor" />
+      <Button layoutX="43.0" layoutY="395.0" mnemonicParsing="false" onAction="#handleSavePreferences" text="Save Preferences" />
+      <Label layoutX="40.0" layoutY="333.0" text="Select courses you don't want" />
    </children>
 </AnchorPane>

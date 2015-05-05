@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="900.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.ViewGeneratedSchedulePageController">
+   <children>
+      <Label layoutX="14.0" layoutY="14.0" text="View Generated Schedule" underline="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="836.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
+      <ListView fx:id="day1Table" layoutX="24.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <ListView fx:id="day2Table" layoutX="147.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <ListView fx:id="day3Table" layoutX="270.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <ListView fx:id="day4Table" layoutX="393.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <ListView fx:id="day5Table" layoutX="516.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <ListView fx:id="day6Table" layoutX="639.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <ListView fx:id="day7Table" layoutX="762.0" layoutY="53.0" prefHeight="393.0" prefWidth="123.0" visible="false" />
+      <Label fx:id="period1" layoutX="8.0" layoutY="56.0" text="1:" visible="false" />
+      <Label fx:id="period2" layoutX="8.0" layoutY="81.0" text="2:" visible="false" />
+      <Label fx:id="period3" layoutX="8.0" layoutY="103.0" text="3:" visible="false" />
+      <Label fx:id="period4" layoutX="9.0" layoutY="129.0" text="4:" visible="false" />
+      <Label fx:id="period5" layoutX="9.0" layoutY="154.0" text="5:" visible="false" />
+      <Label fx:id="period6" layoutX="9.0" layoutY="177.0" text="6:" visible="false" />
+      <Label fx:id="period7" layoutX="9.0" layoutY="200.0" text="7:" visible="false" />
+      <Label fx:id="period8" layoutX="9.0" layoutY="224.0" text="8:" visible="false" />
+      <Label fx:id="period9" layoutX="8.0" layoutY="249.0" text="9:" visible="false" />
+      <Label fx:id="period10" layoutX="5.0" layoutY="274.0" text="10:" visible="false" />
+      <Label fx:id="period11" layoutX="5.0" layoutY="297.0" text="11:" visible="false" />
+      <Label fx:id="period12" layoutX="5.0" layoutY="319.0" text="12:" visible="false" />
+      <Label fx:id="day1" layoutX="69.0" layoutY="37.0" text="Day 1" visible="false" />
+      <Label fx:id="day2" layoutX="191.0" layoutY="37.0" text="Day 2" visible="false" />
+      <Label fx:id="day3" layoutX="314.0" layoutY="37.0" text="Day 3" visible="false" />
+      <Label fx:id="day4" layoutX="437.0" layoutY="37.0" text="Day 4" visible="false" />
+      <Label fx:id="day5" layoutX="560.0" layoutY="37.0" text="Day 5" visible="false" />
+      <Label fx:id="day6" layoutX="683.0" layoutY="37.0" text="Day 6" visible="false" />
+      <Label fx:id="day7" layoutX="806.0" layoutY="37.0" text="Day 7" visible="false" />
+   </children>
+</AnchorPane>
