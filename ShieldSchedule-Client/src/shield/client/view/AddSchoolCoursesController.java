@@ -131,9 +131,8 @@ public class AddSchoolCoursesController implements Initializable, ControlledScre
     public void handleFinishSchedule(ActionEvent event){
         StudentSession ss = (StudentSession)myController.getSession();
         SimpleSchedule sched = ss.getAssignedSchedule();
-        sched.year = ss.getScheduleYear();
-        sched.studentEmail = ss.getStudentAccount().email;
-        Response rsp = setAssignedSchedule.request(sched);
+        myController.loadScreen(CSE308GUI.StudentViewID, CSE308GUI.StudentView);
+        myController.setScreen(CSE308GUI.StudentViewID);
     }
 
 }

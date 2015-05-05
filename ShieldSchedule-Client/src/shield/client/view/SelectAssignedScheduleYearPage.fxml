@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="720.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="shield.client.view.SelectAssignedScheduleYearPage">
+   <children>
+      <ComboBox fx:id="year" layoutX="18.0" layoutY="57.0" prefWidth="150.0" />
+      <Button layoutX="186.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleSelectYear" text="Select Year" />
+      <Label layoutX="14.0" layoutY="14.0" text="Select Assigned Schedule Year" underline="true">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="665.0" layoutY="446.0" mnemonicParsing="false" onAction="#handleBack" text="Back" />
+   </children>
+</AnchorPane>
