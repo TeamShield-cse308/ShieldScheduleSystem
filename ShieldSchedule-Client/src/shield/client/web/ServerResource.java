@@ -14,8 +14,8 @@ public final class ServerResource
     /**
      * The base url of web resources on the shield application server.
      */
-    private static final String SERVER_BASE_URL
-            = "http://localhost:8080/ShieldSchedule-Server/webresources/";
+    private static final String SERVER_BASE_URL =
+            "http://localhost:8080/ShieldSchedule-Server/webresources/";
 
     /**
      * The location of the web resource exposing the list of all schools.
@@ -38,7 +38,6 @@ public final class ServerResource
     public static final ServerResource EDIT_SCHOOL_URL = new ServerResource(
             SERVER_BASE_URL + "admin/schools/edit");
 
-    
     public static final ServerResource GET_SCHOOL_URL = new ServerResource(
             SERVER_BASE_URL + "admin/schools/getSchool");
 
@@ -111,45 +110,46 @@ public final class ServerResource
      */
     public static final ServerResource ADD_COURSE_URL = new ServerResource(
             SERVER_BASE_URL + "courses/add");
-    
+
     /**
      * The location of the web resource to get a Schools courselist
      */
     public static final ServerResource GET_SCHOOL_COURSES_URL = new ServerResource(
             SERVER_BASE_URL + "courses/getSchoolCourses");
-    
+
     public static final ServerResource GET_SCHOOL_COURSES_WITH_LUNCH_URL = new ServerResource(
             SERVER_BASE_URL + "courses/getSchoolCoursesWithLunch");
-    
+
     /**
      * The location of the web resource to get a Courses sectionList
      */
     public static final ServerResource GET_COURSE_SECTIONS_URL = new ServerResource(
             SERVER_BASE_URL + "section/getCourseSections");
-    
+
     public static final ServerResource ADD_SCHEDULE_BLOCK_URL = new ServerResource(
             SERVER_BASE_URL + "scheduleBlock/add");
 
     public static final ServerResource GET_SCHOOL_SCHEDULE_BLOCKS = new ServerResource(
             SERVER_BASE_URL + "scheduleBlock/getSchoolScheduleBlocks");
-    
+
     public static final ServerResource ADD_SECTION_URL = new ServerResource(
             SERVER_BASE_URL + "section/add");
 
     public static final ServerResource SET_ASSIGNED_SCHEDULE_URL = new ServerResource(
             SERVER_BASE_URL + "schedule/setAssignedSchedule");
-    
+
     public static final ServerResource ADD_SECTION_TO_SCHEDULE_URL = new ServerResource(
             SERVER_BASE_URL + "schedule/addSectionToSchedule");
-    
-    
+
     public static final ServerResource CREATE_SCHEDULE_URL = new ServerResource(
             SERVER_BASE_URL + "schedule/createSchedule");
-    
-    
-            public static final ServerResource GET_STUDENTS_ASSIGNED_SCHEDULE = new ServerResource(
+
+    public static final ServerResource GET_STUDENTS_ASSIGNED_SCHEDULE = new ServerResource(
             SERVER_BASE_URL + "schedule/get");
-    
+
+    public static final ServerResource ADD_DESIRED_COURSE_URL = new ServerResource(
+            SERVER_BASE_URL + "desiredschedule/add");
+
     private String resourceUrl;
 
     public String getUrl()
