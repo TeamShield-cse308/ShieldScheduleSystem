@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -45,6 +47,9 @@ public class DesiredScheduleResource
 
     @Inject
     private DesiredScheduleBean desiredScheduleBean;
+    
+    private static final Logger logger = Logger.getLogger(DesiredScheduleResource.class.getName());
+
 
     /**
      * Creates a new instance of DesiredScheduleResource
@@ -151,9 +156,11 @@ public class DesiredScheduleResource
 
             if (schedules.isEmpty())
             {
+                logger.log(Level.INFO, "No acceptable schedules found");
                 return Response.status(Response.Status.NO_CONTENT).build();
             } else if (schedules.get(0).isPerfect())
             {
+                logger.log(Level.INFO, "Perfect Acceptable schedule found, returning best");
                 Schedule schedule = schedules.get(0);
 
                 //build schedule dto
@@ -172,6 +179,7 @@ public class DesiredScheduleResource
 
             } else
             {
+                logger.log(Level.INFO, "No perfect schedules found, returning list of near-schedules.");
                 //list of schedule dtos
                 List<SimpleSchedule> ssList = new ArrayList<>();
                 for (Schedule schedule : schedules)
