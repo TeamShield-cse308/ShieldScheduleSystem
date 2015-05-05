@@ -75,7 +75,7 @@ public class Student extends GenericUser implements Serializable
         accountState = StudentAccountState.PENDING;
         assignedSchedules = new ArrayList<>(School.NUM_YEARS);
         desiredSchedules = new ArrayList<>(School.NUM_YEARS);
-        for (int i = 0; i < School.NUM_YEARS; i++)
+        for (int i = 1; i <= School.NUM_YEARS; i++)
         {
             assignedSchedules.add(new Schedule(school, i));
             desiredSchedules.add(new GenerationCriteria(school, i));
