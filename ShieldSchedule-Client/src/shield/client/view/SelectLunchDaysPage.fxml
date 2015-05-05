@@ -12,13 +12,13 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <CheckBox layoutX="14.0" layoutY="46.0" mnemonicParsing="false" text="Lunch on day 1" visible="false" />
-      <CheckBox layoutX="14.0" layoutY="64.0" mnemonicParsing="false" text="Lunch on day 2" visible="false" />
-      <CheckBox layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Lunch on day 3" visible="false" />
-      <CheckBox layoutX="14.0" layoutY="100.0" mnemonicParsing="false" text="Lunch on day 4" visible="false" />
-      <CheckBox layoutX="14.0" layoutY="118.0" mnemonicParsing="false" text="Lunch on day 5" visible="false" />
-      <CheckBox layoutX="14.0" layoutY="136.0" mnemonicParsing="false" text="Lunch on day 6" visible="false" />
-      <CheckBox layoutX="14.0" layoutY="154.0" mnemonicParsing="false" text="Lunch on day 7" visible="false" />
+      <CheckBox fx:id="lunchDay1" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" text="Lunch on day 1" visible="false" />
+      <CheckBox fx:id="lunchDay2" layoutX="14.0" layoutY="64.0" mnemonicParsing="false" text="Lunch on day 2" visible="false" />
+      <CheckBox fx:id="lunchDay3" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Lunch on day 3" visible="false" />
+      <CheckBox fx:id="lunchDay4" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" text="Lunch on day 4" visible="false" />
+      <CheckBox fx:id="lunchDay5" layoutX="14.0" layoutY="118.0" mnemonicParsing="false" text="Lunch on day 5" visible="false" />
+      <CheckBox fx:id="lunchDay6" layoutX="14.0" layoutY="136.0" mnemonicParsing="false" text="Lunch on day 6" visible="false" />
+      <CheckBox fx:id="lunchDay7" layoutX="14.0" layoutY="154.0" mnemonicParsing="false" text="Lunch on day 7" visible="false" />
       <Button layoutX="14.0" layoutY="183.0" mnemonicParsing="false" onAction="#handleFinishSchedule" text="Finish Schedule" />
    </children>
 </AnchorPane>

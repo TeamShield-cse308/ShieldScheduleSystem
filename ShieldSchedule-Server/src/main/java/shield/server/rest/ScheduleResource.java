@@ -47,6 +47,7 @@ public class ScheduleResource
     }
 
     @POST
+    @Path("/getSchedule")
     @Consumes("application/json")
     @Produces("application/json")
     public Response getSchedule(SimpleSchedule ss)
