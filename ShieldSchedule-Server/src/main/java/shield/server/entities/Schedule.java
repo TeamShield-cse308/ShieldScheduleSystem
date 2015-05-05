@@ -186,7 +186,7 @@ public class Schedule implements Serializable, Comparable<Schedule>
                     return null;
                 } else
                 {
-                    sandbox[p][q][q] = fill;
+                    sandbox[p][q][r] = fill;
                 }
             }
         }
