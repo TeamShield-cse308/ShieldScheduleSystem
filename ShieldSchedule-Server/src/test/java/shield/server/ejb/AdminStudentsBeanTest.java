@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sss.ejb;
+package shield.server.ejb;
 
 import shield.server.ejb.AdminStudentsBean;
 import java.util.List;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sss.ejb;
+package shield.server.ejb;
 
 import shield.server.ejb.AdminSchoolsBean;
 import java.util.List;
@@ -25,27 +25,21 @@ import shield.server.util.DatabaseConnection;
  */
 public class AdminSchoolsBeanTest
 {
-
-    //reference to the perisstence layer
-    @PersistenceContext
+    private String initName; 
+    private int initSemesters ;
+    private int initPeriods;
+    private int initScheduleDays ;
+    private int initStartLunchPeriod ;
+    private int initEndLunchPeriod ;
     private EntityManager em;
-
-    private AdminSchoolsBean asb;
-
-    private School sch;
-    
-    private DatabaseConnection databaseConnection;
-
-    private String initName = "Stony Brook";
-    private int initSemesters = 1;
-    private int initPeriods = 2;
-    private int initScheduleDays = 3;
-    private int initStartLunchPeriod = 4;
-    private int initEndLunchPeriod = 5;
 
     public AdminSchoolsBeanTest()
     {
-
+      AdminSchoolsBean asb=new AdminSchoolsBean();
+       //create the entity manager
+     em = DatabaseConnection.getEntityManager();
+       asb.addSchool(initName, initSemesters, initPeriods, initScheduleDays,
+       initStartLunchPeriod, initEndLunchPeriod);   
     }
 
     @BeforeClass
@@ -61,15 +55,11 @@ public class AdminSchoolsBeanTest
     @Before
     public void setUp()
     {
-        em=DatabaseConnection.getEntityManager();
-        asb = new AdminSchoolsBean();
-        
     }
 
     @After
     public void tearDown()
     {
-        em.close();;
     }
 
     //@TODO resolve NullPointerExceptions
@@ -82,23 +72,23 @@ public class AdminSchoolsBeanTest
     {
         
         System.out.println("addSchool");
-       asb.addSchool(initName, initSemesters, initPeriods, initScheduleDays,
-       initStartLunchPeriod, initEndLunchPeriod);
-       
+
                //Create the entity manager and set up the query by school name
         TypedQuery<School> query =
                 em.createNamedQuery("School.findByName", School.class);
         query.setParameter("name", initName);
-                    //search the school and remove it from database
-            School sch = query.getSingleResult();
-            
+                    //search the school 
+        School sch = query.getSingleResult();
+        //to test if the those information added to databasee
+        
         assertEquals(initName,sch.getSchoolName());
         assertEquals(initSemesters,sch.getSemesters());
         assertEquals(initPeriods,sch.getPeriods());
         assertEquals(initScheduleDays,sch.getScheduleDays());
-       assertEquals(initStartLunchPeriod,sch.getStartingLunch());
+        assertEquals(initStartLunchPeriod,sch.getStartingLunch());
         assertEquals(initEndLunchPeriod,sch.getEndingLunch());
-        return;
+        // return any fail message
+        fail("The function does not work correctly with the input!");
     }
 
     /**
